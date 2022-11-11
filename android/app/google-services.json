@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "951853762645",
+    "project_id": "homealonerecipe-f1764",
+    "storage_bucket": "homealonerecipe-f1764.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951853762645:android:cae6b87d8e3d7d7dd0ecdc",
+        "android_client_info": {
+          "package_name": "com.example.home_alone_recipe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951853762645-5u6tht8bq2aklv4prj6go5hlkdm8clfc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn8my_oeNPXgYPSZMSiYgTXftrhVkjyic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951853762645-5u6tht8bq2aklv4prj6go5hlkdm8clfc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
