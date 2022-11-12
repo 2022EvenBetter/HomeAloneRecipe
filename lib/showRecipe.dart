@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('마이냉장고'),
+        title: Text('전체레시피 조회'),
         actions: [
           IconButton(
               icon: Icon(
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Center(
-        child: Text('홈화면'),
+        child: Text('레시피화면2'),
       ),
       bottomNavigationBar: bottom_bar(),
     );
