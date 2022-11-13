@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.fromLTRB(0, 40, 300, 10),
                         child: Text('이메일',
                             style: TextStyle(
@@ -51,9 +51,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ), //이메일 text
 
                       Padding(
-                        padding: EdgeInsets.fromLTRB(30, 0, 30, 5),
+                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 5),
                         child: TextFormField(
-                          key: ValueKey(1),
+                          key: const ValueKey(1),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return '이메일을 입력해주세요!';
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           autofocus: true,
                           keyboardType: TextInputType.emailAddress,
                           textAlign: TextAlign.start,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             filled: true,
                             fillColor: Colors.white,
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ), //이메일 form
 
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.fromLTRB(0, 20, 300, 10),
                         child: Text('비밀번호',
                             style: TextStyle(
@@ -92,9 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ), //비밀번호 text
 
                       Padding(
-                        padding: EdgeInsets.fromLTRB(30, 0, 30, 40),
+                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 40),
                         child: TextFormField(
-                          key: ValueKey(2),
+                          key: const ValueKey(2),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return '비밀번호를 입력해주세요!';
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: true,
                           enableSuggestions: false,
                           autocorrect: false,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             filled: true,
                             fillColor: Colors.white,
@@ -174,8 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 builder: (context) => SignUpScreen()),
                           );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
+                        child: const Padding(
+                          padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
                           child: Text(
                             '계정이 없으신가요?',
                             style: TextStyle(

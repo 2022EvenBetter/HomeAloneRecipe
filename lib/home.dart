@@ -37,10 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('마이냉장고'),
+        title: const Text('마이냉장고'),
         actions: [
           IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.exit_to_app_sharp,
                 color: Colors.black,
               ),
@@ -50,10 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
               })
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text('홈화면'),
       ),
-      bottomNavigationBar: bottom_bar(),
+      bottomNavigationBar: const bottom_bar(),
     );
   }
 }

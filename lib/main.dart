@@ -6,7 +6,7 @@ import 'package:home_alone_recipe/signup.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           ThemeData(primarySwatch: Colors.yellow // priamrySwatch 기본적인 앱의 색상을 지정
               ),
 
-      home: LoginScreen(), // 앱이 실행될 때 표시할 화면의 함수를 호출
+      home: const LoginScreen(), // 앱이 실행될 때 표시할 화면의 함수를 호출
     );
   }
 }
