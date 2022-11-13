@@ -9,5 +9,5 @@ class Post {
   String meetingPlace;
 
   Post(this.upperCategory, this.lowerCategory, this.title, this.content,
-      this.participants, this.date, this.time, this.meetingPlace)
+      this.participants, this.date, this.time, this.meetingPlace) {}
 }

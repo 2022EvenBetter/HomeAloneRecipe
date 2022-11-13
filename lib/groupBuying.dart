@@ -12,27 +12,26 @@ class GroupBuying extends StatefulWidget {
 }
 
 class _GroupBuyingState extends State<GroupBuying> {
-  FirebaseFirestore fireStore=FirebaseFirestore.instance;
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   final List<String> upperCategoryList = ['육류', '야채류', '소스류', '유제품'];
   String selectedUpper = '육류';
   final List<String> lowerCategoryList = ['돼지고기', '닭고기', '우유', '양상추', '굴소스'];
   String selectedLower = '돼지고기';
-  String? inputTitle='';
+  String? inputTitle = '';
   //static Post post; //사용자가 입력한 정보를 담을 객체
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('글쓰기'),
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text('글쓰기'),
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          elevation: 0.0,
-        ),
-        bottomNavigationBar: const BottomBar(),
-        body: ListView(
+        centerTitle: true,
+        elevation: 0.0,
+      ),
+      body: ListView(
           padding: const EdgeInsets.fromLTRB(20.0, 40.0, 0.0, 0.0),
           children: <Widget>[
             const Text(
@@ -88,18 +87,12 @@ class _GroupBuyingState extends State<GroupBuying> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-             TextField(
-              decoration: const InputDecoration(
-                hintText: '제목을 입력해주세요.',
-              ),
-              onChanged: (text){
-
-              }
-            ),
-
-          ]
-        ),
-
+            TextField(
+                decoration: const InputDecoration(
+                  hintText: '제목을 입력해주세요.',
+                ),
+                onChanged: (text) {}),
+          ]),
     );
   }
 }

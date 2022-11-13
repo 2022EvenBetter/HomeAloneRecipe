@@ -51,14 +51,16 @@ import 'package:home_alone_recipe/home.dart';
 // }
 
 class BottomBar extends StatefulWidget {
-  const BottomBar({Key? key}) : super(key: key);
+  final _selectedIndex;
+  final _onItemTapped;
+  const BottomBar(this._selectedIndex, this._onItemTapped, {Key? key})
+      : super(key: key);
 
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
 
 class _BottomBarState extends State<BottomBar> {
-  int _selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
     const HomeScreen(),
@@ -66,11 +68,7 @@ class _BottomBarState extends State<BottomBar> {
     const HomeScreen(),
     const HomeScreen(),
   ];
-  void _onItemTapped(int index){
-    setState(() {
-      _selectedIndex=index;
-    });
-  }
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -96,10 +94,10 @@ class _BottomBarState extends State<BottomBar> {
           label: '유저화면',
         ),
       ],
-      currentIndex: _selectedIndex,
+      currentIndex: widget._selectedIndex,
       selectedItemColor: Colors.amber[800],
       unselectedItemColor: Colors.grey,
-      onTap: _onItemTapped,
+      onTap: widget._onItemTapped,
     );
   }
 }

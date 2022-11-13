@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:home_alone_recipe/groupBuying.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
 import 'widget/getRecipe.dart';
 import 'screen/recipe_screen.dart';
@@ -16,6 +17,34 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _authentication = FirebaseAuth.instance;
   User? loggedUser;
+
+  // bottom bar info
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      '홈화면',
+      style: optionStyle,
+    ),
+    RecipeScreen(),
+    GroupBuying(),
+    Text(
+      '채팅화면',
+      style: optionStyle,
+    ),
+    Text(
+      '유저화면',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -38,10 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('마이냉장고'),
+        title: Text('마이냉장고'),
         actions: [
           IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.exit_to_app_sharp,
                 color: Colors.black,
               ),
@@ -51,10 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
               })
         ],
       ),
-      body: const Center(
-        child: Text('홈화면'),
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: const BottomBar(),
+      bottomNavigationBar: BottomBar(_selectedIndex, _onItemTapped),
     );
   }
 }
