@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:home_alone_recipe/widget/bottom_bar.dart';
+import 'package:home_alone_recipe/widget/bottomBar.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:home_alone_recipe/models/post.dart';
 
@@ -19,7 +19,7 @@ class _GroupBuyingState extends State<GroupBuying> {
   final List<String> lowerCategoryList = ['돼지고기', '닭고기', '우유', '양상추', '굴소스'];
   String selectedLower = '돼지고기';
   String? inputTitle='';
-  static Post post; //사용자가 입력한 정보를 담을 객체
+  //static Post post; //사용자가 입력한 정보를 담을 객체
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,7 @@ class _GroupBuyingState extends State<GroupBuying> {
           centerTitle: true,
           elevation: 0.0,
         ),
+        bottomNavigationBar: const BottomBar(),
         body: ListView(
           padding: const EdgeInsets.fromLTRB(20.0, 40.0, 0.0, 0.0),
           children: <Widget>[
@@ -92,12 +93,13 @@ class _GroupBuyingState extends State<GroupBuying> {
                 hintText: '제목을 입력해주세요.',
               ),
               onChanged: (text){
-                  post.title = text;
-                  debugPrint(post.title);
-                }
+
+              }
             ),
 
           ]
-        ));
+        ),
+
+    );
   }
 }

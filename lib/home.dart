@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:home_alone_recipe/widget/bottom_bar.dart';
+import 'package:home_alone_recipe/widget/bottomBar.dart';
+import 'widget/getRecipe.dart';
+import 'screen/recipe_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _authentication = FirebaseAuth.instance;
   User? loggedUser;
-
   @override
   void initState() {
     super.initState();
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: const Center(
         child: Text('홈화면'),
       ),
-      bottomNavigationBar: const bottom_bar(),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
