@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:home_alone_recipe/widget/bottom_bar.dart';
+import 'package:home_alone_recipe/widget/bottomBar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -53,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Text('레시피화면2'),
       ),
-      bottomNavigationBar: bottom_bar(),
     );
   }
 }
