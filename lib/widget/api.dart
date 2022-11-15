@@ -111,11 +111,31 @@ class ListBuilder extends StatefulWidget {
 class _ListBuilderState extends State<ListBuilder> {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
+  Future<List> getMake(Map<String, dynamic> data, List<dynamic> ingArr) async {
+    db
+        .collection("recipeMake")
+        .where("레시피 코드", isEqualTo: data["레시피 코드"])
+        .get()
+        .then((ingSnap) => {
+              ingSnap.docs.forEach((element) {
+                Map<String, dynamic> ing =
+                    element.data() as Map<String, dynamic>;
+                //print('${ing['레시피 코드']}${ing['요리설명']}');
+                ingArr.add(ing["요리설명"]);
+                //print(ingArr);
+              })
+            });
+    return await Future.delayed(Duration(seconds: 1), () {
+      return ingArr;
+    });
+  }
+
   Future<List> _getRecipe(var ingredient) async {
     var pureRecipeArr = [];
     var loadedRecipe = [];
     var recipe =
         db.collection("recipeIngredients").where("재료명", isEqualTo: ingredient);
+
     recipe.get().then((docSnaps) => {
           docSnaps.docs.forEach((element) {
             Map<String, dynamic> data = element.data() as Map<String, dynamic>;
@@ -128,19 +148,36 @@ class _ListBuilderState extends State<ListBuilder> {
                         Map<String, dynamic> recipeD =
                             recipeData.data() as Map<String, dynamic>;
                         //print(recipeD["레시피 이름"]);
-                        pureRecipeArr.add(Recipe(
-                            recipeD["레시피 이름"],
-                            recipeD["대표이미지 URL"],
-                            recipeD["레시피 코드"],
-                            recipeD["간략(요약) 소개"]));
-                        print(pureRecipeArr.length);
+                        List<String> ingArr = [];
+                        db
+                            .collection("recipeMake")
+                            .where("레시피 코드", isEqualTo: data["레시피 코드"])
+                            .get()
+                            .then((ingSnap) => {
+                                  ingSnap.docs.forEach((element) {
+                                    Map<String, dynamic> ing =
+                                        element.data() as Map<String, dynamic>;
+                                    print('${ing['레시피 코드']}${ing['요리설명']}');
+                                    ingArr.add(ing["요리설명"]);
+                                    print(ingArr);
+                                  }),
+                                  pureRecipeArr.add(Recipe(
+                                      recipeD["레시피 이름"],
+                                      recipeD["대표이미지 URL"],
+                                      recipeD["레시피 코드"],
+                                      recipeD["간략(요약) 소개"],
+                                      ingArr))
+                                });
+                        //ingArr = getMake(data, ingArr);
+
+                        //print(pureRecipeArr.length);
                       })
                     });
           })
         });
 
-    return await Future.delayed(Duration(seconds: 1), () {
-      print(pureRecipeArr);
+    return await Future.delayed(Duration(seconds: 3), () {
+      //print(pureRecipeArr);
       return pureRecipeArr;
     });
   }
@@ -153,7 +190,7 @@ class _ListBuilderState extends State<ListBuilder> {
           //print(snapshot.hasData);
           //print('hi${snapshot.data![0]}');
           List<Recipe> snapRecipe = [];
-          snapshot.data.forEach((element) {
+          snapshot.data!.forEach((element) {
             Recipe r = element as Recipe;
             snapRecipe.add(r);
           });
@@ -162,13 +199,150 @@ class _ListBuilderState extends State<ListBuilder> {
                 itemCount: snapRecipe.length,
                 itemBuilder: (BuildContext context, int idx) {
                   return ListTile(
-                    title: Text(snapRecipe[idx].recipeName),
+                    title: Text(
+                        '${snapRecipe[idx].recipeName}${snapRecipe[idx].recipeCode}'),
                     subtitle: Text(snapRecipe[idx].description),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                RecipeDetailPage(snapRecipe[idx])),
+                      );
+                    },
                   );
                 });
           }
 
           return const Text('hi');
         }));
+  }
+}
+
+class RecipeDetailPage extends StatelessWidget {
+  final Recipe recipe;
+  const RecipeDetailPage(this.recipe, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Container(
+                height: 200.0,
+                child: Image.network(
+                  recipe.imageURL,
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width,
+                ),
+              ),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          recipe.recipeName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.favorite,
+                        ),
+                      ),
+                      Text('55'),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '이미 스크랩 하셨습니다.',
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Container(
+                  width: 500,
+                  child: Divider(color: Colors.grey, thickness: 1.0)),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '재료',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      '고등어, 밀가루',
+                      style: TextStyle(
+                          fontSize: 15.0, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                  width: 500,
+                  child: Divider(color: Colors.grey, thickness: 1.0)),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '레시피',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        verticalDirection: VerticalDirection.down,
+                        children: [
+                          for (var i = 0; i < recipe.recipe.length; i++)
+                            Text(
+                              '${i + 1} : ${recipe.recipe[i]}',
+                              style: TextStyle(fontSize: 15.0),
+                              textAlign: TextAlign.left,
+                            ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ));
   }
 }

@@ -2,11 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-<<<<<<< HEAD
-import 'package:home_alone_recipe/widget/bottombar.dart';
-=======
+
 import 'package:home_alone_recipe/widget/bottomBar.dart';
->>>>>>> origin
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
