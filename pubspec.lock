@@ -22,6 +22,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+<<<<<<< HEAD
   bottom_drawer:
     dependency: "direct main"
     description:
@@ -29,6 +30,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.5"
+=======
+>>>>>>> origin
   characters:
     dependency: transitive
     description:
@@ -71,6 +74,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+<<<<<<< HEAD
   cross_file:
     dependency: transitive
     description:
@@ -78,6 +82,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.3+2"
+=======
+>>>>>>> origin
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -464,4 +470,8 @@ packages:
     version: "5.4.1"
 sdks:
   dart: ">=2.18.4 <3.0.0"
+<<<<<<< HEAD
   flutter: ">=2.10.0"
+=======
+  flutter: ">=1.20.0"
+>>>>>>> origin

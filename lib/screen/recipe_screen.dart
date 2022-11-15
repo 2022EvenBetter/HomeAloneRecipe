@@ -25,8 +25,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
       body: Column(
         children: <Widget>[
           Api(apiResults),
-          for (var j = 0; j < apiResults.length; j++)
-            Expanded(child: GetRecipe(apiResults, j)),
+          // for (var j = 0; j < apiResults.length; j++)
+          //   Expanded(child: GetRecipe(apiResults, j)),
         ],
       ),
     );

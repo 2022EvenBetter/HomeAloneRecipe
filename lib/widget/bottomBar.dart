@@ -61,13 +61,7 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  final List<Widget> _widgetOptions = <Widget>[
-    const HomeScreen(),
-    const HomeScreen(),
-    const GroupBuying(),
-    const HomeScreen(),
-    const HomeScreen(),
-  ];
+  
 
   @override
   Widget build(BuildContext context) {
