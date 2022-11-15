@@ -54,10 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Text('레시피화면2'),
       ),
-<<<<<<< HEAD
-
-=======
->>>>>>> origin
     );
   }
 }

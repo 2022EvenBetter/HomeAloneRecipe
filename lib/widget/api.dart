@@ -157,9 +157,9 @@ class _ListBuilderState extends State<ListBuilder> {
                                   ingSnap.docs.forEach((element) {
                                     Map<String, dynamic> ing =
                                         element.data() as Map<String, dynamic>;
-                                    print('${ing['레시피 코드']}${ing['요리설명']}');
+                                    //print('${ing['레시피 코드']}${ing['요리설명']}');
                                     ingArr.add(ing["요리설명"]);
-                                    print(ingArr);
+                                    //print(ingArr);
                                   }),
                                   pureRecipeArr.add(Recipe(
                                       recipeD["레시피 이름"],
@@ -177,7 +177,7 @@ class _ListBuilderState extends State<ListBuilder> {
         });
 
     return await Future.delayed(Duration(seconds: 3), () {
-      //print(pureRecipeArr);
+      print('레시피 배열 : $pureRecipeArr');
       return pureRecipeArr;
     });
   }
