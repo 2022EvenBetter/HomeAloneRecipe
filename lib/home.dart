@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:home_alone_recipe/groupBuying.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
+import 'ocr.dart';
 import 'widget/getRecipe.dart';
 import 'screen/recipe_screen.dart';
 
@@ -23,10 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      '홈화면',
-      style: optionStyle,
-    ),
+    ocr(),
     RecipeScreen(),
     GroupBuying(),
     Text(

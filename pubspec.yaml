@@ -42,6 +42,9 @@ dependencies:
   firebase_database: ^10.0.5
   http: ^0.13.5
   xml: ^5.1.2
+  bottom_drawer: ^0.0.5
+  image_picker: ^0.8.6
+  google_ml_kit: ^0.13.0
 
 dev_dependencies:
   flutter_test:
