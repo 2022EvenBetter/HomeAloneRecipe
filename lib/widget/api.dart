@@ -72,7 +72,7 @@ class _ListBuilderState extends State<ListBuilder> {
     print(recipeCode);
     return db
         .collection("recipeIngredients")
-        .where("레시피 코드", isEqualTo: 1)
+        .where("레시피 코드", isEqualTo: recipeCode)
         .get();
   }
 
@@ -137,7 +137,7 @@ class _ListBuilderState extends State<ListBuilder> {
 
   Future<List<Recipe>> _getFiteredRecipe() async {
     final QuerySnapshot<Map<String, dynamic>> recipeIngredient =
-        await _FetchRecipe("안심");
+        await _FetchRecipe("쌀");
     //고등어를 가지고 있는 데이터를 가져옴
     print(recipeIngredient.docs[0].data()['레시피 코드']);
     final List<Map<String, dynamic>> recipeName = [];

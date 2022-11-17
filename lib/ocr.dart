@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_alone_recipe/screen/categoryIngredent.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:home_alone_recipe/models/post.dart';
@@ -26,91 +27,82 @@ class _ocr extends State<ocr> {
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if(image == null) return;
+      if (image == null) return;
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
-    } on PlatformException catch(e) {
+    } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
   }
+
   final picker = ImagePicker();
   Future getImage(ImageSource imageSource) async {
     // final image = await picker.pickImage(source: imageSource);
-    final XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final XFile? image =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
     });
   }
 
-  int? flag=0;
+  int? flag = 0;
   @override
   Widget build(BuildContext context) {
     _buildBottomDrawer(context);
     return Scaffold(
-
       appBar: AppBar(
-
           backgroundColor: Colors.white,
           centerTitle: true,
           elevation: 0.0,
-
-          actions:<Widget>[
+          actions: <Widget>[
             IconButton(
               icon: Icon(
                 Icons.arrow_downward,
                 color: Colors.black,
               ),
               onPressed: () {
-                if(flag==0) {
+                if (flag == 0) {
                   _controller.open();
-                  flag=1;
-                }
-                else{
+                  flag = 1;
+                } else {
                   _controller.close();
-                  flag=0;
+                  flag = 0;
                 }
-
 
                 setState(() {
                   _button = 'Close Drawer';
                 });
               },
             ),
-          ]
-      ),
+          ]),
       drawer: Drawer(
           child: ListView(
-            children: [
-              DrawerHeader(child: Text('header'),decoration: BoxDecoration(
-                  color: Colors.green
-              ),)
-            ],
+        children: [
+          DrawerHeader(
+            child: Text('header'),
+            decoration: BoxDecoration(color: Colors.green),
           )
-
-      ),
-
-
+        ],
+      )),
       body:
-      // Container(
-      //   alignment: Alignment.center,
-      //   child: Column(
-      //     children: <Widget>[
-      //       Text("ParsedText is:",style: GoogleFonts.montserrat(
-      //           fontSize:20,
-      //           fontWeight:FontWeight.bold
-      //       ),),
-      //       SizedBox(height:10.0),
-      //       Text(parsedtext,style: GoogleFonts.montserrat(
-      //           fontSize:25,
-      //           fontWeight:FontWeight.bold
-      //       ),)
-      //     ],
-      //   ),
-      // ),
+          // Container(
+          //   alignment: Alignment.center,
+          //   child: Column(
+          //     children: <Widget>[
+          //       Text("ParsedText is:",style: GoogleFonts.montserrat(
+          //           fontSize:20,
+          //           fontWeight:FontWeight.bold
+          //       ),),
+          //       SizedBox(height:10.0),
+          //       Text(parsedtext,style: GoogleFonts.montserrat(
+          //           fontSize:25,
+          //           fontWeight:FontWeight.bold
+          //       ),)
+          //     ],
+          //   ),
+          // ),
 
-      Stack(
-
-
+          Stack(
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -119,16 +111,11 @@ class _ocr extends State<ocr> {
               _image == null // 이미지 출력하는 부분임.
                   ? Text('No image selected.')
                   : Image.file(File(_image!.path)),
-
               Padding(
                 padding: EdgeInsets.only(top: 30.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    Text(parsedtext)
-
-                  ],
+                  children: [Text(parsedtext)],
                 ),
               ),
             ],
@@ -136,7 +123,6 @@ class _ocr extends State<ocr> {
           _buildBottomDrawer(context),
         ],
       ),
-
     );
   }
 
@@ -170,26 +156,18 @@ class _ocr extends State<ocr> {
               right: 10.0,
               top: 10.0,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:
-                [
-
-                TextButton(
-                      child: Text(
-                                '레시피 추천받기',
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                color: Colors.black,
-                              ),
-                            ),
-                      onPressed: () {
-
-                      },
-                    )
-
-                ]
-            ),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              TextButton(
+                child: Text(
+                  '레시피 추천받기',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.black,
+                  ),
+                ),
+                onPressed: () {},
+              )
+            ]),
           ),
           Spacer(),
           Divider(
@@ -206,46 +184,50 @@ class _ocr extends State<ocr> {
       width: double.infinity,
       height: _bodyHeight,
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextButton(
-              child: Text(
-                'OCR로 재료추가',
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.black,
-                ),
+        child: Column(children: [
+          TextButton(
+            child: Text(
+              'OCR로 재료추가',
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Colors.black,
               ),
-              onPressed: () {
-                _getFromGallery();
-              },
             ),
-            TextButton(
-              child: Text(
-                '카테고리로 재료추가',
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.black,
-                ),
+            onPressed: () {
+              _getFromGallery();
+            },
+          ),
+          TextButton(
+            child: Text(
+              '카테고리로 재료추가',
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Colors.black,
               ),
-              onPressed: () {
-                _getFromGallery();
-              },
-            ),TextButton(
-              child: Text(
-                '재료 삭제하기',
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.black,
-                ),
+            ),
+            onPressed: () async {
+              final List<String> addUserIngredient = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CategoryIngredient()),
+              );
+              if (addUserIngredient.isEmpty) {
+                print("Data has NULL");
+              } else {
+                print("추가할 재료 목록 : $addUserIngredient");
+              }
+            },
+          ),
+          TextButton(
+            child: Text(
+              '재료 삭제하기',
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Colors.black,
               ),
-              onPressed: () {
-
-              },
-            )
-
-          ]
-        ),
+            ),
+            onPressed: () {},
+          )
+        ]),
       ),
     );
   }
@@ -275,28 +257,29 @@ class _ocr extends State<ocr> {
   double _bodyHeight = 220.0;
   BottomDrawerController _controller = BottomDrawerController();
 
-
   String parsedtext = '';
 
   Future _getFromGallery() async {
     // final pickedFile=_image;
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
 
     var bytes = File(pickedFile.path.toString()).readAsBytesSync();
     String img64 = base64Encode(bytes);
 
     var url = 'https://api.ocr.space/parse/image';
-    var payload = {"base64Image": "data:image/jpg;base64,${img64.toString()}","language" :"kor"};
-    var header = {"apikey" :"K82749852688957"};
+    var payload = {
+      "base64Image": "data:image/jpg;base64,${img64.toString()}",
+      "language": "kor"
+    };
+    var header = {"apikey": "K82749852688957"};
 
-    var post = await http.post(Uri.parse(url),body: payload,headers: header);
+    var post = await http.post(Uri.parse(url), body: payload, headers: header);
     var result = jsonDecode(post.body);
 
     setState(() {
       parsedtext = result['ParsedResults'][0]['ParsedText'];
     });
   }
-
-
 }
