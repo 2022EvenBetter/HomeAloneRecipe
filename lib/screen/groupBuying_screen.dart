@@ -186,8 +186,10 @@ class _GroupBuyingState extends State<GroupBuying> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(
-                  width: 180,
+                const Expanded(
+                  child: SizedBox(
+                    width: 50,
+                  ),
                 ),
                 SizedBox(
                   width: 45,
@@ -195,7 +197,9 @@ class _GroupBuyingState extends State<GroupBuying> {
                   child: FloatingActionButton(
                     onPressed: () {
                       setState(() {
-                        _participantsCounter--;
+                        if(_participantsCounter != 0){
+                          _participantsCounter--;
+                        }
                       });
                     },
                     tooltip: 'Decrement',
@@ -279,6 +283,73 @@ class _GroupBuyingState extends State<GroupBuying> {
                   },
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            const Text(
+              '장소',
+              style: TextStyle(
+                letterSpacing: 1.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextField(
+                decoration: const InputDecoration(
+                  hintText: '장소를 입력해주세요.',
+                ),
+                onChanged: (text) {}
+            ),
+            const SizedBox(
+              height: 100.0,
+            ),
+
+            // TODO: 버튼 클릭 시 동작 설정하기
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 50),
+                  child: OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      child: const Text(
+                        '취소하기',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 50.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 50),
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: const Color(0xff686EFF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                    child: const Text(
+                        '작성하기',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                    ),
+                  ),
+                ),
+              ],
             )
           ]),
     );
