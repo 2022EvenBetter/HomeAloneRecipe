@@ -2,22 +2,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_alone_recipe/config/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:home_alone_recipe/home.dart';
-import 'package:home_alone_recipe/signup.dart';
+import 'package:home_alone_recipe/screen/home_screen.dart';
+import 'package:home_alone_recipe/screen/login_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final _authentication = FirebaseAuth.instance;
 
   final _formKey = GlobalKey<FormState>();
   String userEmail = '';
   String userPassword = '';
+  String userNickName = '';
 
   void _tryValidation() {
     //validation이 유효한지
@@ -41,8 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 40, 300, 10),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 40, 300, 5),
                         child: Text('이메일',
                             style: TextStyle(
                                 color: Palette.black,
@@ -51,9 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ), //이메일 text
 
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 5),
+                        padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
                         child: TextFormField(
-                          key: const ValueKey(1),
+                          key: ValueKey(1),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return '이메일을 입력해주세요!';
@@ -71,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           autofocus: true,
                           keyboardType: TextInputType.emailAddress,
                           textAlign: TextAlign.start,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             filled: true,
                             fillColor: Colors.white,
@@ -82,9 +83,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ), //이메일 form
 
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20, 300, 10),
-                        child: Text('비밀번호',
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 55, 5),
+                        child: Text('비밀번호 (영문+숫자+특수기호 포함 6자 이상)',
                             style: TextStyle(
                                 color: Palette.black,
                                 fontWeight: FontWeight.bold,
@@ -92,12 +93,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ), //비밀번호 text
 
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 40),
+                        padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
                         child: TextFormField(
-                          key: const ValueKey(2),
+                          key: ValueKey(2),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return '비밀번호를 입력해주세요!';
+                            } else if (value!.length < 6) {
+                              return '최소 6자 이어야 합니다!';
                             }
                             return null;
                           },
@@ -111,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: true,
                           enableSuggestions: false,
                           autocorrect: false,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             filled: true,
                             fillColor: Colors.white,
@@ -122,16 +125,56 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ), //비밀번호 form
 
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 130, 5),
+                        child: Text('닉네임 (영문+숫자 포함 4자 이상)',
+                            style: TextStyle(
+                                color: Palette.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15)),
+                      ), //닉네임 text
+
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(30, 0, 30, 40),
+                        child: TextFormField(
+                          key: ValueKey(3),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return '닉네임을 입력해주세요!';
+                            } else if (value!.length < 4) {
+                              return '최소 4자 이어야 합니다!';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            userNickName = value!;
+                          },
+                          onChanged: (value) {
+                            userNickName = value!;
+                          },
+                          keyboardType: TextInputType.visiblePassword,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: '불굴의 자취생',
+                            prefixIcon: Icon(Icons.account_circle),
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ), //닉네임 form
+
                       Positioned(
-                          //로그인 버튼
+                          //회원가입 버튼
                           top: 200,
                           child: GestureDetector(
                             onTap: () async {
                               _tryValidation();
-
                               try {
                                 final newUser = await _authentication
-                                    .signInWithEmailAndPassword(
+                                    .createUserWithEmailAndPassword(
                                   email: userEmail,
                                   password: userPassword,
                                 );
@@ -146,13 +189,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               } catch (e) {
                                 print(e);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Please Check your email and password'),
+                                    backgroundColor: Colors.blue,
+                                  ),
+                                );
                               }
                             },
                             child: Container(
                               alignment: Alignment.center,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text('로그인',
+                                child: Text('회원가입',
                                     style: TextStyle(
                                         color: Palette.white,
                                         fontWeight: FontWeight.bold,
@@ -165,19 +215,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderRadius: BorderRadius.circular(20)),
                             ),
                           )),
-
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUpScreen()),
-                          );
+                          Navigator.pop(context);
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
                           child: Text(
-                            '계정이 없으신가요?',
+                            '로그인하러 가기',
                             style: TextStyle(
                                 color: Colors.grey,
                                 fontWeight: FontWeight.bold,
