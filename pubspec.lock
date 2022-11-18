@@ -97,6 +97,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.8.9"
   fake_async:
     dependency: transitive
     description:
@@ -216,6 +223,48 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  geolocator:
+    dependency: "direct main"
+    description:
+      name: geolocator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.0.2"
+  geolocator_android:
+    dependency: transitive
+    description:
+      name: geolocator_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.4"
+  geolocator_apple:
+    dependency: transitive
+    description:
+      name: geolocator_apple
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.3"
+  geolocator_platform_interface:
+    dependency: transitive
+    description:
+      name: geolocator_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.7"
+  geolocator_web:
+    dependency: transitive
+    description:
+      name: geolocator_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.6"
+  geolocator_windows:
+    dependency: transitive
+    description:
+      name: geolocator_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   google_ml_kit:
     dependency: "direct main"
     description:
@@ -384,6 +433,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.2"
+  image_to_byte:
+    dependency: "direct main"
+    description:
+      name: image_to_byte
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   intl:
     dependency: "direct main"
     description:
@@ -432,6 +488,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
+  naver_map_plugin:
+    dependency: "direct main"
+    description:
+      name: naver_map_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.6"
   path:
     dependency: transitive
     description:
@@ -540,7 +603,14 @@ packages:
       sha256: c9aba3b3dbfe8878845dfab5fa096eb8de7b62231baeeb1cea8e3ee81ca8c6d8
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.15"
+    version: "0.4.12"
+  transparent_image:
+    dependency: "direct main"
+    description:
+      name: transparent_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   typed_data:
     dependency: transitive
     description:
@@ -574,5 +644,6 @@ packages:
     source: hosted
     version: "5.3.2"
 sdks:
-  dart: ">=2.18.4 <4.0.0"
-  flutter: ">=2.10.0"
+  dart: ">=2.18.4 <3.0.0"
+  flutter: ">=3.0.0"
+

@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:home_alone_recipe/widget/bottomBar.dart';
 
 class HomeScreen extends StatefulWidget {
