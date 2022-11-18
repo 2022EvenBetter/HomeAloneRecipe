@@ -24,22 +24,9 @@ class _CameraExampleState extends State<CameraExample> {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
     });
   }
-  // Future<void> getImage(String title, File file) async {
-  //   var request =await http.MultipartRequest("POST", Uri.parse("https://api.imgur.com/3/image"));
-  //   request.fields["title"] = title;
-  //   request.headers["Authorization"] = "";
-  //   var picture = http.MultipartFile.fromBytes('image', (await rootBundle.load('assets/testimage.png')).buffer.asUint8List(),
-  //       filename: 'image.png');
-  //   request.files.add(picture);
-  //   var response = await request.send();
-  //   var responseData = await response.stream.toBytes();
-  //   var result = String.fromCharCodes(responseData);
-  //   print(result);
-  // }
 
   // 이미지를 보여주는 위젯
-  Widget showImage() {
-    return Container(
+  Widget showImage() {return Container(
         color: const Color(0xffd0cece),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,

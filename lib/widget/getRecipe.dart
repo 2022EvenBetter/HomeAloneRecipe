@@ -23,7 +23,6 @@ class GetRecipe extends StatelessWidget {
           onError: (e) => print("error"));
     }
 
-    //Future fut = recipe.where("레시피 코드", isEqualTo: 1).get();
 
     return FutureBuilder<QuerySnapshot>(
       future: recipe.where("레시피 코드", isEqualTo: int.parse(ingredient[i])).get(),
@@ -46,84 +45,9 @@ class GetRecipe extends StatelessWidget {
               ));
             }).toList(),
           );
-          // snapshot.data!.docs[0].data
-          // return Padding(
-          //   padding: EdgeInsets.all(10.0),
-          //   child: Text(snapshot.data!.docs[0].data().toString()),
-          // );
         }
         return Text("loading");
       },
     );
   }
 }
-
-// class Recipe extends StatefulWidget {
-//   final List ingredient;
-//   const Recipe(this.ingredient, {super.key});
-
-//   @override
-//   State<Recipe> createState() => _RecipeState();
-// }
-
-// class _RecipeState extends State<Recipe> {
-//   CollectionReference recipe = FirebaseFirestore.instance.collection("recipe");
-
-//   //recipe.get().then((res) => print("1"));
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final Stream<QuerySnapshot> recipe =
-//         FirebaseFirestore.instance.collection("recipe").snapshots();
-
-//     CollectionReference rr = FirebaseFirestore.instance.collection("recipe");
-//     var stream = rr.where('레시피 코드', whereIn: [1, 2]);
-
-//     // for (var i = 1; i < 2; i++) {
-//     //   stream =
-//     //       stream.where('레시피 코드', isEqualTo: int.parse(widget.ingredient[i]));
-//     // }
-
-//     Stream<QuerySnapshot> streamQuery = stream.snapshots();
-
-//     Stream<QuerySnapshot> r =
-//         FirebaseFirestore.instance.collection("recipe").snapshots();
-
-//     List<int> allNum = [];
-//     QuerySnapshot all;
-//     final list = <int>[];
-//     var j;
-
-//     void getAllNum() {
-//       rr.get().then(
-//           (res) => {
-//                 for (var i = 0; i < res.docs.length; i++)
-//                   {allNum.add(res.docs[i].get('레시피 코드'))},
-//                 //print(allNum)
-//               },
-//           onError: (e) => print("error"));
-//     }
-
-//     return StreamBuilder<QuerySnapshot>(
-//         stream: r,
-//         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//           // print('1${snapshot.data!.docs}');
-//           // print('hi${widget.ingredient[0]}');
-//           getAllNum();
-//           return ListView(
-//             children: snapshot.data!.docs.map((DocumentSnapshot document) {
-//               Map<String, dynamic> data =
-//                   document.data()! as Map<String, dynamic>;
-//               if (data['레시피 코드'] == widget.ingredient) {
-//                 print("find");
-//               }
-//               return (ListTile(
-//                 title: Text('${data['레시피 코드']}'),
-//                 subtitle: Text(data['간략(요약) 소개']),
-//                 trailing: Image.network(data['대표이미지 URL']),
-//               ));
-//             }).toList(),
-//           );
-//         });
-//   }
-// }
