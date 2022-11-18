@@ -7,5 +7,5 @@ class Recipe {
   List<String> recipe = [];
 
   Recipe(this.recipeName, this.imageURL, this.recipeCode, this.description,
-      this.ingredients) {}
+      this.ingredients, this.recipe) {}
 }
