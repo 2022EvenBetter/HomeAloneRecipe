@@ -1,3 +1,4 @@
+import 'dart:convert' as convert;
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:xml/xml.dart';
+import 'package:xml2json/xml2json.dart';
 import 'package:http/http.dart' as http;
 import 'package:home_alone_recipe/widget/getRecipe.dart';
 import 'package:home_alone_recipe/models/recipe.dart';
@@ -76,6 +78,64 @@ class _ListBuilderState extends State<ListBuilder> {
         .get();
   }
 
+  Future<List<String>> _getIngAPI(int recipeCode) async {
+    final response = await http.get(Uri.parse(
+        'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?RECIPE_ID=${recipeCode}'));
+    List<String> ingResult = [];
+    if (response.statusCode == 200) {
+      final body = convert.utf8.decode(response.bodyBytes);
+
+      // xml => json으로 변환
+      final xml = Xml2Json()..parse(body);
+      final json = xml.toParker();
+
+      Map<String, dynamic> jsonResult = convert.json.decode(json);
+      print('응답');
+
+      for (var i = 0;
+          i < jsonResult['Grid_20150827000000000227_1']['row'].length;
+          i++) {
+        ingResult.add(
+            jsonResult['Grid_20150827000000000227_1']['row'][i]['IRDNT_NM']);
+      }
+
+      print(ingResult);
+    } else {
+      throw Exception('오류');
+    }
+
+    return ingResult;
+  }
+
+  Future<List<String>> _getRecipeAPI(int recipeCode) async {
+    final response = await http.get(Uri.parse(
+        'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000228_1/1/10?RECIPE_ID=${recipeCode}'));
+    List<String> ingResult = [];
+    if (response.statusCode == 200) {
+      final body = convert.utf8.decode(response.bodyBytes);
+
+      // xml => json으로 변환
+      final xml = Xml2Json()..parse(body);
+      final json = xml.toParker();
+
+      Map<String, dynamic> jsonResult = convert.json.decode(json);
+      print('응답');
+
+      for (var i = 0;
+          i < jsonResult['Grid_20150827000000000228_1']['row'].length;
+          i++) {
+        ingResult.add(
+            jsonResult['Grid_20150827000000000228_1']['row'][i]['COOKING_DC']);
+      }
+
+      print(ingResult);
+    } else {
+      throw Exception('오류');
+    }
+
+    return ingResult;
+  }
+
   Future<QuerySnapshot<Map<String, dynamic>>> _FetchRecipe(
       String ingredient) async {
     print("고등어");
@@ -115,20 +175,19 @@ class _ListBuilderState extends State<ListBuilder> {
     for (var i = 0; i < recipeInfo.docs.length; i++) {
       print("레시피설명 불러오는중");
       //print(recipeInfo.docs[0].data()['재료명']);
-      var _recipeIngSnapshot =
-          await _FetchRecipeIngredients(recipeInfo.docs[i]['레시피 코드']);
-      List<String> _recipeIng = [];
-      print(_recipeIngSnapshot.docs);
-      for (var j = 0; j < _recipeIngSnapshot.docs.length; j++) {
-        print(_recipeIngSnapshot.docs[j].data()['재료명']);
-        _recipeIng.add(_recipeIngSnapshot.docs[j].data()['재료명']);
-      }
+      List<String> _recipeIng =
+          await _getIngAPI(recipeInfo.docs[i].data()['레시피 코드']);
+      List<String> _recipeMake =
+          await _getRecipeAPI(recipeInfo.docs[i].data()['레시피 코드']);
+      print(_recipeMake);
+
       _recipe.add(Recipe(
           recipeMake[i]['레시피 이름'],
           recipeMake[i]['대표이미지 URL'],
           recipeInfo.docs[i].data()['레시피 코드'],
           recipeMake[i]['간략(요약) 소개'],
-          _recipeIng));
+          _recipeIng,
+          _recipeMake));
     }
     print('recipe : ');
     print(_recipe);
@@ -137,8 +196,9 @@ class _ListBuilderState extends State<ListBuilder> {
 
   Future<List<Recipe>> _getFiteredRecipe() async {
     final QuerySnapshot<Map<String, dynamic>> recipeIngredient =
-        await _FetchRecipe("쌀");
+        await _FetchRecipe("쭈꾸미");
     //고등어를 가지고 있는 데이터를 가져옴
+
     print(recipeIngredient.docs[0].data()['레시피 코드']);
     final List<Map<String, dynamic>> recipeName = [];
     final List<Recipe> filteredRecipeArray = [];
