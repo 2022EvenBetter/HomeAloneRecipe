@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:home_alone_recipe/screen/home_screen.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:home_alone_recipe/models/post.dart';
@@ -31,8 +32,9 @@ class _GroupBuyingState extends State<GroupBuying> {
     '굴소스'
   ];
   String selectedLower = '돼지고기';
-  String? inputTitle = '';
-  int _participantsCounter = 0;
+  Post post = Post(); //Post 클래스의 인스턴스 생성
+  int participantsCounter = 0;
+
   String? yearMonthDay; // 사용자가 입력한 날짜를 저장하기 위한 변수
   String? meetingTime; // 사용자가 입력한 시각을 저장하기 위한 변수
   TextEditingController ymdController =
@@ -77,6 +79,7 @@ class _GroupBuyingState extends State<GroupBuying> {
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0.0,
+        automaticallyImplyLeading: false, //뒤로가기 버튼 삭제
       ),
       body: ListView(
           padding: const EdgeInsets.fromLTRB(20.0, 40.0, 0.0, 0.0),
@@ -89,19 +92,23 @@ class _GroupBuyingState extends State<GroupBuying> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            DropdownButton(
-                value: selectedUpper, //초기값 설정
-                items: upperCategoryList.map((value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedUpper = value!;
-                  });
-                }),
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: DropdownButton(
+                  value: selectedUpper, //초기값 설정
+                  items: upperCategoryList.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedUpper = value!;
+                      post.upperCategory = value;
+                    });
+                  }),
+            ),
             const SizedBox(
               height: 20.0,
             ),
@@ -114,19 +121,23 @@ class _GroupBuyingState extends State<GroupBuying> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            DropdownButton(
-                value: selectedLower,
-                items: lowerCategoryList.map((value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedLower = value!;
-                  });
-                }),
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: DropdownButton(
+                  value: selectedLower,
+                  items: lowerCategoryList.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedLower = value!;
+                      post.lowerCategory = value;
+                    });
+                  }),
+            ),
             const SizedBox(
               height: 20.0,
             ),
@@ -139,11 +150,16 @@ class _GroupBuyingState extends State<GroupBuying> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            TextField(
-                decoration: const InputDecoration(
-                  hintText: '제목을 입력해주세요.',
-                ),
-                onChanged: (text) {}),
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: TextField(
+                  decoration: const InputDecoration(
+                    hintText: '제목을 입력해주세요.',
+                  ),
+                  onSubmitted: (text) {
+                    post.title = text;
+                  }),
+            ),
             const SizedBox(
               height: 20.0,
             ),
@@ -157,7 +173,7 @@ class _GroupBuyingState extends State<GroupBuying> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.all(12),
+              margin: const EdgeInsets.all(10),
               height: 10 * 24.0,
               padding: const EdgeInsets.only(right: 15),
               child: TextField(
@@ -169,7 +185,9 @@ class _GroupBuyingState extends State<GroupBuying> {
                         color: Colors.black,
                       ),
                     )),
-                onChanged: (text) {},
+                onChanged: (text) {
+                  post.content = text;
+                },
               ),
             ),
             const SizedBox(
@@ -197,8 +215,9 @@ class _GroupBuyingState extends State<GroupBuying> {
                   child: FloatingActionButton(
                     onPressed: () {
                       setState(() {
-                        if(_participantsCounter != 0){
-                          _participantsCounter--;
+                        if (participantsCounter != 0) {
+                          participantsCounter--;
+                          post.participants = participantsCounter;
                         }
                       });
                     },
@@ -210,22 +229,26 @@ class _GroupBuyingState extends State<GroupBuying> {
                   width: 20,
                 ),
                 Text(
-                  '$_participantsCounter',
+                  '$participantsCounter',
                 ),
                 const SizedBox(
                   width: 20,
                 ),
-                SizedBox(
-                  width: 45,
-                  height: 45,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      setState(() {
-                        _participantsCounter++;
-                      });
-                    },
-                    tooltip: 'Increment',
-                    child: const Icon(Icons.add),
+                Padding(
+                  padding: const EdgeInsets.only(right: 25.0),
+                  child: SizedBox(
+                    width: 45,
+                    height: 45,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        setState(() {
+                          participantsCounter++;
+                          post.participants = participantsCounter;
+                        });
+                      },
+                      tooltip: 'Increment',
+                      child: const Icon(Icons.add),
+                    ),
                   ),
                 ),
               ],
@@ -235,6 +258,7 @@ class _GroupBuyingState extends State<GroupBuying> {
             ),
 
             // 날짜 //
+            //TODO: 선택한 날짜를 문자열 변수에 넣기
             const Text(
               '날짜',
               style: TextStyle(
@@ -242,18 +266,22 @@ class _GroupBuyingState extends State<GroupBuying> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            GestureDetector(
-              onTap: yearMonthDayPicker,
-              child: AbsorbPointer(
-                //사용자의 임의 입력을 방지
-                child: TextField(
-                  controller: ymdController,
-                  decoration: const InputDecoration(
-                    labelText: '날짜를 선택해 주세요',
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: yearMonthDayPicker,
+                child: AbsorbPointer(
+                  //사용자의 임의 입력을 방지
+                  child: TextField(
+                    controller: ymdController,
+                    decoration: const InputDecoration(
+                      labelText: '날짜를 선택해 주세요',
+                    ),
+                    onChanged: (val) {
+                      yearMonthDay = ymdController.text;
+                      post.date = yearMonthDay;
+                    },
                   ),
-                  onChanged: (val) {
-                    yearMonthDay = ymdController.text;
-                  },
                 ),
               ),
             ),
@@ -269,18 +297,22 @@ class _GroupBuyingState extends State<GroupBuying> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            GestureDetector(
-              onTap: timePicker,
-              child: AbsorbPointer(
-                //사용자의 임의 입력을 방지
-                child: TextField(
-                  controller: timeController,
-                  decoration: const InputDecoration(
-                    labelText: '시간를 선택해 주세요',
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: timePicker,
+                child: AbsorbPointer(
+                  //사용자의 임의 입력을 방지
+                  child: TextField(
+                    controller: timeController,
+                    decoration: const InputDecoration(
+                      labelText: '시간를 선택해 주세요',
+                    ),
+                    onChanged: (val) {
+                      meetingTime = timeController.text;
+                      post.time = meetingTime;
+                    },
                   ),
-                  onChanged: (val) {
-                    meetingTime = timeController.text;
-                  },
                 ),
               ),
             ),
@@ -294,37 +326,47 @@ class _GroupBuyingState extends State<GroupBuying> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            TextField(
-                decoration: const InputDecoration(
-                  hintText: '장소를 입력해주세요.',
-                ),
-                onChanged: (text) {}
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: TextField(
+                  decoration: const InputDecoration(
+                    hintText: '장소를 입력해주세요.',
+                  ),
+                  onSubmitted: (text) {
+                    post.meetingPlace = text;
+                    print(post.content);
+                  }),
             ),
             const SizedBox(
               height: 100.0,
             ),
 
-            // TODO: 버튼 클릭 시 동작 설정하기
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 50),
                   child: OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
                       ),
-                      child: const Text(
-                        '취소하기',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                    ),
+                    child: const Text(
+                      '취소하기',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -332,6 +374,7 @@ class _GroupBuyingState extends State<GroupBuying> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 50),
+                  // TODO: 버튼 클릭 시 파이어스토어에 넘겨주기
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
@@ -341,11 +384,11 @@ class _GroupBuyingState extends State<GroupBuying> {
                       ),
                     ),
                     child: const Text(
-                        '작성하기',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                      '작성하기',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
