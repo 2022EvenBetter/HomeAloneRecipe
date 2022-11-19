@@ -101,7 +101,8 @@ packages:
     dependency: "direct main"
     description:
       name: dropdown_button2
-      url: "https://pub.dartlang.org"
+      sha256: ce05e42529768244e8bab0d0259ae9bbf748e7303d71cf1d128f4681518dcc31
+      url: "https://pub.dev"
     source: hosted
     version: "1.8.9"
   fake_async:
@@ -227,42 +228,48 @@ packages:
     dependency: "direct main"
     description:
       name: geolocator
-      url: "https://pub.dartlang.org"
+      sha256: "5c23f3613f50586c0bbb2b8f970240ae66b3bd992088cf60dd5ee2e6f7dde3a8"
+      url: "https://pub.dev"
     source: hosted
     version: "9.0.2"
   geolocator_android:
     dependency: transitive
     description:
       name: geolocator_android
-      url: "https://pub.dartlang.org"
+      sha256: fe90565c3a8789dc3b433d8f95cdb18343f9bde298a419d978337ba1ae1037d3
+      url: "https://pub.dev"
     source: hosted
     version: "4.1.4"
   geolocator_apple:
     dependency: transitive
     description:
       name: geolocator_apple
-      url: "https://pub.dartlang.org"
+      sha256: "567cf6d9879b4c33b2bd8bbfff0995e75c62a14f87b1480c8522c5dca5d3b166"
+      url: "https://pub.dev"
     source: hosted
     version: "2.2.3"
   geolocator_platform_interface:
     dependency: transitive
     description:
       name: geolocator_platform_interface
-      url: "https://pub.dartlang.org"
+      sha256: af4d69231452f9620718588f41acc4cb58312368716bfff2e92e770b46ce6386
+      url: "https://pub.dev"
     source: hosted
     version: "4.0.7"
   geolocator_web:
     dependency: transitive
     description:
       name: geolocator_web
-      url: "https://pub.dartlang.org"
+      sha256: f68a122da48fcfff68bbc9846bb0b74ef651afe84a1b1f6ec20939de4d6860e1
+      url: "https://pub.dev"
     source: hosted
     version: "2.1.6"
   geolocator_windows:
     dependency: transitive
     description:
       name: geolocator_windows
-      url: "https://pub.dartlang.org"
+      sha256: f5911c88e23f48b598dd506c7c19eff0e001645bdc03bb6fecb9f4549208354d
+      url: "https://pub.dev"
     source: hosted
     version: "0.1.1"
   google_ml_kit:
@@ -437,7 +444,8 @@ packages:
     dependency: "direct main"
     description:
       name: image_to_byte
-      url: "https://pub.dartlang.org"
+      sha256: bb715f70548433b6ae331b7b2288650c3c506c3cdbdfda0594b549028b3f36b9
+      url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
   intl:
@@ -492,7 +500,8 @@ packages:
     dependency: "direct main"
     description:
       name: naver_map_plugin
-      url: "https://pub.dartlang.org"
+      sha256: fb5443bec21585a82a3bc88f6bb53561672a3178a5cdd2ea772c35c8b80b35a6
+      url: "https://pub.dev"
     source: hosted
     version: "0.9.6"
   path:
@@ -603,12 +612,13 @@ packages:
       sha256: c9aba3b3dbfe8878845dfab5fa096eb8de7b62231baeeb1cea8e3ee81ca8c6d8
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.12"
+    version: "0.4.15"
   transparent_image:
     dependency: "direct main"
     description:
       name: transparent_image
-      url: "https://pub.dartlang.org"
+      sha256: "0a9a2f3a400afa7e322d27808be2b784c147651211a16164865e60cc535224d7"
+      url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
   typed_data:
@@ -646,4 +656,3 @@ packages:
 sdks:
   dart: ">=2.18.4 <3.0.0"
   flutter: ">=3.0.0"
-
