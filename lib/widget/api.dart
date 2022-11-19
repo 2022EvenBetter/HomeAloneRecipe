@@ -1,5 +1,6 @@
 import 'dart:convert' as convert;
 import 'dart:developer';
+import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -68,17 +69,45 @@ class ListBuilder extends StatefulWidget {
 class _ListBuilderState extends State<ListBuilder> {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<QuerySnapshot<Map<String, dynamic>>> _FetchRecipeIngredients(
-      int recipeCode) async {
-    print("고등어배열들");
-    print(recipeCode);
-    return db
-        .collection("recipeIngredients")
-        .where("레시피 코드", isEqualTo: recipeCode)
-        .get();
+  // Future<QuerySnapshot<Map<String, dynamic>>> _FetchRecipeIngredients(
+  //     int recipeCode) async {
+  //   print("고등어배열들");
+  //   print(recipeCode);
+  //   return db
+  //       .collection("recipeIngredients")
+  //       .where("레시피 코드", isEqualTo: recipeCode)
+  //       .get();
+  // }
+  Future<List<String>> _getIngAPIbyIngName(String recipeName) async {
+    final response = await http.get(Uri.parse(
+        'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?IRDNT_NM=${recipeName}'));
+    List<String> ingResult = [];
+    if (response.statusCode == 200) {
+      final body = convert.utf8.decode(response.bodyBytes);
+
+      // xml => json으로 변환
+      final xml = Xml2Json()..parse(body);
+      final json = xml.toParker();
+
+      Map<String, dynamic> jsonResult = convert.json.decode(json);
+      print('응답');
+
+      for (var i = 0;
+          i < jsonResult['Grid_20150827000000000227_1']['row'].length;
+          i++) {
+        ingResult.add(
+            jsonResult['Grid_20150827000000000227_1']['row'][i]['RECIPE_ID']);
+      }
+
+      print(ingResult);
+    } else {
+      throw Exception('오류');
+    }
+
+    return ingResult;
   }
 
-  Future<List<String>> _getIngAPI(int recipeCode) async {
+  Future<List<String>> _getIngAPI(String recipeCode) async {
     final response = await http.get(Uri.parse(
         'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?RECIPE_ID=${recipeCode}'));
     List<String> ingResult = [];
@@ -107,7 +136,7 @@ class _ListBuilderState extends State<ListBuilder> {
     return ingResult;
   }
 
-  Future<List<String>> _getRecipeAPI(int recipeCode) async {
+  Future<List<String>> _getRecipeAPI(String recipeCode) async {
     final response = await http.get(Uri.parse(
         'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000228_1/1/10?RECIPE_ID=${recipeCode}'));
     List<String> ingResult = [];
@@ -136,13 +165,19 @@ class _ListBuilderState extends State<ListBuilder> {
     return ingResult;
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> _FetchRecipe(
-      String ingredient) async {
-    print("고등어");
-    return db
-        .collection("recipeIngredients")
-        .where("재료명", isEqualTo: ingredient)
-        .get();
+  Future<List<dynamic>> readJson() async {
+    List<dynamic> _items = [];
+    final String response =
+        await rootBundle.loadString('lib/assets/recipeInfo.json');
+    print(response);
+    final data = await convert.json.decode(response);
+    //print(data);
+
+    _items = await data["recipe"];
+    print("read json");
+    print(_items.length);
+
+    return _items;
   }
 
   Future<Map<String, dynamic>> _FetchRecipeInfo(int recipeCode) async {
@@ -155,36 +190,21 @@ class _ListBuilderState extends State<ListBuilder> {
     return a.docs[0].data();
   }
 
-  Future<List<dynamic>> _FetchRecipeMake(int recipeCode) async {
-    var a = await db
-        .collection("recipeMake")
-        .where("레시피 코드", isEqualTo: recipeCode)
-        .get();
-    print("레시피 설명 넣는중");
-    print(recipeCode);
-    print(a.docs);
-    print(a.docs.length);
-
-    return a.docs;
-  }
-
   Future<List<Recipe>> _MakeRecipeArray(
-      QuerySnapshot<Map<String, dynamic>> recipeInfo,
-      List<Map<String, dynamic>> recipeMake) async {
+      List<dynamic> recipeInfo, List<dynamic> recipeMake) async {
     List<Recipe> _recipe = [];
-    for (var i = 0; i < recipeInfo.docs.length; i++) {
+    for (var i = 0; i < recipeInfo.length; i++) {
       print("레시피설명 불러오는중");
       //print(recipeInfo.docs[0].data()['재료명']);
-      List<String> _recipeIng =
-          await _getIngAPI(recipeInfo.docs[i].data()['레시피 코드']);
-      List<String> _recipeMake =
-          await _getRecipeAPI(recipeInfo.docs[i].data()['레시피 코드']);
-      print(_recipeMake);
+      List<String> _recipeIng = await _getIngAPI(recipeInfo[i]);
+      List<String> _recipeMake = await _getRecipeAPI(recipeInfo[i]);
+      print("recipeMake arr");
+      print(recipeMake);
 
       _recipe.add(Recipe(
           recipeMake[i]['레시피 이름'],
           recipeMake[i]['대표이미지 URL'],
-          recipeInfo.docs[i].data()['레시피 코드'],
+          int.parse(recipeInfo[i]),
           recipeMake[i]['간략(요약) 소개'],
           _recipeIng,
           _recipeMake));
@@ -195,26 +215,35 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 
   Future<List<Recipe>> _getFiteredRecipe() async {
-    final QuerySnapshot<Map<String, dynamic>> recipeIngredient =
-        await _FetchRecipe("쭈꾸미");
+    final List<String> filteredRecipecode = await _getIngAPIbyIngName("쪽파");
     //고등어를 가지고 있는 데이터를 가져옴
+    print("filtered code");
+    print(filteredRecipecode);
 
-    print(recipeIngredient.docs[0].data()['레시피 코드']);
-    final List<Map<String, dynamic>> recipeName = [];
-    final List<Recipe> filteredRecipeArray = [];
-    print(recipeIngredient.docs.length);
+    final List<dynamic> filteredRecipeArray = [];
 
-    print(recipeIngredient.docs[0].data());
-    for (var i = 0; i < recipeIngredient.docs.length; i++) {
-      print('recipeNameFor${recipeIngredient.docs[i]['레시피 코드']}');
-      recipeName
-          .add(await _FetchRecipeInfo(recipeIngredient.docs[i]['레시피 코드']));
+    List<dynamic> allRecipes = await readJson();
+    //print("allrecipe");
+    print(allRecipes);
+    for (var i = 0; i < allRecipes.length; i++) {
+      //print('recipeNameFor${filteredRecipecode[i]}');
+      //print(allRecipes[i]);
 
-      print(recipeName[i]);
+      for (var j = 0; j < filteredRecipecode.length; j++) {
+        // print(allRecipes[i]["레시피 코드"].runtimeType);
+        // print(allRecipes[i]["레시피 코드"]);
+        // print(filteredRecipecode[j].runtimeType);
+        // print(filteredRecipecode[j]);
+        if (allRecipes[i]["레시피 코드"] == int.parse(filteredRecipecode[j])) {
+          filteredRecipeArray.add(allRecipes[i]);
+          print("filtered");
+        }
+      }
+      //print(filteredRecipeArray);
       //고등어를 가지고 있는 레시피의 코드를 추출하여 레시피 이름을 포함한 레시피 데이터를 가져옴
     }
 
-    return await _MakeRecipeArray(recipeIngredient, recipeName);
+    return await _MakeRecipeArray(filteredRecipecode, filteredRecipeArray);
   }
 
   @override
@@ -232,8 +261,10 @@ class _ListBuilderState extends State<ListBuilder> {
             snapshot.data!.forEach((element) {
               Recipe r = element as Recipe;
               snapRecipe.add(r);
+              print("Recipe Snap For");
             });
           }
+          print(snapshot.connectionState);
 
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView.builder(
