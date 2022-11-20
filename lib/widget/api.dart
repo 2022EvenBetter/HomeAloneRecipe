@@ -1,7 +1,7 @@
 import 'dart:convert' as convert;
 import 'dart:developer';
 import 'package:flutter/services.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -25,17 +25,8 @@ class _ApiState extends State<Api> {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<List> _getRecipe(String ingredient) async {
-    var pureRecipeArr = [];
-
-    return pureRecipeArr;
-  }
-
-  void _refresh() {
-    widget.apiResults.clear();
-    print(widget.apiResults);
-  }
-
+  String filterIngredient = "";
+  bool isScrapped = false;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -45,14 +36,21 @@ class _ApiState extends State<Api> {
             children: <Widget>[
               ElevatedButton(
                   onPressed: () {
-                    _getRecipe("안심");
+                    setState(() {
+                      filterIngredient = "쭈꾸미";
+                    });
                   },
                   child: Text('사용불가')),
-              ElevatedButton(onPressed: () {}, child: Text('refresh')),
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      filterIngredient = "고등어";
+                    });
+                  },
+                  child: Text('refresh')),
             ],
           ),
-          Expanded(child: ListBuilder()),
-          //Test(),
+          Expanded(child: ListBuilder(filterIngredient)),
         ],
       ),
     );
@@ -60,7 +58,8 @@ class _ApiState extends State<Api> {
 }
 
 class ListBuilder extends StatefulWidget {
-  const ListBuilder({super.key});
+  final String filterIngredient;
+  const ListBuilder(this.filterIngredient, {super.key});
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
@@ -69,15 +68,6 @@ class ListBuilder extends StatefulWidget {
 class _ListBuilderState extends State<ListBuilder> {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  // Future<QuerySnapshot<Map<String, dynamic>>> _FetchRecipeIngredients(
-  //     int recipeCode) async {
-  //   print("고등어배열들");
-  //   print(recipeCode);
-  //   return db
-  //       .collection("recipeIngredients")
-  //       .where("레시피 코드", isEqualTo: recipeCode)
-  //       .get();
-  // }
   Future<List<String>> _getIngAPIbyIngName(String recipeName) async {
     final response = await http.get(Uri.parse(
         'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?IRDNT_NM=${recipeName}'));
@@ -98,8 +88,6 @@ class _ListBuilderState extends State<ListBuilder> {
         ingResult.add(
             jsonResult['Grid_20150827000000000227_1']['row'][i]['RECIPE_ID']);
       }
-
-      print(ingResult);
     } else {
       throw Exception('오류');
     }
@@ -127,8 +115,6 @@ class _ListBuilderState extends State<ListBuilder> {
         ingResult.add(
             jsonResult['Grid_20150827000000000227_1']['row'][i]['IRDNT_NM']);
       }
-
-      print(ingResult);
     } else {
       throw Exception('오류');
     }
@@ -156,8 +142,6 @@ class _ListBuilderState extends State<ListBuilder> {
         ingResult.add(
             jsonResult['Grid_20150827000000000228_1']['row'][i]['COOKING_DC']);
       }
-
-      print(ingResult);
     } else {
       throw Exception('오류');
     }
@@ -169,25 +153,14 @@ class _ListBuilderState extends State<ListBuilder> {
     List<dynamic> _items = [];
     final String response =
         await rootBundle.loadString('lib/assets/recipeInfo.json');
-    print(response);
+
     final data = await convert.json.decode(response);
     //print(data);
 
     _items = await data["recipe"];
     print("read json");
-    print(_items.length);
 
     return _items;
-  }
-
-  Future<Map<String, dynamic>> _FetchRecipeInfo(int recipeCode) async {
-    var a = await db
-        .collection("recipe")
-        .where("레시피 코드", isEqualTo: recipeCode)
-        .get();
-    print("info)");
-    print(a.docs.length);
-    return a.docs[0].data();
   }
 
   Future<List<Recipe>> _MakeRecipeArray(
@@ -195,11 +168,9 @@ class _ListBuilderState extends State<ListBuilder> {
     List<Recipe> _recipe = [];
     for (var i = 0; i < recipeInfo.length; i++) {
       print("레시피설명 불러오는중");
-      //print(recipeInfo.docs[0].data()['재료명']);
+
       List<String> _recipeIng = await _getIngAPI(recipeInfo[i]);
       List<String> _recipeMake = await _getRecipeAPI(recipeInfo[i]);
-      print("recipeMake arr");
-      print(recipeMake);
 
       _recipe.add(Recipe(
           recipeMake[i]['레시피 이름'],
@@ -209,43 +180,37 @@ class _ListBuilderState extends State<ListBuilder> {
           _recipeIng,
           _recipeMake));
     }
-    print('recipe : ');
-    print(_recipe);
+
     return await _recipe;
   }
 
   Future<List<Recipe>> _getFiteredRecipe() async {
-    final List<String> filteredRecipecode = await _getIngAPIbyIngName("쪽파");
-    //고등어를 가지고 있는 데이터를 가져옴
-    print("filtered code");
-    print(filteredRecipecode);
+    print(widget.filterIngredient);
+    if (widget.filterIngredient != "") {
+      final List<String> filteredRecipecode =
+          await _getIngAPIbyIngName(widget.filterIngredient);
 
-    final List<dynamic> filteredRecipeArray = [];
+      final List<dynamic> filteredRecipeArray = [];
 
-    List<dynamic> allRecipes = await readJson();
-    //print("allrecipe");
-    print(allRecipes);
-    for (var i = 0; i < allRecipes.length; i++) {
-      //print('recipeNameFor${filteredRecipecode[i]}');
-      //print(allRecipes[i]);
+      List<dynamic> allRecipes = await readJson();
 
-      for (var j = 0; j < filteredRecipecode.length; j++) {
-        // print(allRecipes[i]["레시피 코드"].runtimeType);
-        // print(allRecipes[i]["레시피 코드"]);
-        // print(filteredRecipecode[j].runtimeType);
-        // print(filteredRecipecode[j]);
-        if (allRecipes[i]["레시피 코드"] == int.parse(filteredRecipecode[j])) {
-          filteredRecipeArray.add(allRecipes[i]);
-          print("filtered");
+      for (var i = 0; i < allRecipes.length; i++) {
+        for (var j = 0; j < filteredRecipecode.length; j++) {
+          if (allRecipes[i]["레시피 코드"] == int.parse(filteredRecipecode[j])) {
+            filteredRecipeArray.add(allRecipes[i]);
+            print("filtered");
+          }
         }
       }
-      //print(filteredRecipeArray);
-      //고등어를 가지고 있는 레시피의 코드를 추출하여 레시피 이름을 포함한 레시피 데이터를 가져옴
-    }
 
-    return await _MakeRecipeArray(filteredRecipecode, filteredRecipeArray);
+      return await _MakeRecipeArray(filteredRecipecode, filteredRecipeArray);
+    } else {
+      List<Recipe> emptyArr = [];
+      return emptyArr;
+    }
   }
 
+  bool isScrap = true;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -257,33 +222,117 @@ class _ListBuilderState extends State<ListBuilder> {
           print(snapshot);
           if (snapshot.hasData) {
             print("222222222222222222222222222222222222");
-            print(snapshot.data![0].recipeName);
+            //print(snapshot.data![0].recipeName);
             snapshot.data!.forEach((element) {
               Recipe r = element as Recipe;
               snapRecipe.add(r);
               print("Recipe Snap For");
             });
           }
-          print(snapshot.connectionState);
+          //print(snapshot.connectionState);
 
           if (snapshot.connectionState == ConnectionState.done) {
-            return ListView.builder(
-                itemCount: snapRecipe.length,
-                itemBuilder: (BuildContext context, int idx) {
-                  return ListTile(
-                    title: Text(
-                        '${snapRecipe[idx].recipeName}${snapRecipe[idx].recipeCode}'),
-                    subtitle: Text(snapRecipe[idx].description),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                RecipeDetailPage(snapRecipe[idx])),
-                      );
-                    },
-                  );
-                });
+            return Column(
+              children: [
+                Text('총${snapRecipe.length + 1}개의 레시피가 나왔어요!'),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: snapRecipe.length,
+                      itemBuilder: (BuildContext context, int idx) {
+                        return Container(
+                            margin: EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 110.0,
+                                      height: 110.0,
+                                      child: Image.network(
+                                        snapRecipe[idx].imageURL,
+                                        fit: BoxFit.cover,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 110,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            width: 210,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  '${snapRecipe[idx].recipeName}',
+                                                  style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Container(
+                                                    width: 180,
+                                                    child: Text(
+                                                      snapRecipe[idx]
+                                                          .description,
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                          fontSize: 13),
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            0, 10, 10.0, 0.0),
+                                                    child: Container(
+                                                      width: 30,
+                                                      child: IconButton(
+                                                        padding:
+                                                            EdgeInsets.zero,
+                                                        constraints:
+                                                            BoxConstraints(),
+                                                        icon: isScrap
+                                                            ? Icon(
+                                                                Icons.favorite)
+                                                            : Icon(Icons
+                                                                .favorite_outline),
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            isScrap = !isScrap;
+                                                          });
+                                                        },
+                                                      ),
+                                                    )),
+                                                Text('55'),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5),
+                                                  child: Text(
+                                                    '자세히 보기',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ));
+                      }),
+                )
+              ],
+            );
           }
 
           return const Text('hi');
@@ -298,7 +347,15 @@ class RecipeDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(
+            '상세보기',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          centerTitle: true,
+          elevation: 3.0,
+          backgroundColor: Colors.white,
+        ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
@@ -426,42 +483,5 @@ class RecipeDetailPage extends StatelessWidget {
             ],
           ),
         ));
-  }
-}
-
-class Test extends StatefulWidget {
-  const Test({super.key});
-
-  @override
-  State<Test> createState() => _TestState();
-}
-
-class _TestState extends State<Test> {
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  Future<Map<String, dynamic>> getMake() async {
-    dd();
-    var a = await db.collection("recipe").get();
-    print("test");
-    //print(a.docs);
-    return a.docs[0].data();
-  }
-
-  void dd() {
-    print("hello");
-    db.collection("recipeMake").get().then((value) {
-      value.docs.forEach((element) {
-        print(element.data());
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getMake(),
-        builder: ((BuildContext context, AsyncSnapshot snapshot) {
-          print(snapshot);
-          return Text('1');
-        }));
   }
 }
