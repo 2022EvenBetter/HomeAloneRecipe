@@ -52,8 +52,9 @@ dependencies:
   flutter_svg: ^1.0.3
   transparent_image: ^1.0.0
   image_to_byte: ^1.0.0
-  dropdown_button2: ^1.8.9
+  dropdown_button2: ^1.9.0
   cached_network_image: ^3.2.2
+  cool_dropdown: ^1.4.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
