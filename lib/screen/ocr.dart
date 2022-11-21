@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
-import 'package:home_alone_recipe/camera_ex.dart';
+import 'package:home_alone_recipe/screen/camera_ex.dart';
 
 class ocr extends StatefulWidget {
   const ocr({Key? key}) : super(key: key);
