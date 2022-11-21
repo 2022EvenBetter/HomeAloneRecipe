@@ -4,6 +4,9 @@ import 'package:home_alone_recipe/config/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:home_alone_recipe/screen/home_screen.dart';
 import 'package:home_alone_recipe/screen/login_screen.dart';
+import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -14,7 +17,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _authentication = FirebaseAuth.instance;
-
+  late UserProvider _userProvider;
   final _formKey = GlobalKey<FormState>();
   String userEmail = '';
   String userPassword = '';
@@ -28,8 +31,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
+  void showPopup(context, message) {
+    //이메일 유효하지 않을 때
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+            child: Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: 100,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(message,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                        textAlign: TextAlign.center),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.close),
+                      label: const Text('닫기'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.yellow,
+                        onPrimary: Colors.white, // Background color
+                      ),
+                    )
+                  ],
+                )));
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
         backgroundColor: Palette.lightgray,
         body: Column(
@@ -173,13 +215,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             onTap: () async {
                               _tryValidation();
                               try {
+                                //회원가입 성공
                                 final newUser = await _authentication
                                     .createUserWithEmailAndPassword(
                                   email: userEmail,
                                   password: userPassword,
                                 );
 
+
+                                print(_userProvider.toString());
                                 if (newUser.user != null) {
+                                  await FirebaseFirestore.instance
+                                      .collection("User")
+                                      .doc(newUser.user!.uid)
+                                      .set({
+                                    "Email": userEmail,
+                                    "Password": userPassword,
+                                    "NickName": userNickName,
+                                    "Scope": "",
+                                    "Ingredient": [],
+                                    "MyRecipes": [],
+                                    "Location": "",
+                                    "Post": "",
+                                  },
+                                  ).onError((e, _) =>
+                                          print("Error writing document: $e"));
+
+                                  _userProvider.signup(newUser.user!.uid,
+                                      userEmail, userPassword, userNickName);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
@@ -189,6 +252,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 }
                               } catch (e) {
                                 print(e);
+                                String message = "이미 중복된 아이디입니다!";
+                                showPopup(context, message);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
