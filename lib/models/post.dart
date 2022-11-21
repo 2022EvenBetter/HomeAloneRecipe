@@ -1,13 +1,51 @@
-class Post {
-  String upperCategory;
-  String lowerCategory;
-  String title;
-  String content;
-  int participants;
-  DateTime date;
-  DateTime time;
-  String meetingPlace;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Post(this.upperCategory, this.lowerCategory, this.title, this.content,
-      this.participants, this.date, this.time, this.meetingPlace) {}
+class Post {
+  String? upperCategory;
+  String? lowerCategory;
+  String? title;
+  String? content;
+  int? participants;
+  String? date;
+  String? time;
+  String? meetingPlace;
+
+  Post(
+      {this.upperCategory,
+      this.lowerCategory,
+      this.title,
+      this.content,
+      this.participants,
+      this.date,
+      this.time,
+      this.meetingPlace});
+
+  Post.fromJson(dynamic json) {
+    upperCategory = json['upperCategory'];
+    lowerCategory = json['lowerCategory'];
+    title = json['title'];
+    content = json['content'];
+    participants = json['participants'];
+    date = json['date'];
+    time = json['time'];
+    meetingPlace = json['meetingPlace'];
+  }
+
+  Post.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot)
+      : this.fromJson(snapshot.data());
+
+  Post.fromQuerySnapshot(
+      QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : this.fromJson(snapshot.data());
+
+  Map<String, dynamic> toJson() => {
+        'upperCategory': upperCategory,
+        'lowerCategory': lowerCategory,
+        'title': title,
+        'content': content,
+        'participants': participants,
+        'date': date,
+        'time': time,
+        'meetingPlace': meetingPlace,
+      };
 }

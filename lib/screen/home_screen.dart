@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:home_alone_recipe/screen/groupBuying_screen.dart';
 import 'package:home_alone_recipe/screen/myTown_screen.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
-import '../ocr.dart';
+import 'ocr.dart';
 import '../widget/getRecipe.dart';
 import 'recipe_screen.dart';
 
