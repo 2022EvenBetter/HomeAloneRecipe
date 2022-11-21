@@ -105,6 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
+  cool_dropdown:
+    dependency: "direct main"
+    description:
+      name: cool_dropdown
+      sha256: "6b1bbadd8605f957b8199e5ece8f51435b371d43978558e5332f29399b4f287a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.2"
   cross_file:
     dependency: transitive
     description:
@@ -133,10 +141,10 @@ packages:
     dependency: "direct main"
     description:
       name: dropdown_button2
-      sha256: ce05e42529768244e8bab0d0259ae9bbf748e7303d71cf1d128f4681518dcc31
+      sha256: c2c822bc6334ecdb54e5eb79cc02041fb7a208c191ccd87538e3706c2f31a1b6
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.9"
+    version: "1.9.0"
   fake_async:
     dependency: transitive
     description:
