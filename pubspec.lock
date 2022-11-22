@@ -91,13 +91,12 @@ packages:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.17.0"
+    version: "1.16.0"
   cool_dropdown:
     dependency: "direct main"
     description:
       name: cool_dropdown
-      sha256: "6b1bbadd8605f957b8199e5ece8f51435b371d43978558e5332f29399b4f287a"
-      url: "https://pub.dev"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.2"
   cross_file:
@@ -125,8 +124,7 @@ packages:
     dependency: "direct main"
     description:
       name: dropdown_button2
-      sha256: c2c822bc6334ecdb54e5eb79cc02041fb7a208c191ccd87538e3706c2f31a1b6
-      url: "https://pub.dev"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
   fake_async:
