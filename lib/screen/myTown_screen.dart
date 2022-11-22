@@ -82,6 +82,7 @@ class _TownScreenState extends State<TownScreen> {
                   }
                   // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
                   else {
+                    _userProvider.location = snapshot.data.toString();
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: SizedBox(
@@ -92,7 +93,8 @@ class _TownScreenState extends State<TownScreen> {
                             setState(() async {
                               mylocation = getLocation();
                               locationURL = getLocationUrl();
-                              _userProvider.location = snapshot.data.toString();
+                              _userProvider.location=mylocation.toString();
+                              print(_userProvider.location);
                             });
                           },
                           icon: Icon(Icons.update),
@@ -232,13 +234,14 @@ class _TownScreenState extends State<TownScreen> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                       }
+                      _userProvider.scope=selectedValue.toString();
                       if (selectedValue != null) {
                         await FirebaseFirestore.instance
                             .collection("User")
                             .doc(_userProvider.uid)
                             .set({
                           "Location": _userProvider.location,
-                          "Scope": selectedValue
+                          "Scope": selectedValue.toString(),
                         }, SetOptions(merge: true));
                       }
                     },

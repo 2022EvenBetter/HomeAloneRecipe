@@ -222,8 +222,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   password: userPassword,
                                 );
 
-
-                                print(_userProvider.toString());
                                 if (newUser.user != null) {
                                   await FirebaseFirestore.instance
                                       .collection("User")
@@ -236,8 +234,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     "Ingredient": [],
                                     "MyRecipes": [],
                                     "Location": "",
-                                    "Post": "",
+                                    "Post": [],
                                   },
+
                                   ).onError((e, _) =>
                                           print("Error writing document: $e"));
 
@@ -252,15 +251,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 }
                               } catch (e) {
                                 print(e);
-                                String message = "이미 중복된 아이디입니다!";
+                                String message = "회원가입할 수 없습니다!";
                                 showPopup(context, message);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Please Check your email and password'),
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                );
                               }
                             },
                             child: Container(

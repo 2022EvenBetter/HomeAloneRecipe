@@ -207,13 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 print(e);
                                 String message = "아이디 또는 비밀번호가 일치하지 않습니다!";
                                 showPopup(context, message);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Please Check your email and password'),
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                );
+
                               }
                             },
                             child: Container(
