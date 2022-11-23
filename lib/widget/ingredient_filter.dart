@@ -16,8 +16,9 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'category_dropdown.dart';
 
 class IngredientFilter extends StatefulWidget {
-  const IngredientFilter(this.setIng, {super.key});
-  final Function setIng;
+  const IngredientFilter(this.addIng, this.rmvIng, {super.key});
+  final Function addIng;
+  final Function rmvIng;
   @override
   State<IngredientFilter> createState() => _IngredientFilterState();
 }
@@ -48,6 +49,7 @@ class _IngredientFilterState extends State<IngredientFilter> {
         _isV[i] = false;
       }
       _isV[index] = true;
+      _isVisible1 = true;
     });
 
     print(_isV[index]);
@@ -56,44 +58,107 @@ class _IngredientFilterState extends State<IngredientFilter> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 130,
+      height: 150,
       child: Column(
         children: [
           CategoryDropdown(setVisible),
-          Container(
-            child: Visibility(
-              maintainState: false,
-              child: Expanded(
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    IngredientButtonForRecipeTab("채소류", "버섯", widget.setIng),
-                    IngredientButtonForRecipeTab("채소류", "고추", widget.setIng),
-                    IngredientButtonForRecipeTab("채소류", "배추", widget.setIng),
-                    IngredientButtonForRecipeTab("채소류", "바질", widget.setIng),
-                    IngredientButtonForRecipeTab("채소류", "브로콜리", widget.setIng),
-                  ],
+          Expanded(
+            child: Column(
+              children: [
+                Visibility(
+                  maintainState: true,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          IngredientButtonForRecipeTab(
+                              "채소류", "버섯", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "채소류", "고추", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "채소류", "배추", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "채소류", "양배추", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "채소류", "마늘", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "채소류", "바질", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "채소류", "브로콜리", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "채소류", "당근", widget.addIng, widget.rmvIng),
+                        ],
+                      )),
+                  visible: _isV[1],
                 ),
-              ),
-              visible: _isV[1],
+                Visibility(
+                  maintainState: true,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          IngredientButtonForRecipeTab(
+                              "육류", "돼지고기", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "육류", "소고기", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "육류", "닭고기", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "육류", "다짐육", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "육류", "곱창", widget.addIng, widget.rmvIng),
+                        ],
+                      )),
+                  visible: _isV[0],
+                ),
+                Visibility(
+                  maintainState: true,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [],
+                      )),
+                  visible: _isV[2],
+                ),
+                Visibility(
+                  maintainState: true,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [],
+                      )),
+                  visible: _isV[3],
+                ),
+                Visibility(
+                  maintainState: true,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [],
+                      )),
+                  visible: _isV[4],
+                ),
+                Visibility(
+                  maintainState: true,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          IngredientButtonForRecipeTab(
+                              "과일", "딸기", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "과일", "바나나", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "과일", "배", widget.addIng, widget.rmvIng),
+                          IngredientButtonForRecipeTab(
+                              "과일", "사과", widget.addIng, widget.rmvIng),
+                        ],
+                      )),
+                  visible: _isV[5],
+                ),
+              ],
             ),
-          ),
-          Visibility(
-            maintainState: false,
-            child: Expanded(
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  IngredientButtonForRecipeTab("육류", "돼지고기", widget.setIng),
-                  IngredientButtonForRecipeTab("육류", "소고기", widget.setIng),
-                  IngredientButtonForRecipeTab("육류", "닭고기", widget.setIng),
-                  IngredientButtonForRecipeTab("육류", "다짐육", widget.setIng),
-                  IngredientButtonForRecipeTab("육류", "곱창", widget.setIng),
-                ],
-              ),
-            ),
-            visible: _isV[0],
-          ),
+          )
         ],
       ),
     );

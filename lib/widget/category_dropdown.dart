@@ -28,88 +28,54 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
   String? selectedValue;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Row(
-            children: const [
-              Icon(
-                Icons.list,
-                size: 16,
-                color: Colors.yellow,
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Expanded(
-                child: Text(
-                  '카테고리를 선택하세요',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          items: items
-              .map((item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ))
-              .toList(),
-          value: selectedValue,
-          onChanged: (v) {
-            setState(() {
-              print(v);
-              selectedValue = v as String;
-              if (v == "채소류") {
-                widget.setVisible(1);
-              } else if (v == "육류") {
-                widget.setVisible(0);
-              }
-            });
-          },
-          icon: const Icon(
-            Icons.arrow_forward_ios_outlined,
-          ),
-          iconSize: 14,
-          iconEnabledColor: Colors.black,
-          iconDisabledColor: Colors.grey,
-          buttonHeight: 30,
-          buttonWidth: 200,
-          buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-          buttonDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: Colors.yellow,
-          ),
-          buttonElevation: 2,
-          itemHeight: 40,
-          itemPadding: const EdgeInsets.only(left: 14, right: 14),
-          dropdownMaxHeight: 200,
-          dropdownWidth: 240,
-          dropdownPadding: null,
-          dropdownDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: Colors.white,
-          ),
-          dropdownElevation: 8,
-          scrollbarRadius: const Radius.circular(40),
-          scrollbarThickness: 6,
-          scrollbarAlwaysShow: true,
-          offset: const Offset(-20, 0),
-        ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          CategoryButton("육류", widget.setVisible, 0),
+          CategoryButton("채소류", widget.setVisible, 1),
+          CategoryButton("해산물", widget.setVisible, 2),
+          CategoryButton("햄/소시지", widget.setVisible, 3),
+          CategoryButton("가공/유제품", widget.setVisible, 4),
+          CategoryButton("과일", widget.setVisible, 5),
+          CategoryButton("곡류", widget.setVisible, 6),
+          CategoryButton("면", widget.setVisible, 7),
+          CategoryButton("빵/떡", widget.setVisible, 8),
+          CategoryButton("콩/견과류", widget.setVisible, 9),
+          CategoryButton("조미료/양념", widget.setVisible, 10),
+        ],
+      ),
+    );
+  }
+}
+
+class CategoryButton extends StatefulWidget {
+  final String buttonName;
+  final Function setVisible;
+  final int index;
+  const CategoryButton(this.buttonName, this.setVisible, this.index,
+      {super.key});
+
+  @override
+  State<CategoryButton> createState() => _CategoryButtonState();
+}
+
+class _CategoryButtonState extends State<CategoryButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+      child: OutlinedButton(
+        onPressed: () {
+          widget.setVisible(widget.index);
+        },
+        child: Text(widget.buttonName),
+        style: OutlinedButton.styleFrom(
+            minimumSize: Size.zero,
+            padding: EdgeInsets.fromLTRB(3, 0, 3, 0),
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            foregroundColor: Colors.black),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:convert' as convert;
 import 'dart:developer';
+import 'dart:ffi';
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,9 @@ import 'category_dropdown.dart';
 import 'package:home_alone_recipe/screen/recipeDetail_screen.dart';
 import 'ingredient_filter.dart';
 
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
-String filterIngredient = "쌀";
-
 class Api extends StatefulWidget {
   final apiResults;
+
   const Api(this.apiResults, {super.key});
 
   @override
@@ -30,14 +29,24 @@ class Api extends StatefulWidget {
 
 class _ApiState extends State<Api> {
   bool showWidget = false;
-
+  List<String> ingredientArr = [];
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   bool isScrapped = false;
 
-  void setIng(String ing) {
+  void addIng(String ing) {
     setState(() {
-      filterIngredient = ing;
+      ingredientArr.add(ing);
+      print(ingredientArr);
+    });
+  }
+
+  void rmvIng(String ing) {
+    setState(() {
+      ingredientArr.remove(ing);
+
+      //ingredientArr.clear();
+      print(ingredientArr);
     });
   }
 
@@ -46,8 +55,8 @@ class _ApiState extends State<Api> {
     return Expanded(
       child: Column(
         children: <Widget>[
-          IngredientFilter(setIng),
-          Expanded(child: ListBuilder(filterIngredient)),
+          IngredientFilter(addIng, rmvIng),
+          Expanded(child: ListBuilder(ingredientArr)),
         ],
       ),
     );
@@ -55,7 +64,7 @@ class _ApiState extends State<Api> {
 }
 
 class ListBuilder extends StatefulWidget {
-  final String filterIngredient;
+  final List<String> filterIngredient;
   const ListBuilder(this.filterIngredient, {super.key});
 
   @override
@@ -65,31 +74,69 @@ class ListBuilder extends StatefulWidget {
 class _ListBuilderState extends State<ListBuilder> {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<List<String>> _getIngAPIbyIngName(String recipeName) async {
-    final response = await http.get(Uri.parse(
-        'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?IRDNT_NM=${recipeName}'));
+  Future<List<String>> _getIngAPIbyIngName(List<String> recipeName) async {
     List<String> ingResult = [];
-    if (response.statusCode == 200) {
-      final body = convert.utf8.decode(response.bodyBytes);
+    List<String> doubleIng = [];
+    List<String> testIngSet = ["돼지고기", "가지"];
+    for (var idx = 0; idx < recipeName.length; idx++) {
+      final response = await http.get(Uri.parse(
+          'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?IRDNT_NM=${recipeName[idx]}'));
 
-      // xml => json으로 변환
-      final xml = Xml2Json()..parse(body);
-      final json = xml.toParker();
+      if (response.statusCode == 200) {
+        final body = convert.utf8.decode(response.bodyBytes);
 
-      Map<String, dynamic> jsonResult = convert.json.decode(json);
-      //print('응답');
+        // xml => json으로 변환
+        final xml = Xml2Json()..parse(body);
+        final json = xml.toParker();
 
-      for (var i = 0;
-          i < jsonResult['Grid_20150827000000000227_1']['row'].length;
-          i++) {
-        ingResult.add(
-            jsonResult['Grid_20150827000000000227_1']['row'][i]['RECIPE_ID']);
+        Map<String, dynamic> jsonResult = convert.json.decode(json);
+        //print('응답');
+
+        //데이터를 1개가져올때 예외처리
+        print('row data');
+        //print(ingredientArr);
+        if (jsonResult['Grid_20150827000000000227_1']['row'].toString().length <
+            150) {
+          ingResult.add(
+              jsonResult['Grid_20150827000000000227_1']['row']['RECIPE_ID']);
+        } else if (jsonResult['Grid_20150827000000000227_1']['row']
+                .toString()
+                .length >=
+            150) {
+          print(1);
+          for (var i = 0;
+              i < jsonResult['Grid_20150827000000000227_1']['row'].length;
+              i++) {
+            ingResult.add(jsonResult['Grid_20150827000000000227_1']['row'][i]
+                ['RECIPE_ID']);
+          }
+        }
+      } else {
+        throw Exception('오류');
       }
-    } else {
-      throw Exception('오류');
     }
-
-    return ingResult;
+    print(recipeName);
+    ingResult.sort();
+    print(ingResult);
+    if (recipeName.length > 1) {
+      int upFlag = 0;
+      bool downFlag = false;
+      for (var i = 0; i < ingResult.length - 1; i++) {
+        if (ingResult[i] == ingResult[i + 1]) {
+          upFlag += 1;
+          if (upFlag == recipeName.length - 1) {
+            doubleIng.add(ingResult[i]);
+          }
+        } else if (ingResult[i] != ingResult[i + 1]) {
+          upFlag = 0;
+        }
+      }
+      print(doubleIng);
+      return doubleIng;
+    } else {
+      print(ingResult);
+      return ingResult;
+    }
   }
 
   Future<List<String>> _getIngAPI(String recipeCode) async {
@@ -123,6 +170,7 @@ class _ListBuilderState extends State<ListBuilder> {
     final response = await http.get(Uri.parse(
         'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000228_1/1/10?RECIPE_ID=${recipeCode}'));
     List<String> ingResult = [];
+
     if (response.statusCode == 200) {
       final body = convert.utf8.decode(response.bodyBytes);
 
@@ -164,7 +212,7 @@ class _ListBuilderState extends State<ListBuilder> {
       List<dynamic> recipeInfo, List<dynamic> recipeMake) async {
     List<Recipe> _recipe = [];
 
-    for (var i = 0; i < recipeInfo.length; i++) {
+    for (var i = 0; i < recipeMake.length; i++) {
       //print("레시피설명 불러오는중");
 
       List<String> _recipeIng = await _getIngAPI(recipeInfo[i]);
@@ -200,8 +248,8 @@ class _ListBuilderState extends State<ListBuilder> {
           }
         }
       }
-      //print(filteredRecipeArray.length);
-      //print(filteredRecipecode);
+      print(filteredRecipeArray.length);
+      print(filteredRecipecode.length);
       return await _MakeRecipeArray(filteredRecipecode, filteredRecipeArray);
     } else {
       List<Recipe> emptyArr = [];
@@ -218,7 +266,7 @@ class _ListBuilderState extends State<ListBuilder> {
           List<Recipe> snapRecipe = [];
 
           //print("111111111111111111111111111111111111");
-          //print(snapshot);
+          print(snapshot);
           if (snapshot.hasData) {
             //print("222222222222222222222222222222222222");
             //print(snapshot.data![0].recipeName);
@@ -233,7 +281,9 @@ class _ListBuilderState extends State<ListBuilder> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Column(
               children: [
-                Text('총${snapRecipe.length}개의 레시피가 나왔어요!'),
+                (snapRecipe.length >= 1)
+                    ? Text('총${snapRecipe.length}개의 레시피가 나왔어요!')
+                    : Text('만족하는 레시피가 없습니다.'),
                 Expanded(
                   child: ListView.builder(
                       itemCount: snapRecipe.length,
@@ -364,7 +414,7 @@ class _ListBuilderState extends State<ListBuilder> {
               ],
             );
           }
-          return const Text('hi');
+          return const Text('Now Loading...');
         }));
   }
 }
