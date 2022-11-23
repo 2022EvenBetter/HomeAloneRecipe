@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_alone_recipe/config/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:home_alone_recipe/screen/home_screen.dart';
 import 'package:home_alone_recipe/screen/signup_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late UserProvider _userProvider;
   final _authentication = FirebaseAuth.instance;
 
   final _formKey = GlobalKey<FormState>();
@@ -27,8 +32,46 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void showPopup(context, message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+            child: Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: 100,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(message,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey),
+                        textAlign: TextAlign.center),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.close),
+                      label: const Text('닫기'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.yellow,
+                        onPrimary: Colors.white, // Background color
+                      ),
+                    )
+                  ],
+                )));
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
         backgroundColor: Palette.lightgray,
         body: Column(
@@ -137,6 +180,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
 
                                 if (newUser.user != null) {
+                                  var result = await FirebaseFirestore.instance
+                                      .collection("User")
+                                      .doc(newUser.user!.uid);
+                                  await result.get().then((value) => {
+                                        _userProvider.login(
+                                          newUser.user!.uid,
+                                          value['Email'].toString(),
+                                          value['Password'].toString(),
+                                          value['NickName'].toString(),
+                                          value['Location'].toString(),
+                                          value['Scope'].toString(),
+                                          value['Ingredient'].cast<String>(),
+                                          value['MyRecipes'].cast<String>(),
+                                          value['Post'].cast<String>(),
+                                        ),
+                                      });
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
@@ -146,6 +205,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               } catch (e) {
                                 print(e);
+                                String message = "아이디 또는 비밀번호가 일치하지 않습니다!";
+                                showPopup(context, message);
+
                               }
                             },
                             child: Container(

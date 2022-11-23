@@ -4,6 +4,10 @@ import 'package:home_alone_recipe/network/naver_api_connector.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:home_alone_recipe/constants/apiKey.dart';
+import 'package:provider/provider.dart';
+import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 const List<String> list = <String>['동명 (읍/면)', '구 (시/군)', '도 (시)'];
 
@@ -15,6 +19,7 @@ class TownScreen extends StatefulWidget {
 }
 
 class _TownScreenState extends State<TownScreen> {
+  late UserProvider _userProvider;
   Future<String> mylocation = getLocation();
   Future<String> locationURL = getLocationUrl();
 
@@ -24,6 +29,7 @@ class _TownScreenState extends State<TownScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -76,6 +82,7 @@ class _TownScreenState extends State<TownScreen> {
                   }
                   // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
                   else {
+                    _userProvider.location = snapshot.data.toString();
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: SizedBox(
@@ -83,9 +90,11 @@ class _TownScreenState extends State<TownScreen> {
                         height: 50, // <-- Your height
                         child: ElevatedButton.icon(
                           onPressed: () {
-                            setState(() {
+                            setState(() async {
                               mylocation = getLocation();
                               locationURL = getLocationUrl();
+                              _userProvider.location=mylocation.toString();
+                              print(_userProvider.location);
                             });
                           },
                           icon: Icon(Icons.update),
@@ -221,9 +230,19 @@ class _TownScreenState extends State<TownScreen> {
                         }),
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
+                      }
+                      _userProvider.scope=selectedValue.toString();
+                      if (selectedValue != null) {
+                        await FirebaseFirestore.instance
+                            .collection("User")
+                            .doc(_userProvider.uid)
+                            .set({
+                          "Location": _userProvider.location,
+                          "Scope": selectedValue.toString(),
+                        }, SetOptions(merge: true));
                       }
                     },
                     child: const Text(
