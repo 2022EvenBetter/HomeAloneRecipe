@@ -176,7 +176,7 @@ packages:
       sha256: cde965270f0cbc873e78d4a6be9283b3589d000049234d2fdd7c5da0881d1762
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.3"
+    version: "4.1.4"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
