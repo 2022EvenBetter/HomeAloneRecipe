@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_alone_recipe/screen/home_screen.dart';
-import 'package:home_alone_recipe/widget/bottomBar.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:home_alone_recipe/models/post.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:home_alone_recipe/constants/category.dart';
 
 class GroupBuying extends StatefulWidget {
   const GroupBuying({Key? key}) : super(key: key);
@@ -16,20 +14,12 @@ class GroupBuying extends StatefulWidget {
 }
 
 class _GroupBuyingState extends State<GroupBuying> {
+  List<String> lowerCategoryList = [];
+  String? selectedUpper;
+  String? selectedLower;
   late UserProvider _userProvider;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
-  final List<String> upperCategoryList = ['육류', '야채류', '곡류', '소스류', '유제품'];
-  String selectedUpper = '육류';
-  final List<String> lowerCategoryList = [
-    '돼지고기',
-    '닭고기',
-    '쌀',
-    '우유',
-    '양상추',
-    '굴소스'
-  ];
-  String selectedLower = '돼지고기';
   Post post = Post(); //Post 클래스의 인스턴스 생성
   int participantsCounter = 0;
 
@@ -255,7 +245,7 @@ class _GroupBuyingState extends State<GroupBuying> {
                                 Container(
                                   width:
                                       MediaQuery.of(context).size.width / 1.1,
-                                  child: DropdownButton(
+                                  child: DropdownButtonFormField(
                                     hint: Text('상위 카테고리를 선택해주세요',
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 17)),
@@ -276,8 +266,20 @@ class _GroupBuyingState extends State<GroupBuying> {
                                       setState(() {
                                         selectedUpper = value!;
                                         post.upperCategory = value;
+                                        lowerCategoryList =
+                                            setLowerCategory(value!.toString());
+                                        selectedLower = lowerCategoryList[0];
                                       });
                                     },
+                                    onSaved: (value) {
+                                      selectedUpper = value!.toString();
+                                      post.upperCategory = value;
+                                      lowerCategoryList =
+                                          setLowerCategory(value!.toString());
+                                    },
+                                    value: selectedUpper == null
+                                        ? null
+                                        : selectedUpper,
                                   ),
                                 ),
                               ]),
@@ -303,30 +305,37 @@ class _GroupBuyingState extends State<GroupBuying> {
                             children: [
                               Container(
                                 width: MediaQuery.of(context).size.width / 1.1,
-                                child: DropdownButton(
-                                    isExpanded: true,
-                                    hint: Text('하위 카테고리를 선택해주세요',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 17)),
-                                    alignment: Alignment.center,
-                                    items: lowerCategoryList.map((value) {
-                                      return DropdownMenuItem(
-                                        value: value,
-                                        child: Center(
-                                          child: Text(
-                                            value,
-                                            textAlign: TextAlign.center,
-                                          ),
+                                child: DropdownButtonFormField(
+                                  isExpanded: true,
+                                  value: selectedLower == null
+                                      ? null
+                                      : selectedLower,
+                                  hint: Text('하위 카테고리를 선택해주세요',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 17)),
+                                  alignment: Alignment.center,
+                                  items: lowerCategoryList.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Center(
+                                        child: Text(
+                                          value,
+                                          textAlign: TextAlign.center,
                                         ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? value) {
-                                      setState(() {
-                                        selectedLower = value!;
-                                        post.lowerCategory = value;
-                                        print(post.lowerCategory);
-                                      });
-                                    }),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      selectedLower = value!;
+                                      post.lowerCategory = value;
+                                      print(post.lowerCategory);
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    selectedLower = value!.toString();
+                                  },
+                                ),
                               ),
                             ],
                           ),
