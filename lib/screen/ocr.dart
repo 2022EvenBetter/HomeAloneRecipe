@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:home_alone_recipe/screen/categoryIngredent.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -46,6 +47,7 @@ class _ocr extends State<ocr> {
   }
 
   int? flag = 0;
+
   @override
   Widget build(BuildContext context) {
     _buildBottomDrawer(context);
