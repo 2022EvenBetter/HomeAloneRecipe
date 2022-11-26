@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:xml/xml.dart';
-import 'package:http/http.dart' as http;
-import 'package:home_alone_recipe/widget/getRecipe.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:home_alone_recipe/widget/api.dart';
+import 'package:provider/provider.dart';
 
 class RecipeScreen extends StatefulWidget {
   const RecipeScreen({super.key});
@@ -19,10 +18,12 @@ class RecipeScreen extends StatefulWidget {
 }
 
 class _RecipeScreenState extends State<RecipeScreen> {
+  //late UserProvider _userProvider;
   List<dynamic> apiResults = [];
 
   @override
   Widget build(BuildContext context) {
+    //_userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
