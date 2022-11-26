@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:home_alone_recipe/screen/home_screen.dart';
 import 'package:home_alone_recipe/screen/signup_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
@@ -189,8 +189,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           value['Email'].toString(),
                                           value['Password'].toString(),
                                           value['NickName'].toString(),
-                                          value['Location'].toString(),
-                                          value['Scope'].toString(),
+                                          value['Location'].cast<String>(),
+                                          value['Scope'],
                                           value['Ingredient'].cast<String>(),
                                           value['MyRecipes'].cast<int>(),
                                           value['Post'].cast<String>(),

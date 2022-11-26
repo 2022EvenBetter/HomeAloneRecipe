@@ -4,7 +4,7 @@ import 'package:home_alone_recipe/config/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:home_alone_recipe/screen/home_screen.dart';
 import 'package:home_alone_recipe/screen/login_screen.dart';
-import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -230,10 +230,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     "Email": userEmail,
                                     "Password": userPassword,
                                     "NickName": userNickName,
-                                    "Scope": "",
+                                    "Scope": 0,
                                     "Ingredient": [],
                                     "MyRecipes": [],
-                                    "Location": "",
+                                    "Location": [],
                                     "Post": [],
                                   },
 
