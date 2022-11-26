@@ -5,7 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:home_alone_recipe/constants/apiKey.dart';
 import 'package:provider/provider.dart';
-import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -20,7 +20,7 @@ class TownScreen extends StatefulWidget {
 
 class _TownScreenState extends State<TownScreen> {
   late UserProvider _userProvider;
-  Future<String> mylocation = getLocation();
+  Future<List<String>> mylocation = getLocation();
   Future<String> locationURL = getLocationUrl();
 
   String? selectedValue;
@@ -82,7 +82,7 @@ class _TownScreenState extends State<TownScreen> {
                   }
                   // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
                   else {
-                    _userProvider.location = snapshot.data.toString();
+                    _userProvider.locations = snapshot.data as List<String>;
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: SizedBox(
@@ -93,8 +93,8 @@ class _TownScreenState extends State<TownScreen> {
                             setState(() async {
                               mylocation = getLocation();
                               locationURL = getLocationUrl();
-                              _userProvider.location = mylocation.toString();
-                              print(_userProvider.location);
+                              _userProvider.locations=mylocation as List<String>;
+                              print(_userProvider.locations);
                             });
                           },
                           icon: Icon(Icons.update),
@@ -102,9 +102,14 @@ class _TownScreenState extends State<TownScreen> {
                             primary: Palette.orange,
                             onPrimary: Colors.black,
                           ),
-                          label: Text(snapshot.data.toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17)),
+                          label: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(_userProvider.locations[0]+" "+_userProvider.locations[1]+" "+_userProvider.locations[2],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 17)),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -183,7 +188,7 @@ class _TownScreenState extends State<TownScreen> {
                         }
                       },
                       onSaved: (value) {
-                        selectedValue = value.toString();
+                        dropdownValue = value.toString();
                       },
                     ),
                   ),
@@ -234,14 +239,20 @@ class _TownScreenState extends State<TownScreen> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                       }
-                      _userProvider.scope = selectedValue.toString();
+                      if(dropdownValue.toString()=='도 (시)'){
+                        _userProvider.scope=0;
+                      }else if(dropdownValue.toString()=='구 (시/군)'){
+                        _userProvider.scope=1;
+                      }else if(dropdownValue.toString()=='동명 (읍/면)'){
+                        _userProvider.scope=2;
+                      }
                       if (selectedValue != null) {
                         await FirebaseFirestore.instance
                             .collection("User")
                             .doc(_userProvider.uid)
                             .set({
-                          "Location": _userProvider.location,
-                          "Scope": selectedValue.toString(),
+                          "Location": _userProvider.locations,
+                          "Scope": _userProvider.scope,
                         }, SetOptions(merge: true));
                       }
                     },

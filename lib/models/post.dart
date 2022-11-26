@@ -5,17 +5,19 @@ class Post {
   String? lowerCategory;
   String? title;
   String? content;
-  int? participants;
+  int? maxParticipants;
   String? date;
   String? time;
   String? meetingPlace;
+  int? curParticipants;
 
   Post(
       {this.upperCategory,
       this.lowerCategory,
       this.title,
       this.content,
-      this.participants,
+      this.maxParticipants,
+        this.curParticipants,
       this.date,
       this.time,
       this.meetingPlace});
@@ -25,7 +27,8 @@ class Post {
     lowerCategory = json['lowerCategory'];
     title = json['title'];
     content = json['content'];
-    participants = json['participants'];
+    maxParticipants = json['maxParticipants'];
+    curParticipants=json['curParticipants'];
     date = json['date'];
     time = json['time'];
     meetingPlace = json['meetingPlace'];
@@ -43,7 +46,8 @@ class Post {
         'lowerCategory': lowerCategory,
         'title': title,
         'content': content,
-        'participants': participants,
+        'maxParticipants': maxParticipants,
+        'curParticipants': curParticipants,
         'date': date,
         'time': time,
         'meetingPlace': meetingPlace,

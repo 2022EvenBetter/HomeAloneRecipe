@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:home_alone_recipe/widget/getRecipe.dart';
 import 'package:home_alone_recipe/models/recipe.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:provider/provider.dart';
 
 class RecipeDetailPage extends StatefulWidget {
