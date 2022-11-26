@@ -7,6 +7,7 @@ import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:home_alone_recipe/screen/groupBuying_screen.dart';
 import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:home_alone_recipe/screen/myTown_screen.dart';
+import 'package:home_alone_recipe/screen/groupChatting.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
 import 'ocr.dart';
 import '../widget/getRecipe.dart';
@@ -32,11 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
     ocr(),
     RecipeScreen(),
     GroupBuying(),
-    Text(
-      '채팅화면',
-      style: optionStyle,
-    ),
-    //TownScreen(),
+    MessageListScreen(),
+    TownScreen(),
   ];
 
   void _onItemTapped(int index) {
