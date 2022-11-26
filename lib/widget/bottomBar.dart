@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:home_alone_recipe/screen/groupBuying_screen.dart';
+import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:home_alone_recipe/screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:home_alone_recipe/screen/signup_screen.dart';
