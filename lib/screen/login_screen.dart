@@ -192,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           value['Location'].toString(),
                                           value['Scope'].toString(),
                                           value['Ingredient'].cast<String>(),
-                                          value['MyRecipes'].cast<String>(),
+                                          value['MyRecipes'].cast<int>(),
                                           value['Post'].cast<String>(),
                                         ),
                                       });
@@ -207,7 +207,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 print(e);
                                 String message = "아이디 또는 비밀번호가 일치하지 않습니다!";
                                 showPopup(context, message);
-
                               }
                             },
                             child: Container(

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:home_alone_recipe/Provider/userProvider.dart';
 import 'package:home_alone_recipe/widget/ingredient_button.dart';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
@@ -17,6 +18,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'category_dropdown.dart';
 import 'package:home_alone_recipe/screen/recipeDetail_screen.dart';
 import 'ingredient_filter.dart';
+import 'package:provider/provider.dart';
 
 class Api extends StatefulWidget {
   final apiResults;
@@ -28,6 +30,8 @@ class Api extends StatefulWidget {
 }
 
 class _ApiState extends State<Api> {
+  late UserProvider _userProvider;
+
   bool showWidget = false;
   List<String> ingredientArr = [];
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -52,6 +56,7 @@ class _ApiState extends State<Api> {
 
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
     return Expanded(
       child: Column(
         children: <Widget>[
@@ -73,6 +78,32 @@ class ListBuilder extends StatefulWidget {
 
 class _ListBuilderState extends State<ListBuilder> {
   FirebaseFirestore db = FirebaseFirestore.instance;
+
+  Future<bool> hasData(int recipeCode) async {
+    var data =
+        await db.collection("recipeScrap").doc(recipeCode.toString()).get();
+    return data.exists;
+  }
+
+  Future initRecipeScrap(int recipeCodeNum) async {
+    var isEmpty = await hasData(recipeCodeNum);
+    if (!isEmpty) {
+      db
+          .collection("recipeScrap")
+          .doc(recipeCodeNum.toString())
+          .set({"scrapNum": 0}, SetOptions(merge: true));
+      print("init data");
+    } else {
+      print("already exist");
+    }
+  }
+
+  Future<int> getScrapNum(int recipeCodeNum) async {
+    var data =
+        await db.collection("recipeScrap").doc(recipeCodeNum.toString()).get();
+    print("Get Scrap Num in API");
+    return data.data()!["scrapNum"];
+  }
 
   Future<List<String>> _getIngAPIbyIngName(List<String> recipeName) async {
     List<String> ingResult = [];
@@ -214,7 +245,8 @@ class _ListBuilderState extends State<ListBuilder> {
 
     for (var i = 0; i < recipeMake.length; i++) {
       //print("레시피설명 불러오는중");
-
+      await initRecipeScrap(int.parse(recipeInfo[i]));
+      int scrapNum = await getScrapNum(int.parse(recipeInfo[i]));
       List<String> _recipeIng = await _getIngAPI(recipeInfo[i]);
       List<String> _recipeMake = await _getRecipeAPI(recipeInfo[i]);
 
@@ -224,7 +256,8 @@ class _ListBuilderState extends State<ListBuilder> {
           int.parse(recipeInfo[i]),
           recipeMake[i]['간략(요약) 소개'],
           _recipeIng,
-          _recipeMake));
+          _recipeMake,
+          scrapNum));
     }
 
     return await _recipe;
@@ -240,16 +273,16 @@ class _ListBuilderState extends State<ListBuilder> {
 
       List<dynamic> allRecipes = await readJson();
 
-      for (var i = 0; i < allRecipes.length; i++) {
-        for (var j = 0; j < filteredRecipecode.length; j++) {
+      for (var i = allRecipes.length - 1; i >= 0; i--) {
+        for (var j = filteredRecipecode.length - 1; j >= 0; j--) {
           if (allRecipes[i]["레시피 코드"] == int.parse(filteredRecipecode[j])) {
             filteredRecipeArray.add(allRecipes[i]);
             print("filtered");
           }
         }
       }
-      print(filteredRecipeArray.length);
-      print(filteredRecipecode.length);
+      print(filteredRecipeArray);
+      print(filteredRecipecode);
       return await _MakeRecipeArray(filteredRecipecode, filteredRecipeArray);
     } else {
       List<Recipe> emptyArr = [];
@@ -365,7 +398,8 @@ class _ListBuilderState extends State<ListBuilder> {
                                                   Padding(
                                                     padding: const EdgeInsets
                                                         .fromLTRB(10, 0, 10, 0),
-                                                    child: Text('55'),
+                                                    child: Text(
+                                                        '${snapRecipe[idx].scrapped}'),
                                                   ),
                                                   ConstrainedBox(
                                                     constraints:

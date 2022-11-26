@@ -2,12 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:home_alone_recipe/screen/groupBuying_screen.dart';
 import 'package:home_alone_recipe/screen/myTown_screen.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
 import 'ocr.dart';
 import '../widget/getRecipe.dart';
 import 'recipe_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -32,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       '채팅화면',
       style: optionStyle,
     ),
-    TownScreen(),
+    //TownScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -61,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //UserProvider _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

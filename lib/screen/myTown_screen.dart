@@ -93,7 +93,7 @@ class _TownScreenState extends State<TownScreen> {
                             setState(() async {
                               mylocation = getLocation();
                               locationURL = getLocationUrl();
-                              _userProvider.location=mylocation.toString();
+                              _userProvider.location = mylocation.toString();
                               print(_userProvider.location);
                             });
                           },
@@ -234,7 +234,7 @@ class _TownScreenState extends State<TownScreen> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                       }
-                      _userProvider.scope=selectedValue.toString();
+                      _userProvider.scope = selectedValue.toString();
                       if (selectedValue != null) {
                         await FirebaseFirestore.instance
                             .collection("User")
