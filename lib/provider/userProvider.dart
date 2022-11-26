@@ -73,8 +73,8 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void set locations(List<String> input_location) {
-    _locations = input_location;
+  void set locations(List<String> input_locations) {
+    _locations = input_locations;
     notifyListeners();
   }
 

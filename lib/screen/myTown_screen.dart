@@ -246,7 +246,7 @@ class _TownScreenState extends State<TownScreen> {
                       }else if(dropdownValue.toString()=='동명 (읍/면)'){
                         _userProvider.scope=2;
                       }
-                      if (selectedValue != null) {
+                      if (_userProvider.scope != null) {
                         await FirebaseFirestore.instance
                             .collection("User")
                             .doc(_userProvider.uid)
