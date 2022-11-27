@@ -93,7 +93,8 @@ class _TownScreenState extends State<TownScreen> {
                             setState(() async {
                               mylocation = getLocation();
                               locationURL = getLocationUrl();
-                              _userProvider.locations=mylocation as List<String>;
+                              _userProvider.locations =
+                                  mylocation as List<String>;
                               print(_userProvider.locations);
                             });
                           },
@@ -105,9 +106,15 @@ class _TownScreenState extends State<TownScreen> {
                           label: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(_userProvider.locations[0]+" "+_userProvider.locations[1]+" "+_userProvider.locations[2],
+                              Text(
+                                  _userProvider.locations[0] +
+                                      " " +
+                                      _userProvider.locations[1] +
+                                      " " +
+                                      _userProvider.locations[2],
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 17)),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
                             ],
                           ),
                         ),
@@ -184,6 +191,7 @@ class _TownScreenState extends State<TownScreen> {
                           .toList(),
                       validator: (value) {
                         if (value == null) {
+                          dropdownValue = "error";
                           return '범위를 지정해주세요!';
                         }
                       },
@@ -248,7 +256,7 @@ class _TownScreenState extends State<TownScreen> {
                         } else if (dropdownValue.toString() == '동명 (읍/면)') {
                           _userProvider.scope = 2;
                         }
-                        if (_userProvider.scope != null) {
+                        if (dropdownValue != "error") {
                           await FirebaseFirestore.instance
                               .collection("User")
                               .doc(_userProvider.uid)
@@ -256,14 +264,22 @@ class _TownScreenState extends State<TownScreen> {
                             "Location": _userProvider.locations,
                             "Scope": _userProvider.scope,
                           }, SetOptions(merge: true));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('위치가 업데이트되었습니다!'),
-                                backgroundColor: Colors.blue,
-                              ));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('위치가 업데이트되었습니다!'),
+                            backgroundColor: Colors.blue,
+                          ));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('범위를 지정해주세요!'),
+                            backgroundColor: Colors.blue,
+                          ));
                         }
+                        ;
                       },
-                      icon: Icon(Icons.save_alt, color: Colors.black,),
+                      icon: Icon(
+                        Icons.save_alt,
+                        color: Colors.black,
+                      ),
                       label: Text(
                         '저장하기',
                         style: TextStyle(
@@ -271,7 +287,6 @@ class _TownScreenState extends State<TownScreen> {
                             fontWeight: FontWeight.bold,
                             fontSize: 16),
                       ),
-
                     ),
                   ),
                 ],

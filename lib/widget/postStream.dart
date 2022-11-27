@@ -32,16 +32,15 @@ class Posts extends StatelessWidget {
         return ListView.builder(
           itemCount: postDocs.length,
           itemBuilder: (context, index) {
-            return  GestureDetector(
-              onTap: (){
-                Post post=Post.fromQuerySnapshot(postDocs[index]);
+            return GestureDetector(
+              onTap: () {
+                Post post = Post.fromQuerySnapshot(postDocs[index]);
                 print(post.content);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            GroupBuyingDetailPage(post)));
-                },
+                        builder: (context) => GroupBuyingDetailPage(post)));
+              },
               child: PostList(
                 postDocs[index]['Content'],
                 postDocs[index]['Title'],

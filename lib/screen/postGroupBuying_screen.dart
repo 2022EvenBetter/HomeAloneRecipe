@@ -134,7 +134,7 @@ class _GroupBuyingState extends State<GroupBuying> {
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('모든 값이 입력되어야 합니다'),
+                                        content: Text('모든 값이 입력되어야 합니다!'),
                                         backgroundColor: Colors.blue,
                                       ),
                                     );
@@ -449,7 +449,8 @@ class _GroupBuyingState extends State<GroupBuying> {
                                   setState(() {
                                     if (participantsCounter != 0) {
                                       participantsCounter--;
-                                      post.maxParticipants = participantsCounter;
+                                      post.maxParticipants =
+                                          participantsCounter;
                                     }
                                   });
                                 },
@@ -475,7 +476,8 @@ class _GroupBuyingState extends State<GroupBuying> {
                                   onPressed: () {
                                     setState(() {
                                       participantsCounter++;
-                                      post.maxParticipants = participantsCounter;
+                                      post.maxParticipants =
+                                          participantsCounter;
                                     });
                                   },
                                   tooltip: 'Increment',
@@ -584,7 +586,7 @@ class _GroupBuyingState extends State<GroupBuying> {
                           ),
                         ),
                         const SizedBox(
-                          height: 100.0,
+                          height: 20.0,
                         ),
 
                         Row(

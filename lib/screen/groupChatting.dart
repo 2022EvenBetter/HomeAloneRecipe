@@ -134,7 +134,8 @@ class _MessageListScreenState extends State<MessageListScreen> {
     try {
       //찾고자 하는 컬렉션의 스냅샷(Stream)을 가져온다.
       final Stream<QuerySnapshot> snapshots = FirebaseFirestore.instance
-          .collection('/chatrooms/2f0wsrh7TGnuOD8MI80f/messages') // 아직 채팅방 여러개는 안됨
+          .collection(
+              '/chatrooms/2f0wsrh7TGnuOD8MI80f/messages') // 아직 채팅방 여러개는 안됨
           .orderBy('sendDate')
           .snapshots();
 
