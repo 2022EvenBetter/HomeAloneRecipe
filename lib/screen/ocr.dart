@@ -10,7 +10,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:home_alone_recipe/models/findIngredientByString.dart';
 import '../models/findIngredientByString.dart';
 import '../widget/userIngredient.dart';
@@ -63,58 +63,71 @@ class _ocr extends State<ocr> {
     _buildBottomDrawer(context);
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          elevation: 0.0,
+        title: Text('마이냉장고',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        //
+        centerTitle: true,
+        elevation: 3.0,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
           actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.arrow_downward,
-                color: Colors.black,
+              IconButton(
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  if (flag == 0) {
+                    _controller.open();
+                    flag = 1;
+                  } else {
+                    _controller.close();
+                    flag = 0;
+                  }
+
+                  setState(() {
+                    _button = 'Close Drawer';
+                  });
+                },
               ),
-              onPressed: () {
-                if (flag == 0) {
-                  _controller.open();
-                  flag = 1;
-                } else {
-                  _controller.close();
-                  flag = 0;
-                }
+            ]),
 
-                setState(() {
-                  _button = 'Close Drawer';
-                });
-              },
-            ),
-          ]),
-      drawer: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(
-                child: Text('header'),
-                decoration: BoxDecoration(color: Colors.green),
-              )
-            ],
-          )),
-      body:
-      // Container(
-      //   alignment: Alignment.center,
-      //   child: Column(
-      //     children: <Widget>[
-      //       Text("ParsedText is:",style: GoogleFonts.montserrat(
-      //           fontSize:20,
-      //           fontWeight:FontWeight.bold
-      //       ),),
-      //       SizedBox(height:10.0),
-      //       Text(parsedtext,style: GoogleFonts.montserrat(
-      //           fontSize:25,
-      //           fontWeight:FontWeight.bold
-      //       ),)
-      //     ],
-      //   ),
-      // ),
+      // appBar: AppBar(
+      //   title: Text('마이냉장고',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+      //     backgroundColor: Colors.white,
+      //     centerTitle: true,
+      //     // elevation: 0.0,
+      //     actions: <Widget>[
+      //       IconButton(
+      //         icon: Icon(
+      //           Icons.add,
+      //           color: Colors.black,
+      //         ),
+      //         onPressed: () {
+      //           if (flag == 0) {
+      //             _controller.open();
+      //             flag = 1;
+      //           } else {
+      //             _controller.close();
+      //             flag = 0;
+      //           }
+      //
+      //           setState(() {
+      //             _button = 'Close Drawer';
+      //           });
+      //         },
+      //       ),
+      //     ]),
 
-      Stack(
+      // drawer: Drawer(
+      //     child: ListView(
+      //       children: [
+      //         DrawerHeader(
+      //           child: Text('header'),
+      //           decoration: BoxDecoration(color: Colors.green),
+      //         )
+      //       ],
+      //     )),
+      body: Stack(
         children: [
           Column(
 
@@ -123,14 +136,18 @@ class _ocr extends State<ocr> {
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(''),
-              Text('< 재료 >'),
+              Text('식재료',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               Text(''),
               Padding(
                 padding : const EdgeInsets.only(top: 25),
               ),
 
+              if(_userProvider.ingredients.isEmpty)
+                Text('재료가 없습니다.',style: TextStyle( fontSize: 10))
+              else
+                userIngredient(),
 
-              userIngredient(),
+
 
 
               Padding(
@@ -189,8 +206,8 @@ class _ocr extends State<ocr> {
               TextButton(
                 child: Text(
                   '레시피 추천받기',
-                  style: TextStyle(
-                    fontSize: 15.0,
+                  style: GoogleFonts.getFont('Do Hyeon', textStyle:  const TextStyle(fontSize: 15) ,
+
                     color: Colors.black,
                   ),
                 ),
@@ -214,11 +231,12 @@ class _ocr extends State<ocr> {
       height: _bodyHeight,
       child: SingleChildScrollView(
         child: Column(children: [
+          Padding(padding: EdgeInsets.fromLTRB(0, 5, 0, 0)),
           TextButton(
             child: Text(
               'OCR로 재료추가',
-              style: TextStyle(
-                fontSize: 15.0,
+              style: GoogleFonts.getFont('Do Hyeon', textStyle:  const TextStyle(fontSize: 15) ,
+
                 color: Colors.black,
               ),
             ),
@@ -226,11 +244,12 @@ class _ocr extends State<ocr> {
               _getFromGallery();
             },
           ),
+          Padding(padding: EdgeInsets.fromLTRB(0, 3, 0, 0)),
           TextButton(
             child: Text(
               '카테고리로 재료추가',
-              style: TextStyle(
-                fontSize: 15.0,
+              style: GoogleFonts.getFont('Do Hyeon', textStyle:  const TextStyle(fontSize: 15) ,
+
                 color: Colors.black,
               ),
             ),
@@ -246,11 +265,12 @@ class _ocr extends State<ocr> {
               }
             },
           ),
+          Padding(padding: EdgeInsets.fromLTRB(0, 3, 0, 0)),
           TextButton(
             child: Text(
               '재료 삭제하기',
-              style: TextStyle(
-                fontSize: 15.0,
+              style: GoogleFonts.getFont('Do Hyeon', textStyle:  const TextStyle(fontSize: 15) ,
+
                 color: Colors.black,
               ),
             ),
