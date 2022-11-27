@@ -105,7 +105,13 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('카테고리로 재료추가'),
+        title: Text(
+          '카테고리로 재료추가',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        centerTitle: true,
+        elevation: 3.0,
+        backgroundColor: Colors.white,
       ),
       body: Column(
         children: [
@@ -126,6 +132,9 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                               Wrap(alignment: WrapAlignment.start, children: [
                             IngredientButton("육류", "소고기", seletecIngredients),
                             IngredientButton("육류", "돼지고기", seletecIngredients),
+                            IngredientButton("육류", "닭고기", seletecIngredients),
+                            IngredientButton("육류", "곱창", seletecIngredients),
+                            IngredientButton("육류", "다짐육", seletecIngredients),
                           ]),
                           visible: _visibility,
                         ),
@@ -148,19 +157,41 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                               alignment: WrapAlignment.start,
                               children: [
                                 IngredientButton(
-                                    "채소류", "감자", seletecIngredients),
+                                    "채소류", "가지", seletecIngredients),
                                 IngredientButton(
                                     "채소류", "고추", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "김치", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "대파", seletecIngredients),
                                 IngredientButton(
                                     "채소류", "당근", seletecIngredients),
                                 IngredientButton(
                                     "채소류", "마늘", seletecIngredients),
                                 IngredientButton(
-                                    "채소류", "바질", seletecIngredients),
+                                    "채소류", "무", seletecIngredients),
                                 IngredientButton(
                                     "채소류", "배추", seletecIngredients),
                                 IngredientButton(
-                                    "채소류", "버섯", seletecIngredients),
+                                    "채소류", "양송이버섯", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "양배추", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "양파", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "오이", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "콩나물", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "토마토", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "파프리카", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "호박", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "팽이버섯", seletecIngredients),
+                                IngredientButton(
+                                    "채소류", "표고버섯", seletecIngredients),
                                 IngredientButton(
                                     "채소류", "브로콜리", seletecIngredients),
                                 IngredientButton(
@@ -186,7 +217,26 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         padding: EdgeInsets.all(2.0),
                         child: Visibility(
                           maintainState: true,
-                          child: Wrap(children: []),
+                          child: Wrap(children: [
+                            IngredientButton("해산물", "갈치", seletecIngredients),
+                            IngredientButton("해산물", "게맛살", seletecIngredients),
+                            IngredientButton("해산물", "고등어", seletecIngredients),
+                            IngredientButton("해산물", "골뱅이", seletecIngredients),
+                            IngredientButton("해산물", "굴", seletecIngredients),
+                            IngredientButton("해산물", "꽁치", seletecIngredients),
+                            IngredientButton("해산물", "낙지", seletecIngredients),
+                            IngredientButton("해산물", "다시마", seletecIngredients),
+                            IngredientButton("해산물", "새우", seletecIngredients),
+                            IngredientButton("해산물", "동태", seletecIngredients),
+                            IngredientButton("해산물", "멸치", seletecIngredients),
+                            IngredientButton("해산물", "문어", seletecIngredients),
+                            IngredientButton("해산물", "미역", seletecIngredients),
+                            IngredientButton("해산물", "조개", seletecIngredients),
+                            IngredientButton("해산물", "오징어", seletecIngredients),
+                            IngredientButton("해산물", "전복", seletecIngredients),
+                            IngredientButton("해산물", "조기", seletecIngredients),
+                            IngredientButton("해산물", "쭈꾸미", seletecIngredients),
+                          ]),
                           visible: _visibility2,
                         ),
                       )
@@ -203,7 +253,16 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         padding: EdgeInsets.all(2.0),
                         child: Visibility(
                           maintainState: true,
-                          child: Wrap(children: []),
+                          child: Wrap(children: [
+                            IngredientButton("곡류", "감자", seletecIngredients),
+                            IngredientButton("곡류", "고구마", seletecIngredients),
+                            IngredientButton("곡류", "밀가루", seletecIngredients),
+                            IngredientButton("곡류", "빵가루", seletecIngredients),
+                            IngredientButton("곡류", "부침가루", seletecIngredients),
+                            IngredientButton("곡류", "옥수수", seletecIngredients),
+                            IngredientButton("곡류", "찹쌀가루", seletecIngredients),
+                            IngredientButton("곡류", "쌀", seletecIngredients),
+                          ]),
                           visible: _visibility3,
                         ),
                       )
@@ -220,7 +279,20 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         padding: EdgeInsets.all(2.0),
                         child: Visibility(
                           maintainState: true,
-                          child: Wrap(children: []),
+                          child: Wrap(children: [
+                            IngredientButton("가공유제품", "계란", seletecIngredients),
+                            IngredientButton(
+                                "가공유제품", "참치캔", seletecIngredients),
+                            IngredientButton(
+                                "가공유제품", "모짜렐라치즈", seletecIngredients),
+                            IngredientButton(
+                                "가공유제품", "슬라이스치즈", seletecIngredients),
+                            IngredientButton(
+                                "가공유제품", "옥수수콘", seletecIngredients),
+                            IngredientButton("가공유제품", "버터", seletecIngredients),
+                            IngredientButton("가공유제품", "우유", seletecIngredients),
+                            IngredientButton("가공유제품", "어묵", seletecIngredients),
+                          ]),
                           visible: _visibility4,
                         ),
                       )
@@ -237,7 +309,14 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         padding: EdgeInsets.all(2.0),
                         child: Visibility(
                           maintainState: true,
-                          child: Wrap(children: []),
+                          child: Wrap(children: [
+                            IngredientButton("콩견과류", "깨", seletecIngredients),
+                            IngredientButton("콩견과류", "두부", seletecIngredients),
+                            IngredientButton("콩견과류", "콩", seletecIngredients),
+                            IngredientButton("콩견과류", "아몬드", seletecIngredients),
+                            IngredientButton("콩견과류", "호두", seletecIngredients),
+                            IngredientButton("콩견과류", "청국장", seletecIngredients),
+                          ]),
                           visible: _visibility5,
                         ),
                       )
@@ -255,12 +334,15 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         child: Visibility(
                           maintainState: true,
                           child: Wrap(children: [
+                            IngredientButton("과일", "감", seletecIngredients),
                             IngredientButton("과일", "건포도", seletecIngredients),
                             IngredientButton("과일", "딸기", seletecIngredients),
                             IngredientButton("과일", "레몬", seletecIngredients),
                             IngredientButton("과일", "바나나", seletecIngredients),
                             IngredientButton("과일", "배", seletecIngredients),
                             IngredientButton("과일", "사과", seletecIngredients),
+                            IngredientButton("과일", "아보카도", seletecIngredients),
+                            IngredientButton("과일", "오렌지", seletecIngredients),
                             IngredientButton("과일", "체리", seletecIngredients),
                             IngredientButton("과일", "키위", seletecIngredients),
                             IngredientButton("과일", "파인애플", seletecIngredients),
@@ -282,7 +364,14 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         padding: EdgeInsets.all(2.0),
                         child: Visibility(
                           maintainState: true,
-                          child: Wrap(children: []),
+                          child: Wrap(children: [
+                            IngredientButton("면", "칼국수면", seletecIngredients),
+                            IngredientButton("면", "파스타면", seletecIngredients),
+                            IngredientButton("면", "우동면", seletecIngredients),
+                            IngredientButton("면", "소면", seletecIngredients),
+                            IngredientButton("면", "당면", seletecIngredients),
+                            IngredientButton("면", "라면", seletecIngredients),
+                          ]),
                           visible: _visibility7,
                         ),
                       )
@@ -299,7 +388,10 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         padding: EdgeInsets.all(2.0),
                         child: Visibility(
                           maintainState: true,
-                          child: Wrap(children: []),
+                          child: Wrap(children: [
+                            IngredientButton("빵떡", "식빵", seletecIngredients),
+                            IngredientButton("빵떡", "떡국떡", seletecIngredients),
+                          ]),
                           visible: _visibility8,
                         ),
                       )
@@ -316,7 +408,13 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         padding: EdgeInsets.all(2.0),
                         child: Visibility(
                           maintainState: true,
-                          child: Wrap(children: []),
+                          child: Wrap(children: [
+                            IngredientButton("햄소시지", "베이컨", seletecIngredients),
+                            IngredientButton(
+                                "햄소시지", "비엔나소시지", seletecIngredients),
+                            IngredientButton("햄소시지", "소시지", seletecIngredients),
+                            IngredientButton("햄소시지", "햄", seletecIngredients),
+                          ]),
                           visible: _visibility9,
                         ),
                       )
@@ -333,7 +431,36 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
                         padding: EdgeInsets.all(2.0),
                         child: Visibility(
                           maintainState: true,
-                          child: Wrap(children: []),
+                          child: Wrap(children: [
+                            IngredientButton("조미료양념", "간장", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "고추장", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "고춧가루", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "굴소스", seletecIngredients),
+                            IngredientButton("조미료양념", "소금", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "다진마늘", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "멸치액젓", seletecIngredients),
+                            IngredientButton("조미료양념", "설탕", seletecIngredients),
+                            IngredientButton("조미료양념", "식초", seletecIngredients),
+                            IngredientButton("조미료양념", "쌈장", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "올리브유", seletecIngredients),
+                            IngredientButton("조미료양념", "케첩", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "마요네즈", seletecIngredients),
+                            IngredientButton("조미료양념", "후추", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "쇠고기 다시다", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "카레가루", seletecIngredients),
+                            IngredientButton(
+                                "조미료양념", "참기름", seletecIngredients),
+                            IngredientButton("조미료양념", "된장", seletecIngredients),
+                          ]),
                           visible: _visibility10,
                         ),
                       )

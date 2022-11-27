@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:home_alone_recipe/provider/userProvider.dart';
+import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:home_alone_recipe/screen/groupChatting.dart';
 import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:home_alone_recipe/screen/myTown_screen.dart';
