@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:home_alone_recipe/screen/groupBuyingDetail_screen.dart';
 import 'package:home_alone_recipe/widget/postWidget.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:provider/provider.dart';
+
+import '../models/post.dart';
 
 class Posts extends StatelessWidget {
   const Posts({Key? key}) : super(key: key);
@@ -29,17 +32,27 @@ class Posts extends StatelessWidget {
         return ListView.builder(
           itemCount: postDocs.length,
           itemBuilder: (context, index) {
-            return PostList(
-              postDocs[index]['Content'],
-              postDocs[index]['Title'],
-              postDocs[index]['Date'],
-              postDocs[index]['Time'],
-              postDocs[index]['WriterName'],
-              postDocs[index]['UpperCategory'],
-              postDocs[index]['LowerCategory'],
-              postDocs[index]['maxParticipants'],
-              postDocs[index]['curParticipants'],
-              postDocs[index]['Place'],
+            return GestureDetector(
+              onTap: () {
+                Post post = Post.fromQuerySnapshot(postDocs[index]);
+                print(post.content);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GroupBuyingDetailPage(post)));
+              },
+              child: PostList(
+                postDocs[index]['Content'],
+                postDocs[index]['Title'],
+                postDocs[index]['Date'],
+                postDocs[index]['Time'],
+                postDocs[index]['WriterName'],
+                postDocs[index]['UpperCategory'],
+                postDocs[index]['LowerCategory'],
+                postDocs[index]['maxParticipants'],
+                postDocs[index]['curParticipants'],
+                postDocs[index]['Place'],
+              ),
             );
           },
         );

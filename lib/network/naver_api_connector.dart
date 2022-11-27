@@ -36,11 +36,11 @@ Future<String> getLocationUrl() async {
   String lat = position.latitude.toString();
   String lon = position.longitude.toString();
   String apiURL =
-      'https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?w=500&h=280&center=' +
+      'https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?w=500&h=300&center=' +
           lon +
           ',' +
           lat +
-          '&level=13';
+          '&level=16';
   print("update getLocationURL");
   return apiURL;
 }
