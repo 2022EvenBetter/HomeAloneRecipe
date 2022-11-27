@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:home_alone_recipe/screen/myTown_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:home_alone_recipe/provider/userProvider.dart';
-import 'package:home_alone_recipe/widget/postStream.dart';
-import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:home_alone_recipe/config/palette.dart';
 import 'package:home_alone_recipe/models/post.dart';
 import 'package:home_alone_recipe/screen/groupChatting.dart';

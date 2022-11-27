@@ -117,7 +117,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               keyboardType: TextInputType.emailAddress,
                               textAlign: TextAlign.start,
                               decoration: InputDecoration(
-                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: '1234@gmail.com',
@@ -159,7 +160,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               enableSuggestions: false,
                               autocorrect: false,
                               decoration: InputDecoration(
-                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'alstn1234',
@@ -200,7 +202,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               enableSuggestions: false,
                               autocorrect: false,
                               decoration: InputDecoration(
-                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: '불굴의 자취생',
@@ -228,22 +231,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       await FirebaseFirestore.instance
                                           .collection("User")
                                           .doc(newUser.user!.uid)
-                                          .set({
-                                        "Email": userEmail,
-                                        "Password": userPassword,
-                                        "NickName": userNickName,
-                                        "Scope": 0,
-                                        "Ingredient": [],
-                                        "MyRecipes": [],
-                                        "Location": [],
-                                        "Post": [],
-                                      },
+                                          .set(
+                                        {
+                                          "Email": userEmail,
+                                          "Password": userPassword,
+                                          "NickName": userNickName,
+                                          "Scope": 0,
+                                          "Ingredient": [],
+                                          "MyRecipes": [],
+                                          "Location": [],
+                                          "Post": [],
+                                        },
+                                      ).onError((e, _) => print(
+                                              "Error writing document: $e"));
 
-                                      ).onError((e, _) =>
-                                              print("Error writing document: $e"));
-
-                                      _userProvider.signup(newUser.user!.uid,
-                                          userEmail, userPassword, userNickName);
+                                      _userProvider.signup(
+                                          newUser.user!.uid,
+                                          userEmail,
+                                          userPassword,
+                                          userNickName);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) {

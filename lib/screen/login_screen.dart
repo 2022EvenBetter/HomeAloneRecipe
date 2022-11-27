@@ -117,7 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               keyboardType: TextInputType.emailAddress,
                               textAlign: TextAlign.start,
                               decoration: const InputDecoration(
-                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: '1234@gmail.com',
@@ -157,7 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               enableSuggestions: false,
                               autocorrect: false,
                               decoration: const InputDecoration(
-                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'alstn1234',
@@ -182,7 +184,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     );
 
                                     if (newUser.user != null) {
-                                      var result = await FirebaseFirestore.instance
+                                      var result = await FirebaseFirestore
+                                          .instance
                                           .collection("User")
                                           .doc(newUser.user!.uid);
                                       await result.get().then((value) => {
@@ -193,7 +196,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                               value['NickName'].toString(),
                                               value['Location'].cast<String>(),
                                               value['Scope'],
-                                              value['Ingredient'].cast<String>(),
+                                              value['Ingredient']
+                                                  .cast<String>(),
                                               value['MyRecipes'].cast<int>(),
                                               value['Post'].cast<String>(),
                                             ),
