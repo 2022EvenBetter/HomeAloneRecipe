@@ -20,6 +20,11 @@ import 'package:home_alone_recipe/screen/recipeDetail_screen.dart';
 import 'ingredient_filter.dart';
 import 'package:provider/provider.dart';
 
+Map<String, dynamic> ingMap = {
+  "소고기": ["쇠고기"],
+  "닭고기": ["닭", "닭다리"],
+};
+
 class Api extends StatefulWidget {
   final apiResults;
 
@@ -46,9 +51,17 @@ class _ApiState extends State<Api> {
   }
 
   void rmvIng(String ing) {
+    print("rmvIng");
+    print(ingMap[ing]);
+    //var length = ingMap[ing].length;
+
     setState(() {
       ingredientArr.remove(ing);
-
+      print("before for)");
+      for (var i = 0; i < 1; i++) {
+        //ingredientArr.remove(ingMap[ing][i]);
+        //print(ingMap[ing][i]);
+      }
       //ingredientArr.clear();
       print(ingredientArr);
     });
@@ -77,6 +90,11 @@ class ListBuilder extends StatefulWidget {
 }
 
 class _ListBuilderState extends State<ListBuilder> {
+  Map<String, dynamic> ing = {
+    "소고기": ["쇠고기"],
+    "닭고기": ["닭다리", "닭"],
+  };
+
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<bool> hasData(int recipeCode) async {
@@ -108,10 +126,31 @@ class _ListBuilderState extends State<ListBuilder> {
   Future<List<String>> _getIngAPIbyIngName(List<String> recipeName) async {
     List<String> ingResult = [];
     List<String> doubleIng = [];
-    List<String> testIngSet = ["돼지고기", "가지"];
-    for (var idx = 0; idx < recipeName.length; idx++) {
+    List<String> recipeAllName = [];
+    for (var i = 0; i < recipeName.length; i++) {
+      recipeAllName.add(recipeName[i]);
+    }
+
+    int duplicate = 0;
+    for (var i = 0; i < recipeName.length; i++) {
+      print(ing);
+      print("recipeName");
+      print(recipeName);
+      if (ing[recipeName[i]] != null) {
+        for (var j = 0; j < ing[recipeName[i]].length; j++) {
+          recipeAllName.add(ing[recipeName[i]][j]);
+          duplicate += 1;
+          print("dup recipeName");
+          print(recipeName);
+        }
+      }
+    }
+    print("recipeAllName");
+
+    print(recipeAllName);
+    for (var idx = 0; idx < recipeAllName.length; idx++) {
       final response = await http.get(Uri.parse(
-          'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?IRDNT_NM=${recipeName[idx]}'));
+          'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?IRDNT_NM=${recipeAllName[idx]}'));
 
       if (response.statusCode == 200) {
         final body = convert.utf8.decode(response.bodyBytes);
@@ -124,8 +163,7 @@ class _ListBuilderState extends State<ListBuilder> {
         //print('응답');
 
         //데이터를 1개가져올때 예외처리
-        print('row data');
-        //print(ingredientArr);
+
         if (jsonResult['Grid_20150827000000000227_1']['row'].toString().length <
             150) {
           ingResult.add(
@@ -146,6 +184,7 @@ class _ListBuilderState extends State<ListBuilder> {
         throw Exception('오류');
       }
     }
+    print("추가 되지 않은 배열");
     print(recipeName);
     ingResult.sort();
     print(ingResult);
@@ -440,6 +479,9 @@ class _ListBuilderState extends State<ListBuilder> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                Divider(
+                                  color: Colors.grey,
                                 ),
                               ],
                             ));

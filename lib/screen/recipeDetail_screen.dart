@@ -152,12 +152,24 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     tmpScrapNum += 1;
                                     setScrapNum(
                                         widget.recipe.recipeCode, tmpScrapNum);
+                                    await FirebaseFirestore.instance
+                                        .collection("User")
+                                        .doc(_userProvider.uid)
+                                        .set({
+                                      "MyRecipes": _userProvider.recipes
+                                    }, SetOptions(merge: true));
                                   } else {
                                     _userProvider
                                         .removeRecipe(widget.recipe.recipeCode);
                                     tmpScrapNum -= 1;
                                     setScrapNum(
                                         widget.recipe.recipeCode, tmpScrapNum);
+                                    await FirebaseFirestore.instance
+                                        .collection("User")
+                                        .doc(_userProvider.uid)
+                                        .set({
+                                      "MyRecipes": _userProvider.recipes
+                                    }, SetOptions(merge: true));
                                   }
                                   print("유저 좋아요 레시피");
                                   print(_userProvider.recipes);
