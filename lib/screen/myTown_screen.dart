@@ -234,34 +234,44 @@ class _TownScreenState extends State<TownScreen> {
                           }
                         }),
                   ),
-                  TextButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                      }
-                      if(dropdownValue.toString()=='도 (시)'){
-                        _userProvider.scope=0;
-                      }else if(dropdownValue.toString()=='구 (시/군)'){
-                        _userProvider.scope=1;
-                      }else if(dropdownValue.toString()=='동명 (읍/면)'){
-                        _userProvider.scope=2;
-                      }
-                      if (_userProvider.scope != null) {
-                        await FirebaseFirestore.instance
-                            .collection("User")
-                            .doc(_userProvider.uid)
-                            .set({
-                          "Location": _userProvider.locations,
-                          "Scope": _userProvider.scope,
-                        }, SetOptions(merge: true));
-                      }
-                    },
-                    child: const Text(
-                      '저장하기',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                        }
+                        if (dropdownValue.toString() == '도 (시)') {
+                          _userProvider.scope = 0;
+                        } else if (dropdownValue.toString() == '구 (시/군)') {
+                          _userProvider.scope = 1;
+                        } else if (dropdownValue.toString() == '동명 (읍/면)') {
+                          _userProvider.scope = 2;
+                        }
+                        if (_userProvider.scope != null) {
+                          await FirebaseFirestore.instance
+                              .collection("User")
+                              .doc(_userProvider.uid)
+                              .set({
+                            "Location": _userProvider.locations,
+                            "Scope": _userProvider.scope,
+                          }, SetOptions(merge: true));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('위치가 업데이트되었습니다!'),
+                                backgroundColor: Colors.blue,
+                              ));
+                        }
+                      },
+                      icon: Icon(Icons.save_alt, color: Colors.black,),
+                      label: Text(
+                        '저장하기',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+
                     ),
                   ),
                 ],

@@ -32,26 +32,13 @@ class _showGroupBuyingState extends State<showGroupBuying> {
                 MaterialPageRoute(builder: (context) => TownScreen()),
               );
             },
-            child: Icon(
-              Icons.update,
-            ),
-          ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 30),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GroupBuying()),
-                  );
-                },
-                child: Icon(
-                  Icons.border_color_outlined,
-                ),
+            child: Padding(
+              padding: const EdgeInsets.only(left:10),
+              child: Icon(
+                Icons.update,
               ),
             ),
-          ],
+          ),
         ),
         body: Container(
             child: Stack(children: [
@@ -63,7 +50,7 @@ class _showGroupBuyingState extends State<showGroupBuying> {
           ),
           Positioned(
             bottom: 15,
-            right: 25,
+            right: 20,
             child: IconButton(
                 onPressed: () {
                   Navigator.push(
@@ -72,7 +59,7 @@ class _showGroupBuyingState extends State<showGroupBuying> {
                   );
                 },
                 icon: Icon(Icons.add_circle_outlined),
-                iconSize: 60.0,
+                iconSize: 65.0,
                 color: Palette.blue),
           )
         ])));
