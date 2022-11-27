@@ -84,7 +84,14 @@ flutter:
     - lib/assets/icons/과일/
     - lib/assets/icons/육류/
     - lib/assets/icons/채소류/
-    - lib/assets/
+    - lib/assets/icons/가공유제품/
+    - lib/assets/icons/곡류/
+    - lib/assets/icons/면/
+    - lib/assets/icons/빵떡/
+    - lib/assets/icons/조미료양념/
+    - lib/assets/icons/콩견과류/
+    - lib/assets/icons/해산물/
+    - lib/assets/icons/햄소시지/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
