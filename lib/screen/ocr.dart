@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:home_alone_recipe/screen/categoryIngredent.dart';
-import 'package:home_alone_recipe/widget/bottomBar.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:home_alone_recipe/models/post.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
-import 'package:home_alone_recipe/screen/camera_ex.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
+import 'package:provider/provider.dart';
+
+import 'package:home_alone_recipe/models/findIngredientByString.dart';
+import '../models/findIngredientByString.dart';
+import '../widget/userIngredient.dart';
 
 class ocr extends StatefulWidget {
   const ocr({Key? key}) : super(key: key);
@@ -21,10 +23,15 @@ class ocr extends StatefulWidget {
 }
 
 class _ocr extends State<ocr> {
+  late UserProvider _userProvider;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
+
+
+  // Ingredient ingredient=new Ingredient();
 
   File? image;
   File? _image;
+
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -37,10 +44,11 @@ class _ocr extends State<ocr> {
   }
 
   final picker = ImagePicker();
+
   Future getImage(ImageSource imageSource) async {
     // final image = await picker.pickImage(source: imageSource);
     final XFile? image =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
     });
@@ -50,6 +58,8 @@ class _ocr extends State<ocr> {
 
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
+
     _buildBottomDrawer(context);
     return Scaffold(
       appBar: AppBar(
@@ -79,45 +89,62 @@ class _ocr extends State<ocr> {
           ]),
       drawer: Drawer(
           child: ListView(
-        children: [
-          DrawerHeader(
-            child: Text('header'),
-            decoration: BoxDecoration(color: Colors.green),
-          )
-        ],
-      )),
+            children: [
+              DrawerHeader(
+                child: Text('header'),
+                decoration: BoxDecoration(color: Colors.green),
+              )
+            ],
+          )),
       body:
-          // Container(
-          //   alignment: Alignment.center,
-          //   child: Column(
-          //     children: <Widget>[
-          //       Text("ParsedText is:",style: GoogleFonts.montserrat(
-          //           fontSize:20,
-          //           fontWeight:FontWeight.bold
-          //       ),),
-          //       SizedBox(height:10.0),
-          //       Text(parsedtext,style: GoogleFonts.montserrat(
-          //           fontSize:25,
-          //           fontWeight:FontWeight.bold
-          //       ),)
-          //     ],
-          //   ),
-          // ),
+      // Container(
+      //   alignment: Alignment.center,
+      //   child: Column(
+      //     children: <Widget>[
+      //       Text("ParsedText is:",style: GoogleFonts.montserrat(
+      //           fontSize:20,
+      //           fontWeight:FontWeight.bold
+      //       ),),
+      //       SizedBox(height:10.0),
+      //       Text(parsedtext,style: GoogleFonts.montserrat(
+      //           fontSize:25,
+      //           fontWeight:FontWeight.bold
+      //       ),)
+      //     ],
+      //   ),
+      // ),
 
-          Stack(
+      Stack(
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+
+
+       // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _image == null // 이미지 출력하는 부분임.
-                  ? Text('No image selected.')
-                  : Image.file(File(_image!.path)),
+              Text(''),
+              Text('< 재료 >'),
+              Text(''),
+              Padding(
+                padding : const EdgeInsets.only(top: 25),
+              ),
+
+
+              userIngredient(),
+
+
               Padding(
                 padding: EdgeInsets.only(top: 30.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text(parsedtext)],
+                  children: [
+
+                    // if(parsedtext.length>100)
+                    //   Text(parsedtext.substring(0,100))
+                    // else
+                    //   Text(parsedtext),
+
+                  ],
                 ),
               ),
             ],
@@ -264,7 +291,7 @@ class _ocr extends State<ocr> {
   Future _getFromGallery() async {
     // final pickedFile=_image;
     final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
 
     var bytes = File(pickedFile.path.toString()).readAsBytesSync();
@@ -279,9 +306,44 @@ class _ocr extends State<ocr> {
 
     var post = await http.post(Uri.parse(url), body: payload, headers: header);
     var result = jsonDecode(post.body);
+    List<String> tmp = findIngredient(parsedtext);
+    tmp.toSet();
+    for (int i = 0; i < tmp.length; i++) {
+      if (kDebugMode) {
+        print(tmp[i]);
+      }
+    }
+    _userProvider.ingredients.clear();
 
+    print(tmp.toString());
+
+    _userProvider.addIngredient(tmp);
+    await FirebaseFirestore.instance
+        .collection("User")
+        .doc(_userProvider.uid)
+        .set({
+      "Email": _userProvider.email,
+      "Password": _userProvider.password,
+      "NickName": _userProvider.nickname,
+      "Scope": "",
+      "Ingredient": _userProvider.ingredients,
+      "MyRecipes": [],
+      "Location": "",
+      "Post": [],
+    },
+    ).onError((e, _) =>
+        print("Error writing document: $e"));
+    // print(parsedtext);
     setState(() {
       parsedtext = result['ParsedResults'][0]['ParsedText'];
     });
   }
+
+
+
+
+
+
+
 }
+
