@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:home_alone_recipe/widget/ingredient_button.dart';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
@@ -160,7 +160,6 @@ class _ListBuilderState extends State<ListBuilder> {
         final json = xml.toParker();
 
         Map<String, dynamic> jsonResult = convert.json.decode(json);
-        //print('응답');
 
         //데이터를 1개가져올때 예외처리
 
@@ -221,7 +220,6 @@ class _ListBuilderState extends State<ListBuilder> {
       final json = xml.toParker();
 
       Map<String, dynamic> jsonResult = convert.json.decode(json);
-      //print('응답');
 
       for (var i = 0;
           i < jsonResult['Grid_20150827000000000227_1']['row'].length;
@@ -249,7 +247,6 @@ class _ListBuilderState extends State<ListBuilder> {
       final json = xml.toParker();
 
       Map<String, dynamic> jsonResult = convert.json.decode(json);
-      //print('응답');
 
       for (var i = 0;
           i < jsonResult['Grid_20150827000000000228_1']['row'].length;
@@ -270,7 +267,6 @@ class _ListBuilderState extends State<ListBuilder> {
         await rootBundle.loadString('lib/assets/recipeInfo.json');
 
     final data = await convert.json.decode(response);
-    //print(data);
 
     _items = await data["recipe"];
     print("read json");
@@ -337,18 +333,14 @@ class _ListBuilderState extends State<ListBuilder> {
         builder: ((BuildContext context, AsyncSnapshot<List<Recipe>> snapshot) {
           List<Recipe> snapRecipe = [];
 
-          //print("111111111111111111111111111111111111");
           print(snapshot);
           if (snapshot.hasData) {
-            //print("222222222222222222222222222222222222");
-            //print(snapshot.data![0].recipeName);
             snapshot.data!.forEach((element) {
               Recipe r = element as Recipe;
               snapRecipe.add(r);
               print("Recipe Snap For");
             });
           }
-          //print(snapshot.connectionState);
 
           if (snapshot.connectionState == ConnectionState.done) {
             return Column(

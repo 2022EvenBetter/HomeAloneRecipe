@@ -3,7 +3,7 @@ import 'package:home_alone_recipe/screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:home_alone_recipe/screen/recipeDetail_screen.dart';
 import 'package:home_alone_recipe/screen/signup_screen.dart';
-import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

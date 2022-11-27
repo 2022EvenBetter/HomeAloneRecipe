@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_alone_recipe/screen/home_screen.dart';
 import 'package:home_alone_recipe/models/post.dart';
+import 'package:home_alone_recipe/screen/showGroupBuying_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:home_alone_recipe/Provider/userProvider.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:home_alone_recipe/constants/category.dart';
 
 class GroupBuying extends StatefulWidget {
@@ -102,7 +103,7 @@ class _GroupBuyingState extends State<GroupBuying> {
                                       post.date != null &&
                                       post.upperCategory != null &&
                                       post.lowerCategory != null &&
-                                      post.participants != null &&
+                                      post.maxParticipants != null &&
                                       post.meetingPlace != null &&
                                       post.time != null &&
                                       post.title != null) {
@@ -111,12 +112,13 @@ class _GroupBuyingState extends State<GroupBuying> {
                                         .add({
                                       "Uid": _userProvider.uid,
                                       "WriterName": _userProvider.nickname,
-                                      "UserLocation": _userProvider.location,
+                                      "UserLocation": _userProvider.locations,
                                       "Content": post.content!,
                                       "Date": post.date!,
                                       "UpperCategory": post.upperCategory!,
                                       "LowerCategory": post.lowerCategory!,
-                                      "Participants": post.participants!,
+                                      "maxParticipants": post.maxParticipants!,
+                                      "curParticipants": 0,
                                       "Place": post.meetingPlace!,
                                       "Time": post.time!,
                                       "Title": post.title!,
@@ -125,14 +127,14 @@ class _GroupBuyingState extends State<GroupBuying> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) {
-                                        return Text('전환된 화면입니다!');
+                                        return showGroupBuying();
                                       }),
                                     );
                                   } else {
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('모든 값이 입력되어야 합니다'),
+                                        content: Text('모든 값이 입력되어야 합니다!'),
                                         backgroundColor: Colors.blue,
                                       ),
                                     );
@@ -447,7 +449,8 @@ class _GroupBuyingState extends State<GroupBuying> {
                                   setState(() {
                                     if (participantsCounter != 0) {
                                       participantsCounter--;
-                                      post.participants = participantsCounter;
+                                      post.maxParticipants =
+                                          participantsCounter;
                                     }
                                   });
                                 },
@@ -473,8 +476,8 @@ class _GroupBuyingState extends State<GroupBuying> {
                                   onPressed: () {
                                     setState(() {
                                       participantsCounter++;
-                                      post.participants = participantsCounter;
-                                      print(post.participants);
+                                      post.maxParticipants =
+                                          participantsCounter;
                                     });
                                   },
                                   tooltip: 'Increment',
@@ -583,7 +586,7 @@ class _GroupBuyingState extends State<GroupBuying> {
                           ),
                         ),
                         const SizedBox(
-                          height: 100.0,
+                          height: 20.0,
                         ),
 
                         Row(

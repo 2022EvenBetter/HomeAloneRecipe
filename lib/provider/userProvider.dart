@@ -6,9 +6,9 @@ class UserProvider extends ChangeNotifier {
   String _uid = "";
   String _email = ""; //사용자 이메일
   String _password = ""; //사용자 비밀번호
-  String _location = ""; //사용자 위치 (경기도 성남시 수정구 창곡동)
+  List<String> _locations = []; //사용자 위치 (경기도 성남시 수정구 창곡동)
   String _nickname = ""; //사용자 닉네임 (게시글 작성 시)
-  String _scope = ""; //사용자 위치 범위
+  int _scope = 0; //사용자 위치 범위
   List<String> _ingredients = []; //사용자 재료
   List<int> _recipes = []; //사용자 스크랩한 레시피
   List<String> _posts = []; //사용자 게시글
@@ -16,9 +16,9 @@ class UserProvider extends ChangeNotifier {
   String get uid => _uid;
   String get email => _email;
   String get password => _password;
-  String get location => _location;
+  List<String> get locations => _locations;
   String get nickname => _nickname;
-  String get scope => _scope;
+  int get scope => _scope;
   List<String> get ingredients => _ingredients;
   List<int> get recipes => _recipes;
   List<String> get posts => _posts;
@@ -28,8 +28,8 @@ class UserProvider extends ChangeNotifier {
     this._email = _email;
     this._password = _password;
     this._nickname = _nickname;
-    this._location = "";
-    this._scope = "";
+    this._locations = [];
+    this._scope = 0;
     this._ingredients = [];
     this._recipes = [];
     this._posts = [];
@@ -41,8 +41,8 @@ class UserProvider extends ChangeNotifier {
       String _email,
       String _password,
       String _nickname,
-      String _location,
-      String _scope,
+      List<String> _locations,
+      int _scope,
       List<String> _ingredients,
       List<int> _recipes,
       List<String> _posts) {
@@ -50,7 +50,7 @@ class UserProvider extends ChangeNotifier {
     this._email = _email;
     this._password = _password;
     this._nickname = _nickname;
-    this._location = _location;
+    this._locations = _locations;
     this._scope = _scope;
     this._ingredients = _ingredients;
     this._recipes = _recipes;
@@ -73,8 +73,8 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void set location(String input_location) {
-    _location = input_location;
+  void set locations(List<String> input_locations) {
+    _locations = input_locations;
     notifyListeners();
   }
 
@@ -83,7 +83,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void set scope(String input_scope) {
+  void set scope(int input_scope) {
     _scope = input_scope;
     notifyListeners();
   }
