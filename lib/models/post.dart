@@ -12,6 +12,8 @@ class Post {
   String? meetingPlace;
   String? writerName;
   List<String>? userLocation;
+  String? chatId;
+  String? postId;
 
   Post({
     this.upperCategory,
@@ -25,6 +27,8 @@ class Post {
     this.meetingPlace,
     this.writerName,
     this.userLocation,
+    this.chatId,
+    this.postId,
   });
 
   Post.fromJson(dynamic json) {
@@ -39,6 +43,8 @@ class Post {
     meetingPlace = json['Place'];
     writerName = json['WriterName'];
     userLocation = json['UserLocation'].cast<String>();
+    chatId=json['chatId'];
+    postId=json['PostId'];
   }
 
   Post.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -58,5 +64,6 @@ class Post {
         'time': time,
         'meetingPlace': meetingPlace,
         'writerName': writerName,
+        'chatId':chatId,
       };
 }

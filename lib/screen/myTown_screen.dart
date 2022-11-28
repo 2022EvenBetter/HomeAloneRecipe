@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:home_alone_recipe/widget/bottomBar.dart';
+import 'package:home_alone_recipe/screen/home_screen.dart';
 
 const List<String> list = <String>['동명 (읍/면)', '구 (시/군)', '도 (시)'];
 
@@ -26,6 +28,12 @@ class _TownScreenState extends State<TownScreen> {
   String? selectedValue;
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = list.first;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      int index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -293,6 +301,7 @@ class _TownScreenState extends State<TownScreen> {
               ),
             ),
           ),
-        ]));
+        ]),
+    );
   }
 }

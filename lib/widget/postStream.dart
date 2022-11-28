@@ -18,6 +18,13 @@ class Posts extends StatelessWidget {
         .collection("Post")
         .where("UserLocation",
             arrayContains: _userProvider.locations[_userProvider.scope]);
+
+    Future<String> get_Id(DocumentReference doc_ref) async {
+      DocumentSnapshot docSnap = await doc_ref.get();
+      var doc_id2 = docSnap.reference.id;
+      return doc_id2;
+    }
+
     return StreamBuilder(
       stream: postFilterLocation.snapshots(),
       builder: (context,
@@ -35,7 +42,7 @@ class Posts extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 Post post = Post.fromQuerySnapshot(postDocs[index]);
-                print(post.content);
+
                 Navigator.push(
                     context,
                     MaterialPageRoute(

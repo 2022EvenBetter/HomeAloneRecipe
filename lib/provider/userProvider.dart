@@ -12,6 +12,7 @@ class UserProvider extends ChangeNotifier {
   List<String> _ingredients = []; //사용자 재료
   List<int> _recipes = []; //사용자 스크랩한 레시피
   List<String> _posts = []; //사용자 게시글
+  List<String> _chats=[];
 
   String get uid => _uid;
   String get email => _email;
@@ -22,6 +23,7 @@ class UserProvider extends ChangeNotifier {
   List<String> get ingredients => _ingredients;
   List<int> get recipes => _recipes;
   List<String> get posts => _posts;
+  List<String> get chats=> _chats;
 
   void signup(String _uid, String _email, String _password, String _nickname) {
     this._uid = _uid;
@@ -33,6 +35,7 @@ class UserProvider extends ChangeNotifier {
     this._ingredients = [];
     this._recipes = [];
     this._posts = [];
+    this._chats=[];
     notifyListeners();
   }
 
@@ -45,7 +48,8 @@ class UserProvider extends ChangeNotifier {
       int _scope,
       List<String> _ingredients,
       List<int> _recipes,
-      List<String> _posts) {
+      List<String> _posts,
+          List<String> _chats) {
     this._uid = _uid;
     this._email = _email;
     this._password = _password;
@@ -55,6 +59,7 @@ class UserProvider extends ChangeNotifier {
     this._ingredients = _ingredients;
     this._recipes = _recipes;
     this._posts = _posts;
+    this._chats=_chats;
     notifyListeners();
   }
 
@@ -103,6 +108,11 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void set chats(List<String> input_chats){
+    _chats=input_chats;
+    notifyListeners();
+  }
+
   void addIngredient(List<String> input_ingredients) {
     //재료추가할 때는 list로 받기
     _ingredients.addAll(input_ingredients);
@@ -121,6 +131,11 @@ class UserProvider extends ChangeNotifier {
 
   void addPost(String postId) {
     _posts.add(postId);
+    notifyListeners();
+  }
+
+  void addChat(String chatId){
+    _chats.add(chatId);
     notifyListeners();
   }
 }

@@ -199,7 +199,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                               value['Ingredient']
                                                   .cast<String>(),
                                               value['MyRecipes'].cast<int>(),
-                                              value['Post'].cast<String>(),
+                                              value['Posts'].cast<String>(),
+                                              value['Chats'].cast<String>(),
                                             ),
                                           });
                                       Navigator.push(

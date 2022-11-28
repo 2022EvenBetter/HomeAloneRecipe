@@ -107,7 +107,31 @@ class _GroupBuyingState extends State<GroupBuying> {
                                       post.meetingPlace != null &&
                                       post.time != null &&
                                       post.title != null) {
+                                    final docChatRef = await FirebaseFirestore
+                                        .instance
+                                        .collection("chatrooms")
+                                        .add({});
+                                    String chatId = docChatRef.id;
+                                    String route =
+                                        '/chatrooms/' + chatId + '/Pinfo';
+
+                                    _userProvider.addChat(chatId);
                                     await FirebaseFirestore.instance
+                                        .collection("User")
+                                        .doc(_userProvider.uid)
+                                        .set({"Chats": _userProvider.chats},
+                                            SetOptions(merge: true));
+
+                                    await FirebaseFirestore.instance
+                                        .collection(route)
+                                        .doc(_userProvider.uid)
+                                        .set({
+                                      "Uid": _userProvider.uid,
+                                      "NickName": _userProvider.nickname,
+                                      "Position": "host",
+                                    });
+                                    final docPostRef = await FirebaseFirestore
+                                        .instance
                                         .collection("Post")
                                         .add({
                                       "Uid": _userProvider.uid,
@@ -118,18 +142,29 @@ class _GroupBuyingState extends State<GroupBuying> {
                                       "UpperCategory": post.upperCategory!,
                                       "LowerCategory": post.lowerCategory!,
                                       "maxParticipants": post.maxParticipants!,
-                                      "curParticipants": 0,
+                                      "curParticipants": 1,
                                       "Place": post.meetingPlace!,
                                       "Time": post.time!,
                                       "Title": post.title!,
+                                      "chatId": chatId,
+                                      "PostId": "",
                                     });
+                                    String postId = docPostRef.id;
+                                    await FirebaseFirestore.instance
+                                        .collection("Post")
+                                        .doc(postId)
+                                        .set({"PostId": postId},
+                                            SetOptions(merge: true));
 
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return showGroupBuying();
-                                      }),
-                                    );
+                                    _userProvider.addPost(postId);
+                                    await FirebaseFirestore.instance
+                                        .collection("User")
+                                        .doc(_userProvider.uid)
+                                        .set({"Posts": _userProvider.posts},
+                                            SetOptions(merge: true));
+
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
                                   } else {
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
