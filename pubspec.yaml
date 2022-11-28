@@ -57,6 +57,7 @@ dependencies:
   cached_network_image: ^3.2.2
   cool_dropdown: ^1.4.2
   flutter_chat_bubble: ^2.0.0
+  google_fonts: ^3.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -84,6 +85,14 @@ flutter:
     - lib/assets/icons/과일/
     - lib/assets/icons/육류/
     - lib/assets/icons/채소류/
+    - lib/assets/icons/가공유제품/
+    - lib/assets/icons/곡류/
+    - lib/assets/icons/면/
+    - lib/assets/icons/빵떡/
+    - lib/assets/icons/조미료양념/
+    - lib/assets/icons/콩견과류/
+    - lib/assets/icons/해산물/
+    - lib/assets/icons/햄소시지/
     - lib/assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see

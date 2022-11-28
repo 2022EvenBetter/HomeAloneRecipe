@@ -58,7 +58,7 @@ class _IngredientFilterState extends State<IngredientFilter> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
+      height: 130,
       child: Column(
         children: [
           CategoryDropdown(setVisible),

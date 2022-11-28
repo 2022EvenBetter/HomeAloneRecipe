@@ -10,6 +10,7 @@ import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:home_alone_recipe/screen/myTown_screen.dart';
 import 'package:home_alone_recipe/screen/groupChatting.dart';
 import 'package:home_alone_recipe/screen/showGroupBuying_screen.dart';
+import 'package:home_alone_recipe/screen/userPage.dart';
 import 'package:home_alone_recipe/widget/bottomBar.dart';
 import 'ocr.dart';
 import '../widget/getRecipe.dart';
@@ -32,7 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    ocr(),
+    // ocr(),
+    UserPage(),
     RecipeScreen(),
     showGroupBuying(),
     MessageListScreen(),

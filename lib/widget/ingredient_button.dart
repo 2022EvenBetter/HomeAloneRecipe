@@ -81,17 +81,18 @@ class _IngredientButtonForRecipeTabState
                 scale: 15,
                 color: _hasBeenPressed
                     ? Colors.white.withOpacity(1)
-                    : Colors.white.withOpacity(0.4),
+                    : Colors.white.withOpacity(1),
                 colorBlendMode: BlendMode.modulate,
               ),
               onPressed: () {
                 setState(() {
                   _hasBeenPressed = !_hasBeenPressed;
-                  if (_hasBeenPressed) {
-                    widget.filterIngredient(widget.buttonName);
-                  } else {
-                    widget.rmvIngredient(widget.buttonName);
-                  }
+
+                  widget.filterIngredient(widget.buttonName);
+
+                  // else {
+                  //   widget.rmvIngredient(widget.buttonName);
+                  // }
 
                   // if (_hasBeenPressed) {
 

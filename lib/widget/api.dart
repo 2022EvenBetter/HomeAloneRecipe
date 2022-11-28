@@ -1,6 +1,7 @@
 import 'dart:convert' as convert;
-import 'dart:developer';
-import 'dart:ffi';
+
+import 'package:home_alone_recipe/constants/ingredientCategory.dart' as ingr;
+import 'dart:ffi' as ffi;
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import 'category_dropdown.dart';
 import 'package:home_alone_recipe/screen/recipeDetail_screen.dart';
 import 'ingredient_filter.dart';
 import 'package:provider/provider.dart';
+import 'package:home_alone_recipe/config/palette.dart';
 
 Map<String, dynamic> ingMap = {
   "소고기": ["쇠고기"],
@@ -35,8 +37,6 @@ class Api extends StatefulWidget {
 }
 
 class _ApiState extends State<Api> {
-  late UserProvider _userProvider;
-
   bool showWidget = false;
   List<String> ingredientArr = [];
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -45,7 +45,8 @@ class _ApiState extends State<Api> {
 
   void addIng(String ing) {
     setState(() {
-      ingredientArr.add(ing);
+      if (!ingredientArr.contains(ing)) ingredientArr.add(ing);
+
       print(ingredientArr);
     });
   }
@@ -69,11 +70,45 @@ class _ApiState extends State<Api> {
 
   @override
   Widget build(BuildContext context) {
-    _userProvider = Provider.of<UserProvider>(context);
     return Expanded(
       child: Column(
         children: <Widget>[
           IngredientFilter(addIng, rmvIng),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              for (var i = 0; i < ingredientArr.length; i++)
+                Container(
+                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    decoration: BoxDecoration(
+                        color: Palette.blue,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                    height: 30,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          ingredientArr[i],
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+                          onPressed: () {
+                            rmvIng(ingredientArr[i]);
+                          },
+                          icon: Icon(
+                            Icons.cancel,
+                            size: 20.0,
+                          ),
+                          color: Colors.white,
+                        )
+                      ],
+                    ))
+            ]),
+          ),
           Expanded(child: ListBuilder(ingredientArr)),
         ],
       ),
@@ -90,10 +125,8 @@ class ListBuilder extends StatefulWidget {
 }
 
 class _ListBuilderState extends State<ListBuilder> {
-  Map<String, dynamic> ing = {
-    "소고기": ["쇠고기"],
-    "닭고기": ["닭다리", "닭"],
-  };
+  late UserProvider _userProvider;
+  Map<String, dynamic> ing = ingr.ing;
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -123,9 +156,9 @@ class _ListBuilderState extends State<ListBuilder> {
     return data.data()!["scrapNum"];
   }
 
-  Future<List<String>> _getIngAPIbyIngName(List<String> recipeName) async {
-    List<String> ingResult = [];
-    List<String> doubleIng = [];
+  Future<List<int>> _getIngAPIbyIngName(List<String> recipeName) async {
+    List<int> ingResult = [];
+    List<int> doubleIng = [];
     List<String> recipeAllName = [];
     for (var i = 0; i < recipeName.length; i++) {
       recipeAllName.add(recipeName[i]);
@@ -165,8 +198,8 @@ class _ListBuilderState extends State<ListBuilder> {
 
         if (jsonResult['Grid_20150827000000000227_1']['row'].toString().length <
             150) {
-          ingResult.add(
-              jsonResult['Grid_20150827000000000227_1']['row']['RECIPE_ID']);
+          ingResult.add(int.parse(
+              jsonResult['Grid_20150827000000000227_1']['row']['RECIPE_ID']));
         } else if (jsonResult['Grid_20150827000000000227_1']['row']
                 .toString()
                 .length >=
@@ -175,8 +208,8 @@ class _ListBuilderState extends State<ListBuilder> {
           for (var i = 0;
               i < jsonResult['Grid_20150827000000000227_1']['row'].length;
               i++) {
-            ingResult.add(jsonResult['Grid_20150827000000000227_1']['row'][i]
-                ['RECIPE_ID']);
+            ingResult.add(int.parse(jsonResult['Grid_20150827000000000227_1']
+                ['row'][i]['RECIPE_ID']));
           }
         }
       } else {
@@ -203,8 +236,11 @@ class _ListBuilderState extends State<ListBuilder> {
       print(doubleIng);
       return doubleIng;
     } else {
-      print(ingResult);
-      return ingResult;
+      var setResult = ingResult.toSet();
+      print("set");
+      print(setResult);
+      var toListResult = setResult.toList();
+      return toListResult;
     }
   }
 
@@ -280,15 +316,15 @@ class _ListBuilderState extends State<ListBuilder> {
 
     for (var i = 0; i < recipeMake.length; i++) {
       //print("레시피설명 불러오는중");
-      await initRecipeScrap(int.parse(recipeInfo[i]));
-      int scrapNum = await getScrapNum(int.parse(recipeInfo[i]));
-      List<String> _recipeIng = await _getIngAPI(recipeInfo[i]);
-      List<String> _recipeMake = await _getRecipeAPI(recipeInfo[i]);
+      await initRecipeScrap(recipeInfo[i]);
+      int scrapNum = await getScrapNum(recipeInfo[i]);
+      List<String> _recipeIng = await _getIngAPI(recipeInfo[i].toString());
+      List<String> _recipeMake = await _getRecipeAPI(recipeInfo[i].toString());
 
       _recipe.add(Recipe(
           recipeMake[i]['레시피 이름'],
           recipeMake[i]['대표이미지 URL'],
-          int.parse(recipeInfo[i]),
+          recipeInfo[i],
           recipeMake[i]['간략(요약) 소개'],
           _recipeIng,
           _recipeMake,
@@ -301,16 +337,17 @@ class _ListBuilderState extends State<ListBuilder> {
   Future<List<Recipe>> _getFiteredRecipe() async {
     print(widget.filterIngredient);
     if (widget.filterIngredient != "") {
-      final List<String> filteredRecipecode =
+      final List<int> filteredRecipecode =
           await _getIngAPIbyIngName(widget.filterIngredient);
 
       final List<dynamic> filteredRecipeArray = [];
 
       List<dynamic> allRecipes = await readJson();
-
+      print(allRecipes);
+      print(filteredRecipecode);
       for (var i = allRecipes.length - 1; i >= 0; i--) {
         for (var j = filteredRecipecode.length - 1; j >= 0; j--) {
-          if (allRecipes[i]["레시피 코드"] == int.parse(filteredRecipecode[j])) {
+          if (allRecipes[i]["레시피 코드"] == filteredRecipecode[j]) {
             filteredRecipeArray.add(allRecipes[i]);
             print("filtered");
           }
@@ -328,6 +365,7 @@ class _ListBuilderState extends State<ListBuilder> {
   bool isScrap = true;
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
     return FutureBuilder(
         future: _getFiteredRecipe(),
         builder: ((BuildContext context, AsyncSnapshot<List<Recipe>> snapshot) {
@@ -409,21 +447,27 @@ class _ListBuilderState extends State<ListBuilder> {
                                                       padding: EdgeInsets.zero,
                                                       constraints:
                                                           BoxConstraints(),
-                                                      // icon: isScrap
-                                                      //     ? Icon(Icons.favorite)
-                                                      //     : Icon(Icons
-                                                      //         .favorite_outline),
-                                                      icon:
-                                                          Icon(Icons.favorite),
+                                                      icon: _userProvider
+                                                              .recipes
+                                                              .contains(
+                                                                  snapRecipe[
+                                                                          idx]
+                                                                      .recipeCode)
+                                                          ? Icon(
+                                                              Icons.favorite,
+                                                              color:
+                                                                  Colors.yellow,
+                                                            )
+                                                          : Icon(
+                                                              Icons
+                                                                  .favorite_border,
+                                                              color: Colors
+                                                                  .yellow),
                                                       focusColor: Colors.amber,
                                                       isSelected: false,
                                                       selectedIcon: Icon(Icons
                                                           .favorite_border),
-                                                      onPressed: () {
-                                                        // setState(() {
-                                                        //   isScrap = !isScrap;
-                                                        // });
-                                                      },
+                                                      onPressed: () {},
                                                     ),
                                                   ),
                                                   Padding(
