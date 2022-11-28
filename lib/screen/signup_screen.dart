@@ -240,7 +240,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           "Ingredient": [],
                                           "MyRecipes": [],
                                           "Location": [],
-                                          "Post": [],
+                                          "Posts": [],
+                                          "Chats": [],
                                         },
                                       ).onError((e, _) => print(
                                               "Error writing document: $e"));

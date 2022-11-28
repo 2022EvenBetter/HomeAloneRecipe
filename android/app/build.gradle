@@ -92,4 +92,5 @@ dependencies {
     implementation 'com.naver.maps:map-sdk:3.15.0'
     implementation("com.squareup.okio:okio:3.2.0")
     implementation platform('com.google.firebase:firebase-bom:29.3.1')
+    implementation 'com.google.firebase:firebase-auth'
 }

@@ -16,6 +16,7 @@ import 'ocr.dart';
 import '../widget/getRecipe.dart';
 import 'recipe_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:home_alone_recipe/screen/showMyChat.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     UserPage(),
     RecipeScreen(),
     showGroupBuying(),
-    MessageListScreen(),
+    showMyChat(),
     TownScreen(),
   ];
 
