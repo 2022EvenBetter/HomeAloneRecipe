@@ -93,6 +93,7 @@ flutter:
     - lib/assets/icons/콩견과류/
     - lib/assets/icons/해산물/
     - lib/assets/icons/햄소시지/
+    - lib/assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,5 +1,5 @@
 import 'dart:convert' as convert;
-import 'dart:developer';
+import 'package:home_alone_recipe/constants/ingredientCategory.dart' as ing;
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,8 @@ import 'package:home_alone_recipe/models/recipe.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:provider/provider.dart';
+
+Map<String, dynamic> ingredient = ing.ing;
 
 class RecipeDetailPage extends StatefulWidget {
   final Recipe recipe;
@@ -81,6 +83,25 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         changeMode = true;
       }
     }
+    var plusAlphaIng = [];
+    for (var i = 0; i < _userProvider.ingredients.length; i++) {
+      plusAlphaIng.add(_userProvider.ingredients[i]);
+    }
+
+    for (var i = 0; i < _userProvider.ingredients.length; i++) {
+      print(ingredient[_userProvider.ingredients[i]]);
+
+      if (ingredient[_userProvider.ingredients[i]] != null) {
+        for (var j = 0;
+            j < ingredient[_userProvider.ingredients[i]].length;
+            j++) {
+          print(ingredient[_userProvider.ingredients[i]][j]);
+          plusAlphaIng.add(ingredient[_userProvider.ingredients[i]][j]);
+        }
+      }
+    }
+    print("plusAlpha");
+    print(plusAlphaIng);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -130,8 +151,12 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               padding: EdgeInsets.zero,
                               constraints: BoxConstraints(),
                               icon: isScrap
-                                  ? Icon(Icons.favorite)
-                                  : Icon(Icons.favorite_outline),
+                                  ? Icon(
+                                      Icons.favorite,
+                                      color: Colors.yellow,
+                                    )
+                                  : Icon(Icons.favorite_outline,
+                                      color: Colors.yellow),
                               focusColor: Colors.amber,
                               isSelected: false,
                               selectedIcon: Icon(Icons.favorite_border),
@@ -225,8 +250,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                           for (var i = 0;
                               i < widget.recipe.ingredients.length;
                               i++)
-                            _userProvider.ingredients
-                                    .contains(widget.recipe.ingredients[i])
+                            plusAlphaIng.contains(widget.recipe.ingredients[i])
                                 ? Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Text(
