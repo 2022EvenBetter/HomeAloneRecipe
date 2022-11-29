@@ -34,12 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    // ocr(),
-    UserPage(),
+    ocr(),
     RecipeScreen(),
     showGroupBuying(),
     showMyChat(),
-    TownScreen(),
+    UserPage(),
+    // TownScreen(),
   ];
 
   void _onItemTapped(int index) {

@@ -133,10 +133,10 @@ class _ocr extends State<ocr> {
 
 
        // mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
+       //      crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(''),
-              Text('식재료',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                Text('식재료',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               Text(''),
               Padding(
                 padding : const EdgeInsets.only(top: 25),
