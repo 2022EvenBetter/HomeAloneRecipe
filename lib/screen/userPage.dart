@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
+import 'package:home_alone_recipe/screen/myScrapRecipe_screen.dart';
 import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -36,33 +37,33 @@ class _UserPage extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
-    String str=_userProvider.locations.toString();
-    str=str.substring(1,str.length-1);
-    str=str.replaceAll(',', ' ');
+    String str = _userProvider.locations.toString();
+    str = str.substring(1, str.length - 1);
+    str = str.replaceAll(',', ' ');
     return Scaffold(
       appBar: AppBar(
-        title: Text('나의 정보',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: Text('나의 정보',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         centerTitle: true,
         elevation: 3.0,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
       ),
-
-      body: Column(
+      body: ListView(
         children: [
           SizedBox(
             height: 15.0,
           ),
           Padding(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+            padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
             child: Container(
-            height: 120,
-            width: 500,
-            // alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.black26,
-              borderRadius: BorderRadius.circular(15),
-            ),
+              height: 120,
+              width: 500,
+              // alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -72,10 +73,9 @@ class _UserPage extends State<UserPage> {
                     backgroundColor: Colors.white,
                     child: Icon(
                       Icons.person_outline,
-                      size : 35,
+                      size: 35,
                       color: Colors.black12,
                     ),
-
                   ),
                   // Positioned(
                   //     bottom : 40,
@@ -95,16 +95,16 @@ class _UserPage extends State<UserPage> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(_userProvider.nickname+' 님',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                      Text(_userProvider.nickname + ' 님',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18)),
                       Text(str),
-                      SizedBox(height:20),
+                      SizedBox(height: 20),
                     ],
                   )
                 ],
               ),
-
-
-          ),
+            ),
           ),
 
           // 2번째 박스!
@@ -122,29 +122,39 @@ class _UserPage extends State<UserPage> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 10,),
-                  Text('  나의 활동',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('  나의 활동',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
-                      SizedBox(width: 10,),
-                      Icon(
-                        Icons.post_add
+                      SizedBox(
+                        width: 10,
                       ),
-                      TextButton(onPressed: (){}, child: Text(' 내가 쓴 공동구매글 ', style: TextStyle(color:Colors.black)),),
-
+                      Icon(Icons.post_add),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(' 내가 쓴 공동구매글 ',
+                            style: TextStyle(color: Colors.black)),
+                      ),
                     ],
                   ),
-
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Row(
                     children: [
-                      SizedBox(width: 10,),
-                      Icon(
-                          Icons.location_on
+                      SizedBox(
+                        width: 10,
                       ),
+                      Icon(Icons.location_on),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -152,18 +162,16 @@ class _UserPage extends State<UserPage> {
                             MaterialPageRoute(
                                 builder: (context) => TownScreen()),
                           );
-
-                      }, child: Text(' 내 동네 설정 ', style: TextStyle(color:Colors.black)),),
-
+                        },
+                        child: Text(' 내 동네 설정 ',
+                            style: TextStyle(color: Colors.black)),
+                      ),
                     ],
                   ),
                 ],
               ),
-
-
             ),
           ),
-
 
           // 3번째 박스!!
           SizedBox(
@@ -182,23 +190,36 @@ class _UserPage extends State<UserPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 10,),
-                  Text('  나의 레시피',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('  나의 레시피',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
-                      SizedBox(width: 10,),
-                      Icon(
-                          Icons.search_rounded
+                      SizedBox(
+                        width: 10,
                       ),
-                      TextButton(onPressed: (){}, child: Text(' 내가 스크랩한 레시피 보기 ', style: TextStyle(color:Colors.black)),),
+                      Icon(Icons.search_rounded),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyScrapRecipeScreen()),
+                          );
+                        },
+                        child: Text(' 내가 스크랩한 레시피 보기 ',
+                            style: TextStyle(color: Colors.black)),
+                      ),
                     ],
                   ),
-
                 ],
               ),
-
-
             ),
           ),
 
@@ -208,8 +229,11 @@ class _UserPage extends State<UserPage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('   최근 본 레시피',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              SizedBox(height: 10,),
+              Text('   최근 본 레시피',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              SizedBox(
+                height: 10,
+              ),
             ],
           ),
           //
@@ -253,19 +277,11 @@ class _UserPage extends State<UserPage> {
             ),
           )
           //
-
         ],
-
-
-
       ),
-
-
     );
   }
-
 }
-
 
 class Category {
   final String imagUrl;
