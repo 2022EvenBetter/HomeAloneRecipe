@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_alone_recipe/config/palette.dart';
 import 'package:home_alone_recipe/models/post.dart';
 import 'package:home_alone_recipe/screen/groupChatting.dart';
+import 'package:provider/provider.dart';
+import 'package:home_alone_recipe/provider/userProvider.dart';
 
 class GroupBuyingDetailPage extends StatefulWidget {
   final Post post;
@@ -13,6 +16,8 @@ class GroupBuyingDetailPage extends StatefulWidget {
 }
 
 class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
+  late UserProvider _userProvider;
+
   String curState() {
     if (widget.post.maxParticipants == null) {
       return "null입니다";
@@ -20,6 +25,15 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
       return "모집중";
     } else {
       return "모집완료";
+    }
+  }
+
+  bool isAttend(String chatId) {
+    //내가 이미 채팅방에 참여하고 있는 지 중복체크
+    if (_userProvider.chats.contains(chatId)) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -52,10 +66,42 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             width: 110,
                             child: ElevatedButton.icon(
                               onPressed: () async {
+                                if (isAttend(widget.post.chatId!) == false) {
+                                  widget.post.curParticipants =
+                                      widget.post.curParticipants! + 1;
+                                  await FirebaseFirestore.instance
+                                      .collection("Post")
+                                      .doc(widget.post.postId)
+                                      .set({
+                                    "curParticipants":
+                                        widget.post.curParticipants
+                                  }, SetOptions(merge: true));
+
+                                  _userProvider.addChat(widget.post.chatId!);
+                                  await FirebaseFirestore.instance
+                                      .collection("User")
+                                      .doc(_userProvider.uid)
+                                      .set({"Chats": _userProvider.chats},
+                                          SetOptions(merge: true));
+
+                                  String route = '/chatrooms/' +
+                                      widget.post.chatId! +
+                                      '/Pinfo';
+                                  await FirebaseFirestore.instance
+                                      .collection(route)
+                                      .doc(_userProvider.uid)
+                                      .set({
+                                    "Uid": _userProvider.uid,
+                                    "NickName": _userProvider.nickname,
+                                    "Position": "guest",
+                                  });
+                                }
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) {
-                                    return MessageListScreen();
+                                    return MessageListScreen(
+                                        widget.post.chatId!);
                                   }),
                                 );
                               },
@@ -98,6 +144,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
     var stringlist = widget.post.userLocation!.join(" ");
     return Scaffold(
       appBar: AppBar(
@@ -245,7 +292,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 18, 0, 7),
-                    width: MediaQuery.of(context).size.width * 0.98,
+                    width: MediaQuery.of(context).size.width * 1,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -259,12 +306,14 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             borderRadius: BorderRadius.circular(10.0),
                             //color: Palette.lightgrey,
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(13, 15, 13, 15),
-                            child: Text(
-                              widget.post.content.toString(),
-                              style: TextStyle(
-                                fontSize: 14,
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(13, 15, 13, 15),
+                              child: Text(
+                                widget.post.content.toString(),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
@@ -293,44 +342,77 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
             ),
           ),
           Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(104, 150, 235, 1),
-                      Color.fromRGBO(104, 100, 255, 1),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(25.0),
-                  ),
-                ),
-                height: MediaQuery.of(context).size.width * 0.15,
-                width: MediaQuery.of(context).size.width * 0.90,
-                child: OutlinedButton(
-                  onPressed: () {
-                    showPopup(context);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(23.0),
-                    ),
-                  ),
-                  child: const Text(
-                    '참여하기',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20),
-                  ),
-                ),
-              ),
-            ),
-          ),
+              child: curState() == "모집중"
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.fromRGBO(104, 150, 235, 1),
+                              Color.fromRGBO(104, 100, 255, 1),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(25.0),
+                          ),
+                        ),
+                        height: MediaQuery.of(context).size.width * 0.15,
+                        width: MediaQuery.of(context).size.width * 0.90,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            showPopup(context);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(23.0),
+                            ),
+                          ),
+                          child: const Text(
+                            '참여하기',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(25.0),
+                          ),
+                        ),
+                        height: MediaQuery.of(context).size.width * 0.15,
+                        width: MediaQuery.of(context).size.width * 0.90,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('모집이 완료되었습니다!'),
+                              backgroundColor: Colors.blue,
+                            ));
+                          },
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(23.0),
+                            ),
+                          ),
+                          child: const Text(
+                            '모집완료',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    )),
         ]),
       ]),
     );

@@ -16,6 +16,7 @@ import 'ocr.dart';
 import '../widget/getRecipe.dart';
 import 'recipe_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:home_alone_recipe/screen/showMyChat.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,12 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    // ocr(),
-    UserPage(),
+    ocr(),
     RecipeScreen(),
     showGroupBuying(),
-    MessageListScreen(),
-    TownScreen(),
+    showMyChat(),
+    UserPage(),
+    // TownScreen(),
   ];
 
   void _onItemTapped(int index) {

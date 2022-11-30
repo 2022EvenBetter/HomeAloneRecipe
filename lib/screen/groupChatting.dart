@@ -7,7 +7,9 @@ import 'package:home_alone_recipe/screen/chatBubble_screen.dart';
 import 'package:provider/provider.dart';
 
 class MessageListScreen extends StatefulWidget {
-  const MessageListScreen({Key? key}) : super(key: key);
+  final String chatId;
+
+  const MessageListScreen(this.chatId, {Key? key}) : super(key: key);
 
   @override
   State<MessageListScreen> createState() => _MessageListScreenState();
@@ -21,6 +23,14 @@ class _MessageListScreenState extends State<MessageListScreen> {
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          '채팅방',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        elevation: 3.0,
+        backgroundColor: Colors.white,
+      ),
       body: StreamBuilder<List<MessageModel>>(
         stream: streamMessages(), //중계하고 싶은 Stream을 넣는다.
         builder: (context, asyncSnapshot) {
@@ -49,8 +59,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
                                 messages[index].uid.toString() ==
                                     userProvider.uid,
                                 messages[index].nickName,
-                                messages[index].sendDate
-                            ),
+                                messages[index].sendDate),
                           );
                         })),
                 getInputWidget()
@@ -63,11 +72,11 @@ class _MessageListScreenState extends State<MessageListScreen> {
   }
 
   Stream<List<MessageModel>> streamMessages() {
+    String route = '/chatrooms/' + widget.chatId + '/messages';
     try {
       //찾고자 하는 컬렉션의 스냅샷(Stream)을 가져온다.
       final Stream<QuerySnapshot> snapshots = FirebaseFirestore.instance
-          .collection(
-              '/chatrooms/H6Qw7eohRMNhoNoKGY0S/messages') // 아직 채팅방 여러개는 안됨
+          .collection(route)
           .orderBy('sendDate', descending: true)
           .snapshots();
 
@@ -149,6 +158,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
 
   //전송버튼을 눌렀을 때 동작
   void _onPressedSendButton() {
+    String route = '/chatrooms/' + widget.chatId + '/messages';
     try {
       //서버로 보낼 데이터를 모델클래스에 담아둔다.
       MessageModel messageModel = MessageModel(
@@ -160,9 +170,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
       //Firestore 인스턴스 가져오기
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       //원하는 collection 주소에 새로운 document를 Map의 형태로 추가하는 모습.
-      firestore
-          .collection('/chatrooms/H6Qw7eohRMNhoNoKGY0S/messages')
-          .add(messageModel.toMap());
+      firestore.collection(route).add(messageModel.toMap());
       controller.clear();
     } catch (ex) {
       log('error)', error: ex.toString(), stackTrace: StackTrace.current);
