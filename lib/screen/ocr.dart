@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:home_alone_recipe/models/findIngredientByString.dart';
 import '../models/findIngredientByString.dart';
 import '../widget/userIngredient.dart';
+import 'package:home_alone_recipe/screen/removeIngredient_screen.dart';
 
 class ocr extends StatefulWidget {
   const ocr({Key? key}) : super(key: key);
@@ -26,8 +27,7 @@ class _ocr extends State<ocr> {
   late UserProvider _userProvider;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-
-  // Ingredient ingredient=new Ingredient();
+  List<String> selectedIngredient = [];
 
   File? image;
   File? _image;
@@ -48,13 +48,27 @@ class _ocr extends State<ocr> {
   Future getImage(ImageSource imageSource) async {
     // final image = await picker.pickImage(source: imageSource);
     final XFile? image =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
     });
   }
 
   int? flag = 0;
+
+  void setRemoveIngredient(String name) {
+    setState(() {
+      selectedIngredient.add(name);
+    });
+    print(selectedIngredient);
+  }
+
+  void cancelRemoveIngredient(String name) {
+    setState(() {
+      selectedIngredient.remove(name);
+    });
+    print(selectedIngredient);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,33 +77,34 @@ class _ocr extends State<ocr> {
     _buildBottomDrawer(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('마이냉장고',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-        //
-        centerTitle: true,
-        elevation: 3.0,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
+          title: Text('마이냉장고',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          //
+          centerTitle: true,
+          elevation: 3.0,
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
           actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.black,
-                ),
-                onPressed: () {
-                  if (flag == 0) {
-                    _controller.open();
-                    flag = 1;
-                  } else {
-                    _controller.close();
-                    flag = 0;
-                  }
-
-                  setState(() {
-                    _button = 'Close Drawer';
-                  });
-                },
+            IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Colors.black,
               ),
-            ]),
+              onPressed: () {
+                if (flag == 0) {
+                  _controller.open();
+                  flag = 1;
+                } else {
+                  _controller.close();
+                  flag = 0;
+                }
+
+                setState(() {
+                  _button = 'Close Drawer';
+                });
+              },
+            ),
+          ]),
 
       // appBar: AppBar(
       //   title: Text('마이냉장고',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
@@ -130,37 +145,30 @@ class _ocr extends State<ocr> {
       body: Stack(
         children: [
           Column(
-
-
-       // mainAxisAlignment: MainAxisAlignment.center,
-       //      crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            //      crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(''),
-                Text('식재료',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Text('식재료',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               Text(''),
               Padding(
-                padding : const EdgeInsets.only(top: 25),
+                padding: const EdgeInsets.only(top: 25),
               ),
-
-              if(_userProvider.ingredients.isEmpty)
-                Text('재료가 없습니다.',style: TextStyle( fontSize: 10))
+              if (_userProvider.ingredients.isEmpty)
+                Text('재료가 없습니다.', style: TextStyle(fontSize: 10))
               else
-                userIngredient(),
-
-
-
-
+                userIngredient(selectedIngredient, setRemoveIngredient,
+                    cancelRemoveIngredient),
               Padding(
                 padding: EdgeInsets.only(top: 30.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     // if(parsedtext.length>100)
                     //   Text(parsedtext.substring(0,100))
                     // else
                     //   Text(parsedtext),
-
                   ],
                 ),
               ),
@@ -206,8 +214,9 @@ class _ocr extends State<ocr> {
               TextButton(
                 child: Text(
                   '레시피 추천받기',
-                  style: GoogleFonts.getFont('Do Hyeon', textStyle:  const TextStyle(fontSize: 15) ,
-
+                  style: GoogleFonts.getFont(
+                    'Do Hyeon',
+                    textStyle: const TextStyle(fontSize: 15),
                     color: Colors.black,
                   ),
                 ),
@@ -235,8 +244,9 @@ class _ocr extends State<ocr> {
           TextButton(
             child: Text(
               'OCR로 재료추가',
-              style: GoogleFonts.getFont('Do Hyeon', textStyle:  const TextStyle(fontSize: 15) ,
-
+              style: GoogleFonts.getFont(
+                'Do Hyeon',
+                textStyle: const TextStyle(fontSize: 15),
                 color: Colors.black,
               ),
             ),
@@ -248,8 +258,9 @@ class _ocr extends State<ocr> {
           TextButton(
             child: Text(
               '카테고리로 재료추가',
-              style: GoogleFonts.getFont('Do Hyeon', textStyle:  const TextStyle(fontSize: 15) ,
-
+              style: GoogleFonts.getFont(
+                'Do Hyeon',
+                textStyle: const TextStyle(fontSize: 15),
                 color: Colors.black,
               ),
             ),
@@ -262,6 +273,14 @@ class _ocr extends State<ocr> {
                 print("Data has NULL");
               } else {
                 print("추가할 재료 목록 : $addUserIngredient");
+                _userProvider.addIngredient(addUserIngredient);
+                await FirebaseFirestore.instance
+                    .collection("User")
+                    .doc(_userProvider.uid)
+                    .set({
+                  "Ingredient": _userProvider.ingredients,
+                }, SetOptions(merge: true)).onError(
+                        (e, _) => print("Error writing document: $e"));
               }
             },
           ),
@@ -269,12 +288,31 @@ class _ocr extends State<ocr> {
           TextButton(
             child: Text(
               '재료 삭제하기',
-              style: GoogleFonts.getFont('Do Hyeon', textStyle:  const TextStyle(fontSize: 15) ,
-
+              style: GoogleFonts.getFont(
+                'Do Hyeon',
+                textStyle: const TextStyle(fontSize: 15),
                 color: Colors.black,
               ),
             ),
-            onPressed: () {},
+            onPressed: () async {
+              final List<String> removeIng = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => removeIngredient()),
+              );
+              if (removeIng.isEmpty) {
+                print("Data has NULL");
+              } else {
+                print("제거할 재료 목록 : $removeIng");
+                _userProvider.removeIngredient(removeIng);
+                await FirebaseFirestore.instance
+                    .collection("User")
+                    .doc(_userProvider.uid)
+                    .set({
+                  "Ingredient": _userProvider.ingredients,
+                }, SetOptions(merge: true)).onError(
+                        (e, _) => print("Error writing document: $e"));
+              }
+            },
           )
         ]),
       ),
@@ -311,7 +349,7 @@ class _ocr extends State<ocr> {
   Future _getFromGallery() async {
     // final pickedFile=_image;
     final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
 
     var bytes = File(pickedFile.path.toString()).readAsBytesSync();
@@ -341,29 +379,21 @@ class _ocr extends State<ocr> {
     await FirebaseFirestore.instance
         .collection("User")
         .doc(_userProvider.uid)
-        .set({
-      "Email": _userProvider.email,
-      "Password": _userProvider.password,
-      "NickName": _userProvider.nickname,
-      "Scope": "",
-      "Ingredient": _userProvider.ingredients,
-      "MyRecipes": [],
-      "Location": "",
-      "Post": [],
-    },
-    ).onError((e, _) =>
-        print("Error writing document: $e"));
+        .set(
+      {
+        "Email": _userProvider.email,
+        "Password": _userProvider.password,
+        "NickName": _userProvider.nickname,
+        "Scope": "",
+        "Ingredient": _userProvider.ingredients,
+        "MyRecipes": [],
+        "Location": "",
+        "Post": [],
+      },
+    ).onError((e, _) => print("Error writing document: $e"));
     // print(parsedtext);
     setState(() {
       parsedtext = result['ParsedResults'][0]['ParsedText'];
     });
   }
-
-
-
-
-
-
-
 }
-
