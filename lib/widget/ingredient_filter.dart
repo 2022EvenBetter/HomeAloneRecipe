@@ -25,7 +25,7 @@ class IngredientFilter extends StatefulWidget {
 
 class _IngredientFilterState extends State<IngredientFilter> {
   List<bool> _isV = [
-    false,
+    true,
     false,
     false,
     false,

@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_alone_recipe/config/palette.dart';
 import 'package:home_alone_recipe/screen/categoryIngredent.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
+import 'package:home_alone_recipe/screen/recommandRecipe_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -220,7 +222,43 @@ class _ocr extends State<ocr> {
                     color: Colors.black,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (!_userProvider.ingredients.isEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              RecommandRecipe(selectedIngredient)),
+                    );
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text(
+                              '식재료를 추가해주세요.',
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    '확인',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Palette.blue),
+                                ),
+                              )
+                            ],
+                          );
+                        });
+                  }
+                },
               )
             ]),
           ),
@@ -295,22 +333,51 @@ class _ocr extends State<ocr> {
               ),
             ),
             onPressed: () async {
-              final List<String> removeIng = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => removeIngredient()),
-              );
-              if (removeIng.isEmpty) {
-                print("Data has NULL");
+              if (!_userProvider.ingredients.isEmpty) {
+                final List<String> removeIng = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => removeIngredient()),
+                );
+                if (removeIng.isEmpty) {
+                  print("Data has NULL");
+                } else {
+                  print("제거할 재료 목록 : $removeIng");
+                  _userProvider.removeIngredient(removeIng);
+                  await FirebaseFirestore.instance
+                      .collection("User")
+                      .doc(_userProvider.uid)
+                      .set({
+                    "Ingredient": _userProvider.ingredients,
+                  }, SetOptions(merge: true)).onError(
+                          (e, _) => print("Error writing document: $e"));
+                }
               } else {
-                print("제거할 재료 목록 : $removeIng");
-                _userProvider.removeIngredient(removeIng);
-                await FirebaseFirestore.instance
-                    .collection("User")
-                    .doc(_userProvider.uid)
-                    .set({
-                  "Ingredient": _userProvider.ingredients,
-                }, SetOptions(merge: true)).onError(
-                        (e, _) => print("Error writing document: $e"));
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text(
+                          '삭제할 재료가 없습니다.',
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                '확인',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Palette.blue),
+                            ),
+                          )
+                        ],
+                      );
+                    });
               }
             },
           )

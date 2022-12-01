@@ -17,7 +17,7 @@ class _IngredientButtonState extends State<IngredientButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+        margin: EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             ElevatedButton(
@@ -41,12 +41,16 @@ class _IngredientButtonState extends State<IngredientButton> {
               },
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),
-                minimumSize: Size(70, 70),
+                minimumSize: Size(60, 60),
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
             ),
-            Text(widget.buttonName)
+            Text(
+              widget.buttonName,
+              style:
+                  TextStyle(fontSize: widget.buttonName.length > 4 ? 11 : 14),
+            )
           ],
         ));
   }

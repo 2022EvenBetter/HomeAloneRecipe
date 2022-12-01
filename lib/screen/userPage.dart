@@ -50,14 +50,14 @@ class _UserPage extends State<UserPage> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
       ),
-      body: Column(
+      body: ListView(
         children: [
           SizedBox(
             height: 15.0,
           ),
           Expanded(
-              flex : 2,
-              child: Padding(
+            flex: 2,
+            child: Padding(
               padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
               child: Container(
                 height: 120,
@@ -111,135 +111,130 @@ class _UserPage extends State<UserPage> {
             ),
           ),
 
-
           // 2번째 박스!
           SizedBox(
             height: 5.0,
           ),
-      Expanded(
-        flex : 3,
-        child:
-        Padding(
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
-
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
               child: Container(
-              // alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('  나의 활동',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(Icons.post_add),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyPostScreen()),
-                          );
-                        },
-                        child: Text(' 내가 쓴 공동구매글 ',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(Icons.location_on),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TownScreen()),
-                          );
-                        },
-                        child: Text(' 내 동네 설정 ',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                    ],
-                  ),
-                ],
+                // alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('  나의 활동',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(Icons.post_add),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyPostScreen()),
+                            );
+                          },
+                          child: Text(' 내가 쓴 공동구매글 ',
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(Icons.location_on),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TownScreen()),
+                            );
+                          },
+                          child: Text(' 내 동네 설정 ',
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-
           ),
-      ),
           // 3번째 박스!!
           SizedBox(
             height: 5.0,
           ),
-      Expanded(
-        flex : 2,
-        child:
-        Padding(
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
-            child: Container(
-              height: 100,
-              width: 500,
-              // alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('  나의 레시피',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(Icons.search_rounded),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyScrapRecipeScreen()),
-                          );
-                        },
-                        child: Text(' 내가 스크랩한 레시피 보기 ',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                    ],
-                  ),
-                ],
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+              child: Container(
+                height: 100,
+                width: 500,
+                // alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('  나의 레시피',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(Icons.search_rounded),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyScrapRecipeScreen()),
+                            );
+                          },
+                          child: Text(' 내가 스크랩한 레시피 보기 ',
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-      ),
           SizedBox(
             height: 10.0,
           ),
@@ -255,49 +250,47 @@ class _UserPage extends State<UserPage> {
             ],
           ),
           //
-      Expanded(
-        flex : 4,
-        child:
-        Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Container(
-              width: double.infinity,
-              height: 200,
-              child: ListView.builder(
-                  itemCount: catego.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 172,
-                            width: 132,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(catego[index].imagUrl),
-                                fit: BoxFit.cover,
+          Expanded(
+              flex: 4,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Container(
+                  width: double.infinity,
+                  height: 200,
+                  child: ListView.builder(
+                      itemCount: catego.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 172,
+                                width: 132,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(catego[index].imagUrl),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                            ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                catego[index].name,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            catego[index].name,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-            ),
-          )
-      ),//
+                        );
+                      }),
+                ),
+              )), //
         ],
       ),
     );

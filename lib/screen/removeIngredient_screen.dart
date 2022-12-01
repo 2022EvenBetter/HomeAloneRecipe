@@ -167,14 +167,53 @@ class _removeIngredientState extends State<removeIngredient> {
                         selectedIngredient = [];
                         Navigator.pop(context, selectedIngredient);
                       },
-                      child: Text('취소하기')),
+                      child: Text(
+                        '취소하기',
+                        style: TextStyle(color: Colors.white),
+                      )),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: ElevatedButton(
                       onPressed: () async {
-                        showPopup(context, selectedIngredient);
-                        print(selectedIngredient);
+                        if (!selectedIngredient.isEmpty) {
+                          showPopup(context, selectedIngredient);
+                          print(selectedIngredient);
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Text(
+                                    '삭제할 재료가 없습니다.',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  actions: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          '확인',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Palette.blue,
+                                          onPrimary:
+                                              Colors.white, // Background color
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              });
+                        }
                         //Navigator.pop(context, selectedIngredient);
                       },
                       child: Text('삭제하기')),
