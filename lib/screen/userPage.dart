@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
+import 'package:home_alone_recipe/screen/myPost_screen.dart';
 import 'package:home_alone_recipe/screen/myScrapRecipe_screen.dart';
 import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:provider/provider.dart';
@@ -49,73 +50,79 @@ class _UserPage extends State<UserPage> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
       ),
-      body: ListView(
+      body: Column(
         children: [
           SizedBox(
             height: 15.0,
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
-            child: Container(
-              height: 120,
-              width: 500,
-              // alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Padding(padding: EdgeInsets.only(left: 10,)),
-                  CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.person_outline,
-                      size: 35,
-                      color: Colors.black12,
+          Expanded(
+              flex : 2,
+              child: Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+              child: Container(
+                height: 120,
+                width: 500,
+                // alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Padding(padding: EdgeInsets.only(left: 10,)),
+                    CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.person_outline,
+                        size: 35,
+                        color: Colors.black12,
+                      ),
                     ),
-                  ),
-                  // Positioned(
-                  //     bottom : 40,
-                  //     right : 20,
-                  //     child: InkWell(
-                  //       onTap: (){},
-                  //       child: Icon(
-                  //         Icons.camera_alt_outlined,
-                  //         size : 40,
-                  //       ),
-                  //
-                  // )),
+                    // Positioned(
+                    //     bottom : 40,
+                    //     right : 20,
+                    //     child: InkWell(
+                    //       onTap: (){},
+                    //       child: Icon(
+                    //         Icons.camera_alt_outlined,
+                    //         size : 40,
+                    //       ),
+                    //
+                    // )),
 
-                  //image
-                  // Padding(padding: EdgeInsets.only(left: 10)),
+                    //image
+                    // Padding(padding: EdgeInsets.only(left: 10)),
 
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(_userProvider.nickname + ' 님',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)),
-                      Text(str),
-                      SizedBox(height: 20),
-                    ],
-                  )
-                ],
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(_userProvider.nickname + ' 님',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
+                        Text(str),
+                        SizedBox(height: 20),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
+
 
           // 2번째 박스!
           SizedBox(
             height: 5.0,
           ),
-          Padding(
+      Expanded(
+        flex : 3,
+        child:
+        Padding(
             padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
-            child: Container(
-              height: 180,
-              width: 500,
+
+              child: Container(
               // alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Colors.black26,
@@ -140,7 +147,13 @@ class _UserPage extends State<UserPage> {
                       ),
                       Icon(Icons.post_add),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyPostScreen()),
+                          );
+                        },
                         child: Text(' 내가 쓴 공동구매글 ',
                             style: TextStyle(color: Colors.black)),
                       ),
@@ -171,13 +184,17 @@ class _UserPage extends State<UserPage> {
                 ],
               ),
             ),
-          ),
 
+          ),
+      ),
           // 3번째 박스!!
           SizedBox(
             height: 5.0,
           ),
-          Padding(
+      Expanded(
+        flex : 2,
+        child:
+        Padding(
             padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
             child: Container(
               height: 100,
@@ -222,10 +239,11 @@ class _UserPage extends State<UserPage> {
               ),
             ),
           ),
-
+      ),
           SizedBox(
             height: 10.0,
           ),
+
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -237,7 +255,10 @@ class _UserPage extends State<UserPage> {
             ],
           ),
           //
-          Padding(
+      Expanded(
+        flex : 4,
+        child:
+        Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Container(
               width: double.infinity,
@@ -276,7 +297,7 @@ class _UserPage extends State<UserPage> {
                   }),
             ),
           )
-          //
+      ),//
         ],
       ),
     );

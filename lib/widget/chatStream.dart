@@ -16,6 +16,34 @@ class Chats extends StatelessWidget {
     late UserProvider _userProvider;
     _userProvider = Provider.of<UserProvider>(context);
 
+    Future<String> postTitlebyChatId(String chatId) async {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection("Post")
+          .where("chatId", isEqualTo: chatId)
+          .get();
+      String name = "";
+      for (var doc in querySnapshot.docs) {
+        // Getting data directly
+        name = doc.get('Title');
+      }
+      return name;
+    }
+
+    Future<String> lastMessagebyChatId(String chatId) async {
+      String route = '/chatrooms/' + chatId + '/messages';
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection(route)
+          .orderBy('sendDate', descending: true)
+          .limit(1)
+          .get();
+      String message = "";
+      for (var doc in querySnapshot.docs) {
+        // Getting data directly
+        message = doc.get('content');
+      }
+      return message;
+    }
+
     return ListView.builder(
       itemCount: _userProvider.chats.length,
       itemBuilder: (context, index) {
@@ -39,14 +67,70 @@ class Chats extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(" 제목입니다.",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.black)),
-                          Text(" 마지막 채팅입니다.",
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.grey)),
+                          FutureBuilder(
+                              future:
+                                  postTitlebyChatId(_userProvider.chats[index]),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                //해당 부분은 data를 아직 받아 오지 못했을때
+                                if (snapshot.hasData == false) {
+                                  return CircularProgressIndicator();
+                                }
+                                //error가 발생하게 될 경우
+                                else if (snapshot.hasError) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Error: ${snapshot.error}',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  );
+                                }
+                                // 데이터를 정상적으로 받아오게 되면
+                                else {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      snapshot.data.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.black),
+                                    ),
+                                  );
+                                }
+                              }),
+                          FutureBuilder(
+                              future: lastMessagebyChatId(
+                                  _userProvider.chats[index]),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                //해당 부분은 data를 아직 받아 오지 못했을때
+                                if (snapshot.hasData == false) {
+                                  return CircularProgressIndicator();
+                                }
+                                //error가 발생하게 될 경우
+                                else if (snapshot.hasError) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Error: ${snapshot.error}',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  );
+                                }
+                                // 데이터를 정상적으로 받아오게 되면
+                                else {
+                                  return Padding(
+                                    padding: const EdgeInsets.fromLTRB(10, 5, 0, 10),
+                                    child: Text(
+                                      snapshot.data.toString(),
+                                      style: TextStyle(
+                                          fontSize: 17, color: Colors.black54),
+                                    ),
+                                  );
+                                }
+                              }),
                         ],
                       ),
                     ),
