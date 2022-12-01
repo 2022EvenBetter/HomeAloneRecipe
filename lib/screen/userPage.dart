@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
+import 'package:home_alone_recipe/screen/myPost_screen.dart';
 import 'package:home_alone_recipe/screen/myScrapRecipe_screen.dart';
 import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:provider/provider.dart';
@@ -140,7 +141,13 @@ class _UserPage extends State<UserPage> {
                       ),
                       Icon(Icons.post_add),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyPostScreen()),
+                          );
+                        },
                         child: Text(' 내가 쓴 공동구매글 ',
                             style: TextStyle(color: Colors.black)),
                       ),
