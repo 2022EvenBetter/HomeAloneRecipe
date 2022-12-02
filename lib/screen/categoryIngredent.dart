@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:home_alone_recipe/config/palette.dart';
 import 'package:xml/xml.dart';
 import 'package:http/http.dart' as http;
 import 'package:home_alone_recipe/widget/getRecipe.dart';
@@ -470,13 +471,28 @@ class _CategoryIngredientState extends State<CategoryIngredient> {
               ],
             ),
           ),
-          ElevatedButton(
-              onPressed: () {
-                print(seletecIngredients);
-                Navigator.pop(context, seletecIngredients);
-              },
-              child: Text('추가하기')),
-        ],
+          Padding(
+            padding: const EdgeInsets.only(bottom:5),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.width*0.1,
+              width: MediaQuery.of(context).size.width*0.9,
+              child: ElevatedButton(
+                  onPressed: () {
+                    print(seletecIngredients);
+                    Navigator.pop(context, seletecIngredients);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Palette.orange, // Background color
+                    onPrimary: Colors.white,// Text Color (Foreground color)
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))
+                  ),
+
+                  child: Text('추가하기', style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,),),
+            ),
+          ),
+          ),],
       ),
     );
   }

@@ -16,12 +16,17 @@ class _CategoryContainerState extends State<CategoryContainer> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.centerLeft,
-        padding: EdgeInsets.only(left: 10.0),
+        padding: EdgeInsets.only(left: 10.0, top: 10),
         child: Row(
           children: [
-            Text(
-              widget.categoryName,
-              style: TextStyle(fontSize: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(left:15,),
+              child: Text(
+                widget.categoryName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,),
+              ),
             ),
             IconButton(
                 onPressed: () {
