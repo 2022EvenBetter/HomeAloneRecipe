@@ -82,7 +82,7 @@ class _IngredientButtonForRecipeTabState
             ElevatedButton(
               child: Image.asset(
                 'lib/assets/icons/${widget.category}/${widget.buttonName}.png',
-                scale: 15,
+                scale: 10,
                 color: _hasBeenPressed
                     ? Colors.white.withOpacity(1)
                     : Colors.white.withOpacity(1),
