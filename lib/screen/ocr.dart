@@ -290,6 +290,8 @@ class _ocr extends State<ocr> {
             ),
             onPressed: () {
               _getFromGallery();
+
+
             },
           ),
           Padding(padding: EdgeInsets.fromLTRB(0, 3, 0, 0)),
@@ -441,7 +443,7 @@ class _ocr extends State<ocr> {
     _userProvider.ingredients.clear();
 
     print(tmp.toString());
-
+    showPopup(context,tmp);
     _userProvider.addIngredient(tmp);
     await FirebaseFirestore.instance
         .collection("User")
@@ -463,4 +465,75 @@ class _ocr extends State<ocr> {
       parsedtext = result['ParsedResults'][0]['ParsedText'];
     });
   }
+
+  void showPopup(context, List<String> removeIng) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+            child: Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: 150,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Wrap(
+                      direction: Axis.horizontal,
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        for (var i = 0; i < removeIng.length; i++)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                            child: Text("${removeIng[i]}",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                                textAlign: TextAlign.center),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Text("이(가) 추가되었습니다.",
+                              style:
+                              TextStyle(fontSize: 15, color: Colors.black),
+                              textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width: 110,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(Icons.close),
+                              label: const Text('확인'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xff686EFF),
+                                onPrimary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ), // Background color
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                )));
+      },
+    );
+  }
+
 }
+
