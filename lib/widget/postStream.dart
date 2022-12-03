@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import '../models/post.dart';
 
 class Posts extends StatelessWidget {
-  const Posts({Key? key}) : super(key: key);
+  final String ingredient;
+  const Posts(this.ingredient, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,32 +36,65 @@ class Posts extends StatelessWidget {
           );
         }
         final postDocs = snapshot.data!.docs;
-
+        var flag = 0;
         return ListView.builder(
           itemCount: postDocs.length,
           itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Post post = Post.fromQuerySnapshot(postDocs[index]);
+            if (postDocs[index]['LowerCategory'] == ingredient) {
+              return GestureDetector(
+                onTap: () {
+                  Post post = Post.fromQuerySnapshot(postDocs[index]);
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GroupBuyingDetailPage(post)));
-              },
-              child: PostList(
-                postDocs[index]['Content'],
-                postDocs[index]['Title'],
-                postDocs[index]['Date'],
-                postDocs[index]['Time'],
-                postDocs[index]['WriterName'],
-                postDocs[index]['UpperCategory'],
-                postDocs[index]['LowerCategory'],
-                postDocs[index]['maxParticipants'],
-                postDocs[index]['curParticipants'],
-                postDocs[index]['Place'],
-              ),
-            );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GroupBuyingDetailPage(post)));
+                },
+                child: PostList(
+                  postDocs[index]['Content'],
+                  postDocs[index]['Title'],
+                  postDocs[index]['Date'],
+                  postDocs[index]['Time'],
+                  postDocs[index]['WriterName'],
+                  postDocs[index]['UpperCategory'],
+                  postDocs[index]['LowerCategory'],
+                  postDocs[index]['maxParticipants'],
+                  postDocs[index]['curParticipants'],
+                  postDocs[index]['Place'],
+                ),
+              );
+            } else if (ingredient == "") {
+              //필터가 없으면 전체출력
+              return GestureDetector(
+                onTap: () {
+                  Post post = Post.fromQuerySnapshot(postDocs[index]);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GroupBuyingDetailPage(post)));
+                },
+                child: PostList(
+                  postDocs[index]['Content'],
+                  postDocs[index]['Title'],
+                  postDocs[index]['Date'],
+                  postDocs[index]['Time'],
+                  postDocs[index]['WriterName'],
+                  postDocs[index]['UpperCategory'],
+                  postDocs[index]['LowerCategory'],
+                  postDocs[index]['maxParticipants'],
+                  postDocs[index]['curParticipants'],
+                  postDocs[index]['Place'],
+                ),
+              );
+            } else {
+              flag++;
+              if (flag == postDocs.length)
+                return Align(
+                    alignment: Alignment.center,
+                    child: Text('일치하는 레시피가 없습니다.'));
+              return Container();
+            }
           },
         );
       },
