@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:home_alone_recipe/widget/api.dart';
 import 'package:home_alone_recipe/screen/myTown_screen.dart';
+import 'package:home_alone_recipe/widget/ingredient_filter.dart';
 import 'package:provider/provider.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
 import 'package:home_alone_recipe/widget/postStream.dart';
@@ -14,7 +17,42 @@ class showGroupBuying extends StatefulWidget {
 }
 
 class _showGroupBuyingState extends State<showGroupBuying> {
+  Map<String, dynamic> ingMap = {
+    "소고기": ["쇠고기"],
+    "닭고기": ["닭", "닭다리"],
+  };
+
   late UserProvider _userProvider;
+  bool showWidget = false;
+  List<String> ingredientArr = [];
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  bool isScrapped = false;
+
+  void addIng(String ing) {
+    setState(() {
+      if (!ingredientArr.contains(ing)) ingredientArr.add(ing);
+
+      print(ingredientArr);
+    });
+  }
+
+  void rmvIng(String ing) {
+    print("rmvIng");
+    print(ingMap[ing]);
+    //var length = ingMap[ing].length;
+
+    setState(() {
+      ingredientArr.remove(ing);
+      print("before for)");
+      for (var i = 0; i < 1; i++) {
+        //ingredientArr.remove(ingMap[ing][i]);
+        //print(ingMap[ing][i]);
+      }
+      //ingredientArr.clear();
+      print(ingredientArr);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,70 +81,129 @@ class _showGroupBuyingState extends State<showGroupBuying> {
           ),
           body: Container(
               child: Stack(children: [
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  IngredientFilter(addIng, rmvIng),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          for (var i = 0; i < ingredientArr.length; i++)
+                            Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                decoration: BoxDecoration(
+                                    color: Palette.blue,
+                                    borderRadius: BorderRadius.circular(10)),
+                                padding: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                height: 30,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      ingredientArr[i],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    IconButton(
+                                      constraints: BoxConstraints(),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+                                      onPressed: () {
+                                        rmvIng(ingredientArr[i]);
+                                      },
+                                      icon: Icon(
+                                        Icons.cancel,
+                                        size: 20.0,
+                                      ),
+                                      color: Colors.white,
+                                    )
+                                  ],
+                                ))
+                        ]),
+                  ),
+                ],
+              ),
+            ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Expanded(
-                    child: Posts(),
+                  padding: const EdgeInsets.only(top: 140),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(1),
+                          spreadRadius: 0,
+                          blurRadius: 2,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    height: 1.0,
+                    width: 500.0,
                   ),
                 ),
-                Positioned(
-                  bottom: 15,
-                  right: 20,
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => GroupBuying()),
-                        );
-                      },
-                      icon: Icon(Icons.add_circle_outlined),
-                      iconSize: 65.0,
-                      color: Palette.blue),
-                )
-              ])));
-    }
-    else {
+            Padding(
+              padding: const EdgeInsets.only(top: 150),
+              child: Expanded(
+                child: Posts(),
+              ),
+            ),
+            Positioned(
+              bottom: 15,
+              right: 20,
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GroupBuying()),
+                    );
+                  },
+                  icon: Icon(Icons.add_circle_outlined),
+                  iconSize: 65.0,
+                  color: Palette.blue),
+            )
+          ])));
+    } else {
       return Scaffold(
           body: Container(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children:  [
-                  Center(
-                    child: Text('내 위치를 설정하지 않으면\n 이 페이지를 볼 수 없습니다!',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                        textAlign: TextAlign.center),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-
-                    child: OutlinedButton.icon(
-                      // 텍스트버튼에 아이콘 넣기
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                              const TownScreen()),
-                        );
-                      },
-                      icon: const Icon(Icons.check_circle), // 아이콘 색
-                      label: const Text('내 위치 설정하러 가기', style: TextStyle(
-                          fontSize: 20) ),
-                      style:  OutlinedButton.styleFrom(
-                        // background 속성이 없다.
-                          primary: Palette.blue,
-                          side: BorderSide( // 테두리 바꾸는 속성
-                            color: Palette.lightgrey,
-                            width: 2.0,
-                          )),// 글자 색
-                    ),
-                  )
-                ],
-              )));
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text('내 위치를 설정하지 않으면\n 이 페이지를 볼 수 없습니다!',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+                textAlign: TextAlign.center),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: OutlinedButton.icon(
+              // 텍스트버튼에 아이콘 넣기
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TownScreen()),
+                );
+              },
+              icon: const Icon(Icons.check_circle), // 아이콘 색
+              label: const Text('내 위치 설정하러 가기', style: TextStyle(fontSize: 20)),
+              style: OutlinedButton.styleFrom(
+                  // background 속성이 없다.
+                  primary: Palette.blue,
+                  side: BorderSide(
+                    // 테두리 바꾸는 속성
+                    color: Palette.lightgrey,
+                    width: 2.0,
+                  )), // 글자 색
+            ),
+          )
+        ],
+      )));
     }
   }
 }
