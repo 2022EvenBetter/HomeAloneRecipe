@@ -88,10 +88,16 @@ class Chats extends StatelessWidget {
                                 }
                                 // 데이터를 정상적으로 받아오게 되면
                                 else {
+                                  int length = snapshot.data.toString().length;
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      snapshot.data.toString(),
+                                      length > 16
+                                          ? snapshot.data
+                                                  .toString()
+                                                  .substring(0, 20) +
+                                              "..."
+                                          : snapshot.data.toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
@@ -121,10 +127,17 @@ class Chats extends StatelessWidget {
                                 }
                                 // 데이터를 정상적으로 받아오게 되면
                                 else {
+                                  int length = snapshot.data.toString().length;
                                   return Padding(
-                                    padding: const EdgeInsets.fromLTRB(10, 5, 0, 10),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 5, 0, 10),
                                     child: Text(
-                                      snapshot.data.toString(),
+                                      length > 16
+                                          ? snapshot.data
+                                                  .toString()
+                                                  .substring(0, 22) +
+                                              "..."
+                                          : snapshot.data.toString(),
                                       style: TextStyle(
                                           fontSize: 17, color: Colors.black54),
                                     ),

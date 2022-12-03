@@ -219,24 +219,26 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-            child: Row(
-              children: [
-                Text("${curState()}  ",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: curState() == "모집중"
-                            ? Palette.blue
-                            : Colors.redAccent)),
-                Text("${widget.post.title}",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                        color: Colors.black)),
-              ],
-            ),
-          ),
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Text("${curState()}  ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: curState() == "모집중"
+                                ? Palette.blue
+                                : Colors.redAccent)),
+                    Text("${widget.post.title}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            color: Colors.black)),
+                  ],
+                ),
+              )),
           Padding(
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: Column(
