@@ -189,10 +189,8 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                                 ),
                               );
                             }
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const showGroupBuying())
-                            );
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                           },
                           icon: const Icon(Icons.circle_outlined),
                           label: const Text('네'),
