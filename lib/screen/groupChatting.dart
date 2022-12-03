@@ -24,7 +24,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
     userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '채팅방',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
@@ -103,30 +103,33 @@ class _MessageListScreenState extends State<MessageListScreen> {
   //전송버튼
   Widget getInputWidget() {
     return Container(
-      height: 60,
+      height: 70,
       width: double.infinity,
       decoration: BoxDecoration(boxShadow: const [
         BoxShadow(color: Colors.black12, offset: Offset(0, -2), blurRadius: 3)
       ], color: Theme.of(context).bottomAppBarColor),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
               child: TextField(
                 controller: controller,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 decoration: InputDecoration(
+                  isDense: true,
                   labelStyle: const TextStyle(fontSize: 15),
                   fillColor: Colors.white,
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                    borderRadius: BorderRadius.circular(30.0),
                     borderSide: const BorderSide(
                       color: Colors.blue,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                    borderRadius: BorderRadius.circular(30.0),
                     borderSide: const BorderSide(
                       color: Colors.black26,
                       width: 1.0,
