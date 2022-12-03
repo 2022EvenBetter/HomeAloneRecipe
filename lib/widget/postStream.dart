@@ -31,7 +31,7 @@ class Posts extends StatelessWidget {
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -89,10 +89,11 @@ class Posts extends StatelessWidget {
               );
             } else {
               flag++;
-              if (flag == postDocs.length)
-                return Align(
+              if (flag == postDocs.length) {
+                return const Align(
                     alignment: Alignment.center,
                     child: Text('일치하는 레시피가 없습니다.'));
+              }
               return Container();
             }
           },

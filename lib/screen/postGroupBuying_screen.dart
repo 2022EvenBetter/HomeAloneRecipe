@@ -82,7 +82,7 @@ class _GroupBuyingState extends State<GroupBuying> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("해당 게시글을 등록하시겠습니까?",
+                    const Text("해당 게시글을 등록할까요?",
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -148,6 +148,7 @@ class _GroupBuyingState extends State<GroupBuying> {
                                       "Title": post.title!,
                                       "chatId": chatId,
                                       "PostId": "",
+                                      "isDeleted": false,
                                     });
                                     String postId = docPostRef.id;
                                     await FirebaseFirestore.instance
@@ -168,8 +169,8 @@ class _GroupBuyingState extends State<GroupBuying> {
                                   } else {
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('모든 값이 입력되어야 합니다!'),
+                                      const SnackBar(
+                                        content: Text('입력되지 않은 값이 있어요!'),
                                         backgroundColor: Colors.blue,
                                       ),
                                     );
