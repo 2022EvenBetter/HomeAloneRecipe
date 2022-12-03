@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
+  String? uid;
   String? upperCategory;
   String? lowerCategory;
   String? title;
@@ -14,8 +15,10 @@ class Post {
   List<String>? userLocation;
   String? chatId;
   String? postId;
+  bool? isDeleted;
 
   Post({
+    this.uid,
     this.upperCategory,
     this.lowerCategory,
     this.title,
@@ -29,9 +32,11 @@ class Post {
     this.userLocation,
     this.chatId,
     this.postId,
+    this.isDeleted,
   });
 
   Post.fromJson(dynamic json) {
+    uid = json['Uid'];
     upperCategory = json['UpperCategory'];
     lowerCategory = json['LowerCategory'];
     title = json['Title'];
@@ -45,6 +50,7 @@ class Post {
     userLocation = json['UserLocation'].cast<String>();
     chatId=json['chatId'];
     postId=json['PostId'];
+    isDeleted=json['isDeleted'];
   }
 
   Post.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -54,6 +60,7 @@ class Post {
       : this.fromJson(snapshot.data());
 
   Map<String, dynamic> toJson() => {
+        'uid': uid,
         'upperCategory': upperCategory,
         'lowerCategory': lowerCategory,
         'title': title,
@@ -65,5 +72,6 @@ class Post {
         'meetingPlace': meetingPlace,
         'writerName': writerName,
         'chatId':chatId,
+        'isDeleted':isDeleted,
       };
 }

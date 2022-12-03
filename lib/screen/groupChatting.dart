@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_alone_recipe/models/message.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
-import 'package:home_alone_recipe/screen/chatBubble_screen.dart';
+import 'package:home_alone_recipe/widget/chatBubble.dart';
 import 'package:provider/provider.dart';
 
 class MessageListScreen extends StatefulWidget {
