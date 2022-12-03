@@ -24,35 +24,19 @@ class _showGroupBuyingState extends State<showGroupBuying> {
 
   late UserProvider _userProvider;
   bool showWidget = false;
-  List<String> ingredientArr = [];
+  String ingredientArr = "";
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   bool isScrapped = false;
 
-  void addIng(String ing) {
+  void changeIng(String name) {
     setState(() {
-      if (!ingredientArr.contains(ing)) ingredientArr.add(ing);
-
+      ingredientArr = name;
       print(ingredientArr);
     });
   }
 
-  void rmvIng(String ing) {
-    print("rmvIng");
-    print(ingMap[ing]);
-    //var length = ingMap[ing].length;
-
-    setState(() {
-      ingredientArr.remove(ing);
-      print("before for)");
-      for (var i = 0; i < 1; i++) {
-        //ingredientArr.remove(ingMap[ing][i]);
-        //print(ingMap[ing][i]);
-      }
-      //ingredientArr.clear();
-      print(ingredientArr);
-    });
-  }
+  void rmvIng() {}
 
   @override
   Widget build(BuildContext context) {
@@ -81,55 +65,12 @@ class _showGroupBuyingState extends State<showGroupBuying> {
           ),
           body: Container(
               child: Stack(children: [
-            Expanded(
+            Container(
+              height: 1000,
               child: Column(
-                children: <Widget>[
-                  IngredientFilter(addIng, rmvIng),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          for (var i = 0; i < ingredientArr.length; i++)
-                            Container(
-                                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                decoration: BoxDecoration(
-                                    color: Palette.blue,
-                                    borderRadius: BorderRadius.circular(10)),
-                                padding: EdgeInsets.fromLTRB(5, 1, 5, 1),
-                                height: 30,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      ingredientArr[i],
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    IconButton(
-                                      constraints: BoxConstraints(),
-                                      padding:
-                                          EdgeInsets.fromLTRB(10.0, 0, 0, 0),
-                                      onPressed: () {
-                                        rmvIng(ingredientArr[i]);
-                                      },
-                                      icon: Icon(
-                                        Icons.cancel,
-                                        size: 20.0,
-                                      ),
-                                      color: Colors.white,
-                                    )
-                                  ],
-                                ))
-                        ]),
-                  ),
-                ],
-              ),
-            ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 140),
-                  child: Container(
+                children: [
+                  IngredientFilter(changeIng, rmvIng),
+                  Container(
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       boxShadow: [
@@ -144,11 +85,59 @@ class _showGroupBuyingState extends State<showGroupBuying> {
                     height: 1.0,
                     width: 500.0,
                   ),
-                ),
-            Padding(
-              padding: const EdgeInsets.only(top: 150),
-              child: Expanded(
-                child: Posts(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ingredientArr != ""
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 15.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    color: Palette.blue),
+                                padding: EdgeInsets.all(5),
+                                child: Text(
+                                  '${ingredientArr}',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            )
+                          : Text(''),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            ingredientArr = "";
+                          });
+                        },
+                        icon: Icon(Icons.refresh_outlined),
+                        style: IconButton.styleFrom(
+                            shape: CircleBorder(),
+                            foregroundColor: Palette.yellow,
+                            backgroundColor: Palette.yellow),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(1),
+                          spreadRadius: 0,
+                          blurRadius: 2,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    height: 1.0,
+                    width: 500.0,
+                  ),
+                  Expanded(
+                    child: Posts(ingredientArr),
+                  ),
+                ],
               ),
             ),
             Positioned(
