@@ -505,7 +505,7 @@ class _UserPage extends State<UserPage> {
                 padding: const EdgeInsets.only(top: 5),
                 child: Container(
                   width: double.infinity,
-                  height: 200,
+                  // height: 200,
                   child: ListView.builder(
                       itemCount: catego.length,
                       scrollDirection: Axis.horizontal,
@@ -514,19 +514,28 @@ class _UserPage extends State<UserPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Column(
                             children: [
-                              Container(
-                                height: 172,
-                                width: 132,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(catego[index].imagUrl),
-                                    fit: BoxFit.cover,
+                              Expanded(
+                                flex: 3,
+                                  child: Container(
+                                    //
+                                    // height: 50,
+                                    width: 130,
+
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(catego[index].imagUrl),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
-                                ),
                               ),
+
                               SizedBox(
                                 height: 10,
                               ),
+                          Expanded(
+                            flex: 1,
+                              child:
                               Text(
                                 catego[index].name,
                                 style: TextStyle(
@@ -534,6 +543,7 @@ class _UserPage extends State<UserPage> {
                                   fontSize: 12,
                                 ),
                               ),
+                            ),
                             ],
                           ),
                         );
