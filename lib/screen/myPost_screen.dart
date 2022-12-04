@@ -62,13 +62,8 @@ class _MyPostBuilder extends State<MyPostBuilder> {
     _userProvider = Provider.of<UserProvider>(context);
     Query<Map<String, dynamic>> postFilterLocation = FirebaseFirestore.instance
         .collection("Post")
-        .where('Uid', isEqualTo: _userProvider.uid);
-
-    Future<String> get_Id(DocumentReference doc_ref) async {
-      DocumentSnapshot docSnap = await doc_ref.get();
-      var doc_id2 = docSnap.reference.id;
-      return doc_id2;
-    }
+        .where('Uid', isEqualTo: _userProvider.uid)
+        .where('isDeleated', isEqualTo: false);
 
     return StreamBuilder(
       stream: postFilterLocation.snapshots(),
