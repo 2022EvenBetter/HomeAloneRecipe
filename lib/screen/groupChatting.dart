@@ -19,6 +19,21 @@ class _MessageListScreenState extends State<MessageListScreen> {
   TextEditingController controller = TextEditingController();
   late UserProvider userProvider;
 
+  //////////////////////////////////////////////////////////////
+  // 게시글이 삭제 됐으면 true, 아니면 false 반환하는 함수
+  Future<bool> getIsDeleted(String chatId) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection("Post")
+        .where("chatId", isEqualTo: chatId)
+        .where("isDeleted", isEqualTo: true)
+        .get();
+    if (querySnapshot.size == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  //////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserProvider>(context);
@@ -141,18 +156,23 @@ class _MessageListScreenState extends State<MessageListScreen> {
             const SizedBox(
               width: 10,
             ),
-            RawMaterialButton(
-              onPressed: _onPressedSendButton,
-              //전송버튼을 누를때 동작시킬 메소드
-              constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-              elevation: 2,
-              fillColor: Theme.of(context).colorScheme.primary,
-              shape: const CircleBorder(),
-              child: const Padding(
-                padding: EdgeInsets.all(10),
-                child: Icon(Icons.send),
-              ),
+            //////////////////////////////////////////////////////////////
+            FutureBuilder(
+              future: getIsDeleted(widget.chatId),
+              builder: (BuildContext context, AsyncSnapshot snapshot) => RawMaterialButton(
+                  onPressed: snapshot.data ? _onPressedSendButton : null,
+                  //전송버튼을 누를때 동작시킬 메소드
+                  constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                  elevation: 2,
+                  fillColor: Theme.of(context).colorScheme.primary,
+                  shape: const CircleBorder(),
+                  child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.send),
+                  ),
+                )
             )
+            //////////////////////////////////////////////////////////////
           ],
         ),
       ),
