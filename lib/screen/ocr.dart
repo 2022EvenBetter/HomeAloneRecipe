@@ -515,7 +515,7 @@ class _ocr extends State<ocr> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: const Icon(Icons.close),
+                              icon: const Icon(Icons.check),
                               label: const Text('확인'),
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xff686EFF),
