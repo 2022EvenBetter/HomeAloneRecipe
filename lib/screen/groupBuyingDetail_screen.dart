@@ -441,6 +441,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             padding: const EdgeInsets.only(top: 10),
                             child: Container(
                               decoration: const BoxDecoration(
+
                                 gradient: LinearGradient(
                                   colors: [
                                     Color.fromRGBO(104, 150, 235, 1),
@@ -449,6 +450,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                                   begin: Alignment.centerLeft,
                                   end: Alignment.centerRight,
                                 ),
+
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(25.0),
                                 ),
@@ -476,6 +478,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                                     ),
                                   ),
                                 ],
+
                               ),
                             ),
                           )
@@ -501,7 +504,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                                 },
                                 style: OutlinedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(23.0),
+                                    borderRadius: BorderRadius.circular(25.0),
                                   ),
                                 ),
                                 child: const Text(
