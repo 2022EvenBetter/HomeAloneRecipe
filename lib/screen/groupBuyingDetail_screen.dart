@@ -106,6 +106,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                           icon: const Icon(Icons.circle_outlined),
                           label: const Text('네'),
                           style: ElevatedButton.styleFrom(
+
                             primary: Color(0xff686EFF),
                             onPrimary: Colors.white, // Background color
                             shape: RoundedRectangleBorder(
@@ -441,7 +442,6 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             padding: const EdgeInsets.only(top: 10),
                             child: Container(
                               decoration: const BoxDecoration(
-
                                 gradient: LinearGradient(
                                   colors: [
                                     Color.fromRGBO(104, 150, 235, 1),
@@ -457,28 +457,23 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                               ),
                               height: MediaQuery.of(context).size.width * 0.15,
                               width: MediaQuery.of(context).size.width * 0.90,
-                              child: Column(
-                                children: [
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      showParticipatePopup(context);
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(23.0),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      '참여하기',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 20),
-                                    ),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  showParticipatePopup(context);
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(23.0),
                                   ),
-                                ],
-
+                                ),
+                                child: const Text(
+                                  '참여하기',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 20),
+                                ),
                               ),
                             ),
                           )
@@ -528,7 +523,14 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                         padding: const EdgeInsets.only(top: 10),
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.red,
+                                Colors.pink,
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
                             borderRadius: BorderRadius.all(
                               Radius.circular(25.0),
                             ),
