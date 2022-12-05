@@ -44,131 +44,146 @@ class Chats extends StatelessWidget {
       return message;
     }
 
+    bool isDeleted = false;
+
     return ListView.builder(
       itemCount: _userProvider.chats.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
+
+            final querySnapshot=await FirebaseFirestore.instance
+                  .collection("Post")
+                  .where("chatId", isEqualTo: _userProvider.chats[index]).get();
+               for (var doc in querySnapshot.docs) {
+                // Getting data directly
+                isDeleted = doc.get('isDeleted');
+               }
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        MessageListScreen(_userProvider.chats[index])));
-          },
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 8, 20, 5),
-                child: Row(
-                  children: [
-                    Icon(Icons.chat_bubble, color: Colors.blueAccent, size: 60),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FutureBuilder(
-                              future:
-                                  postTitlebyChatId(_userProvider.chats[index]),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot snapshot) {
-                                //해당 부분은 data를 아직 받아 오지 못했을때
-                                if (snapshot.hasData == false) {
-                                  return CircularProgressIndicator();
-                                }
-                                //error가 발생하게 될 경우
-                                else if (snapshot.hasError) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Error: ${snapshot.error}',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  );
-                                }
-                                // 데이터를 정상적으로 받아오게 되면
-                                else {
-                                  int length = snapshot.data.toString().length;
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      length > 16
-                                          ? snapshot.data
-                                                  .toString()
-                                                  .substring(0, 20) +
-                                              "..."
-                                          : snapshot.data.toString(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.black),
-                                    ),
-                                  );
-                                }
-                              }),
-                          FutureBuilder(
-                              future: lastMessagebyChatId(
-                                  _userProvider.chats[index]),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot snapshot) {
-                                //해당 부분은 data를 아직 받아 오지 못했을때
-                                if (snapshot.hasData == false) {
-                                  return CircularProgressIndicator();
-                                }
-                                //error가 발생하게 될 경우
-                                else if (snapshot.hasError) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Error: ${snapshot.error}',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  );
-                                }
-                                // 데이터를 정상적으로 받아오게 되면
-                                else {
-                                  int length = snapshot.data.toString().length;
-                                  return Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(10, 5, 0, 10),
-                                    child: Text(
-                                      length > 16
-                                          ? snapshot.data
-                                                  .toString()
-                                                  .substring(0, 22) +
-                                              "..."
-                                          : snapshot.data.toString(),
-                                      style: TextStyle(
-                                          fontSize: 17, color: Colors.black54),
-                                    ),
-                                  );
-                                }
-                              }),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15, top: 10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(1),
-                        spreadRadius: 0,
-                        blurRadius: 2,
-                        offset: Offset(0, 2), // changes position of shadow
+                builder: (context) =>
+                MessageListScreen(_userProvider.chats[index],isDeleted)));
+            },
+          child: Container(
+            decoration: BoxDecoration(
+              color:Colors.white,
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 8, 20, 5),
+                  child: Row(
+                    children: [
+                      Icon(Icons.chat_bubble, color: Colors.blueAccent, size: 60),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FutureBuilder(
+                                future:
+                                    postTitlebyChatId(_userProvider.chats[index]),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  //해당 부분은 data를 아직 받아 오지 못했을때
+                                  if (snapshot.hasData == false) {
+                                    return CircularProgressIndicator();
+                                  }
+                                  //error가 발생하게 될 경우
+                                  else if (snapshot.hasError) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Error: ${snapshot.error}',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    );
+                                  }
+                                  // 데이터를 정상적으로 받아오게 되면
+                                  else {
+                                    int length = snapshot.data.toString().length;
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        length > 16
+                                            ? snapshot.data
+                                                    .toString()
+                                                    .substring(0, 20) +
+                                                "..."
+                                            : snapshot.data.toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black),
+                                      ),
+                                    );
+                                  }
+                                }),
+                            FutureBuilder(
+                                future: lastMessagebyChatId(
+                                    _userProvider.chats[index]),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  //해당 부분은 data를 아직 받아 오지 못했을때
+                                  if (snapshot.hasData == false) {
+                                    return CircularProgressIndicator();
+                                  }
+                                  //error가 발생하게 될 경우
+                                  else if (snapshot.hasError) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Error: ${snapshot.error}',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    );
+                                  }
+                                  // 데이터를 정상적으로 받아오게 되면
+                                  else {
+                                    int length = snapshot.data.toString().length;
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(10, 5, 0, 10),
+                                      child: Text(
+                                        length > 16
+                                            ? snapshot.data
+                                                    .toString()
+                                                    .substring(0, 22) +
+                                                "..."
+                                            : snapshot.data.toString(),
+                                        style: TextStyle(
+                                            fontSize: 17, color: Colors.black54),
+                                      ),
+                                    );
+                                  }
+                                }),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  height: 1.0,
-                  width: 500.0,
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15, top: 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(1),
+                          spreadRadius: 0,
+                          blurRadius: 2,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    height: 1.0,
+                    width: 500.0,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

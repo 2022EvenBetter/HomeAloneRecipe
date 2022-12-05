@@ -63,7 +63,7 @@ class _MyPostBuilder extends State<MyPostBuilder> {
     Query<Map<String, dynamic>> postFilterLocation = FirebaseFirestore.instance
         .collection("Post")
         .where('Uid', isEqualTo: _userProvider.uid)
-        .where('isDeleated', isEqualTo: false);
+        .where('isDeleted', isEqualTo: false);
 
     return StreamBuilder(
       stream: postFilterLocation.snapshots(),

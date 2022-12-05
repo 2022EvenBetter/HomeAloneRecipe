@@ -99,7 +99,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
-                                return MessageListScreen(widget.post.chatId!);
+                                return MessageListScreen(widget.post.chatId!,false);
                               }),
                             );
                           },
@@ -441,30 +441,44 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             padding: const EdgeInsets.only(top: 10),
                             child: Container(
                               decoration: const BoxDecoration(
-                                color: Colors.blue,
+
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color.fromRGBO(104, 150, 235, 1),
+                                    Color.fromRGBO(104, 100, 255, 1),
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(25.0),
                                 ),
                               ),
                               height: MediaQuery.of(context).size.width * 0.15,
                               width: MediaQuery.of(context).size.width * 0.90,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  showParticipatePopup(context);
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(23.0),
+                              child: Column(
+                                children: [
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      showParticipatePopup(context);
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(23.0),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      '참여하기',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 20),
+                                    ),
                                   ),
-                                ),
-                                child: const Text(
-                                  '참여하기',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 20),
-                                ),
+                                ],
+
                               ),
                             ),
                           )
