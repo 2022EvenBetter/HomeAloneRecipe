@@ -35,8 +35,10 @@ class _UserPage extends State<UserPage> {
     ),
   ];
   late UserProvider _userProvider;
+
   @override
   Widget build(BuildContext context) {
+    final imageSize = MediaQuery.of(context).size.width / 4;
     _userProvider = Provider.of<UserProvider>(context);
     String str = _userProvider.locations.toString();
     str = str.substring(1, str.length - 1);
@@ -60,7 +62,7 @@ class _UserPage extends State<UserPage> {
 
 
                   Container(
-                    // height: 120,
+                    height: 120,
                     // width: 500,
                     // alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -68,26 +70,40 @@ class _UserPage extends State<UserPage> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // Padding(padding: EdgeInsets.only(left: 10,)),
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person_outline,
-                            size: 35,
-                            color: Palette.grey,
+                        // CircleAvatar(
+                        //   radius: 35,
+                        //   backgroundColor: Colors.white,
+                        //   child: Icon(
+                        //     Icons.person_outline,
+                        //     size: 35,
+                        //     color: Palette.grey,
+                        //   ),
+                        // ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          child: Center(
+                            child: Icon(
+                              Icons.account_circle,
+                              size: imageSize,
+                            ),
                           ),
+                        ),
+                        SizedBox(
+                          width: 10,
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(_userProvider.nickname + ' 님',
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18)),
-                            Text(str),
-                            SizedBox(height: 20),
+                                    fontWeight: FontWeight.bold, fontSize: 20)),
+                            (str=='') ? Text('위치를 설정해주세요.') : Text(str),
+
                           ],
                         )
                       ],
@@ -115,6 +131,7 @@ class _UserPage extends State<UserPage> {
           ),
         ),
               Container(
+                height : 180,
                 // alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: Palette.grey,
@@ -178,6 +195,7 @@ class _UserPage extends State<UserPage> {
               ),
         Padding(
           padding: const EdgeInsets.only(bottom: 5, top: 5),
+
           child: Container(
             decoration: BoxDecoration(
               color: Colors.grey,
@@ -195,9 +213,7 @@ class _UserPage extends State<UserPage> {
         ),
           // 3번째 박스!!
            Container(
-                height: 100,
-                width: 500,
-                // alignment: Alignment.center,
+                height: 110,
                 decoration: BoxDecoration(
                   color: Palette.grey,
                   borderRadius: BorderRadius.circular(15),
@@ -237,7 +253,7 @@ class _UserPage extends State<UserPage> {
                 ),
               ),
           Padding(
-            padding: const EdgeInsets.only(top:10.0),
+            padding: const EdgeInsets.only(top:20.0),
             child: Container(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,7 +275,7 @@ class _UserPage extends State<UserPage> {
 
         Container(
           width: 241,
-          height: 200,
+          height: 190,
           child: ListView.builder(
               itemCount: catego.length,
               scrollDirection: Axis.horizontal,
@@ -271,8 +287,8 @@ class _UserPage extends State<UserPage> {
                       Expanded(
                         flex: 3,
                         child: Container(
-                          height:162,
-                          width: 132,
+                          height:200,
+                          width: 150,
 
                           decoration: BoxDecoration(
                             image: DecorationImage(

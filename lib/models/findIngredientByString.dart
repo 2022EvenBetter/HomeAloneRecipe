@@ -391,7 +391,7 @@ List<String> findIngredient(String s){
   for(int j=2;j<longestIngredientName;j++){
     for(int i=0;i<s.length-j;i++){
       if(s.substring(i,i+j) == '人H송이'){
-        result.add(ingredientName['새송이']!);
+        result.add(ingredientName['양송이']!);
       }
       if(ingredientName[s.substring(i,i+j)] != null ) {
         // print(ingredientName[s.substring(i, i + j)]);
