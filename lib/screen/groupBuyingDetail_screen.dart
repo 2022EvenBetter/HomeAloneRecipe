@@ -44,10 +44,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
       builder: (context) {
         return Dialog(
           child: Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 0.7,
+            width: MediaQuery.of(context).size.width * 0.7,
             height: 150,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: Colors.white),
@@ -84,7 +81,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                                   .collection("User")
                                   .doc(_userProvider.uid)
                                   .set({"Chats": _userProvider.chats},
-                                  SetOptions(merge: true));
+                                      SetOptions(merge: true));
 
                               String route = '/chatrooms/' +
                                   widget.post.chatId! +
@@ -102,7 +99,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
-                                return MessageListScreen(widget.post.chatId!);
+                                return MessageListScreen(widget.post.chatId!,false);
                               }),
                             );
                           },
@@ -151,10 +148,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
       builder: (context) {
         return Dialog(
           child: Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 0.7,
+            width: MediaQuery.of(context).size.width * 0.7,
             height: 150,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: Colors.white),
@@ -177,10 +171,11 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                         child: ElevatedButton.icon(
                           onPressed: () async {
                             widget.post.isDeleted = true;
-                            await FirebaseFirestore.instance.collection("Post")
+                            await FirebaseFirestore.instance
+                                .collection("Post")
                                 .doc(widget.post.postId)
                                 .set({"isDeleted": widget.post.isDeleted},
-                                SetOptions(merge: true));
+                                    SetOptions(merge: true));
                             if (widget.post.isDeleted == true) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -252,14 +247,8 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 20, 10, 5),
                 child: Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.08,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.15,
+                  height: MediaQuery.of(context).size.width * 0.08,
+                  width: MediaQuery.of(context).size.width * 0.15,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                         color: Palette.lightgrey,
@@ -292,7 +281,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                                   color: Colors.black)),
                           Text(" " + stringlist,
                               style:
-                              TextStyle(fontSize: 13, color: Colors.grey)),
+                                  TextStyle(fontSize: 13, color: Colors.grey)),
                         ],
                       ),
                     ),
@@ -353,8 +342,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             ),
                             TextSpan(
                                 text:
-                                "  ${widget.post.curParticipants}/${widget.post
-                                    .maxParticipants}명 참여\n",
+                                    "  ${widget.post.curParticipants}/${widget.post.maxParticipants}명 참여\n",
                                 style: const TextStyle(
                                   fontSize: 13,
                                   color: Colors.black,
@@ -369,7 +357,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                             ),
                             TextSpan(
                               text:
-                              "  ${widget.post.date} ${widget.post.time}\n",
+                                  "  ${widget.post.date} ${widget.post.time}\n",
                               style: const TextStyle(
                                 fontSize: 13,
                                 color: Colors.black,
@@ -395,10 +383,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(0, 18, 0, 7),
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 1,
+                        width: MediaQuery.of(context).size.width * 1,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -440,7 +425,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                         spreadRadius: 0,
                         blurRadius: 2,
                         offset:
-                        const Offset(0, 2), // changes position of shadow
+                            const Offset(0, 2), // changes position of shadow
                       ),
                     ],
                   ),
@@ -453,94 +438,82 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                   children: [
                     curState() == "모집중"
                         ? Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color.fromRGBO(104, 150, 235, 1),
-                              Color.fromRGBO(104, 100, 255, 1),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25.0),
-                          ),
-                        ),
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.15,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.90,
-                        child: Column(
-                          children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                showParticipatePopup(context);
-                              },
-                              style: OutlinedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(23.0),
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color.fromRGBO(104, 150, 235, 1),
+                                    Color.fromRGBO(104, 100, 255, 1),
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(25.0),
                                 ),
                               ),
-                              child: const Text(
-                                '참여하기',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20),
+                              height: MediaQuery.of(context).size.width * 0.15,
+                              width: MediaQuery.of(context).size.width * 0.90,
+                              child: Column(
+                                children: [
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      showParticipatePopup(context);
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(23.0),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      '참여하기',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    )
+                          )
                         : Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25.0),
-                          ),
-                        ),
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.15,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.90,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('모집이 완료되었습니다!'),
-                                backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(25.0),
+                                ),
                               ),
-                            );
-                          },
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(23.0),
+                              height: MediaQuery.of(context).size.width * 0.15,
+                              width: MediaQuery.of(context).size.width * 0.90,
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('모집이 완료되었습니다!'),
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  );
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(23.0),
+                                  ),
+                                ),
+                                child: const Text(
+                                  '모집완료',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 20),
+                                ),
+                              ),
                             ),
                           ),
-                          child: const Text(
-                            '모집완료',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20),
-                          ),
-                        ),
-                      ),
-                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -557,14 +530,8 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                               Radius.circular(25.0),
                             ),
                           ),
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.15,
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.90,
+                          height: MediaQuery.of(context).size.width * 0.15,
+                          width: MediaQuery.of(context).size.width * 0.90,
                           child: OutlinedButton(
                             onPressed: () {
                               showDeletePopup(context);

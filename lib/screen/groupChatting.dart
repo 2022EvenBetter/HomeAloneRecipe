@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 class MessageListScreen extends StatefulWidget {
   final String chatId;
+  final bool isDeleted;
 
-  const MessageListScreen(this.chatId, {Key? key}) : super(key: key);
+  const MessageListScreen(this.chatId, this.isDeleted, {Key? key}) : super(key: key);
 
   @override
   State<MessageListScreen> createState() => _MessageListScreenState();
@@ -18,6 +19,8 @@ class MessageListScreen extends StatefulWidget {
 class _MessageListScreenState extends State<MessageListScreen> {
   TextEditingController controller = TextEditingController();
   late UserProvider userProvider;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +62,26 @@ class _MessageListScreenState extends State<MessageListScreen> {
                                 messages[index].uid.toString() ==
                                     userProvider.uid,
                                 messages[index].nickName,
-                                messages[index].sendDate),
+                                messages[index].sendDate,
+
+                            ),
                           );
                         })),
-                getInputWidget()
+                widget.isDeleted
+                    ? Container(
+                  padding: EdgeInsets.all(10),
+                  child: const Center(
+                    child: Text(
+                      "채팅이 종료되었습니다.",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                )
+                : SizedBox.shrink(),
+                getInputWidget(),
               ],
             );
           }
@@ -142,11 +161,11 @@ class _MessageListScreenState extends State<MessageListScreen> {
               width: 10,
             ),
             RawMaterialButton(
-              onPressed: _onPressedSendButton,
+              onPressed: widget.isDeleted ? null : _onPressedSendButton,
               //전송버튼을 누를때 동작시킬 메소드
               constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
               elevation: 2,
-              fillColor: Theme.of(context).colorScheme.primary,
+              fillColor: widget.isDeleted ? Colors.grey : Theme.of(context).colorScheme.primary,
               shape: const CircleBorder(),
               child: const Padding(
                 padding: EdgeInsets.all(10),
