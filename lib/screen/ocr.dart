@@ -440,6 +440,7 @@ class _ocr extends State<ocr> {
         print(tmp[i]);
       }
     }
+
     print(tmp.toString());
     showPopup(context,tmp);
 
