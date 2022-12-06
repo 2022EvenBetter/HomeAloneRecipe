@@ -21,22 +21,26 @@ class _showMyChatState extends State<showMyChat> {
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-        appBar: AppBar(
-          title: Text('채팅',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-          elevation: 3.0,
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-        ),
-        body: Container(
-            child: Stack(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Expanded(
-              child: Chats(),
+      appBar: AppBar(
+        title: const Text('채팅',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
+        elevation: 3.0,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+      ),
+      body: Container(
+        child: Stack(
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Expanded(
+                child: Chats(),
+              ),
             ),
-          ),
-        ])));
+          ],
+        ),
+      ),
+    );
   }
 }

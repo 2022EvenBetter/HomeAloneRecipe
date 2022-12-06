@@ -9,6 +9,7 @@ import '../models/post.dart';
 
 class Posts extends StatelessWidget {
   final String ingredient;
+
   const Posts(this.ingredient, {Key? key}) : super(key: key);
 
   @override
@@ -18,20 +19,15 @@ class Posts extends StatelessWidget {
     Query<Map<String, dynamic>> postFilterLocation = FirebaseFirestore.instance
         .collection("Post")
         .where("UserLocation",
-            arrayContains: _userProvider.locations[_userProvider.scope]);
-
-    Future<String> get_Id(DocumentReference doc_ref) async {
-      DocumentSnapshot docSnap = await doc_ref.get();
-      var doc_id2 = docSnap.reference.id;
-      return doc_id2;
-    }
+            arrayContains: _userProvider.locations[_userProvider.scope])
+        .where("isDeleted", isEqualTo: false);
 
     return StreamBuilder(
       stream: postFilterLocation.snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -89,10 +85,11 @@ class Posts extends StatelessWidget {
               );
             } else {
               flag++;
-              if (flag == postDocs.length)
-                return Align(
+              if (flag == postDocs.length) {
+                return const Align(
                     alignment: Alignment.center,
                     child: Text('일치하는 레시피가 없습니다.'));
+              }
               return Container();
             }
           },

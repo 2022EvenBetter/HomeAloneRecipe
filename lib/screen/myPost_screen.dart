@@ -1,4 +1,3 @@
-
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,7 +24,7 @@ class _MyPostScreen extends State<MyPostScreen> {
     print(_userProvider.uid);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '내가 쓴 공동구매글',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
@@ -33,21 +32,21 @@ class _MyPostScreen extends State<MyPostScreen> {
         elevation: 3.0,
         backgroundColor: Colors.white,
       ),
-
-        body: Container(
-            child: Stack(children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Expanded(
-                  child: MyPostBuilder(),
-                ),
+      body: Container(
+        child: Stack(
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Expanded(
+                child: MyPostBuilder(),
               ),
-
-            ]))
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
-
 
 class MyPostBuilder extends StatefulWidget {
   const MyPostBuilder({super.key});
@@ -63,20 +62,15 @@ class _MyPostBuilder extends State<MyPostBuilder> {
     _userProvider = Provider.of<UserProvider>(context);
     Query<Map<String, dynamic>> postFilterLocation = FirebaseFirestore.instance
         .collection("Post")
-        .where('Uid', isEqualTo: _userProvider.uid);
-
-    Future<String> get_Id(DocumentReference doc_ref) async {
-      DocumentSnapshot docSnap = await doc_ref.get();
-      var doc_id2 = docSnap.reference.id;
-      return doc_id2;
-    }
+        .where('Uid', isEqualTo: _userProvider.uid)
+        .where('isDeleted', isEqualTo: false);
 
     return StreamBuilder(
       stream: postFilterLocation.snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -114,7 +108,4 @@ class _MyPostBuilder extends State<MyPostBuilder> {
   }
 }
 
-
-
 //
-

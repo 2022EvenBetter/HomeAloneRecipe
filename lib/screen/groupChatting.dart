@@ -3,13 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_alone_recipe/models/message.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
-import 'package:home_alone_recipe/screen/chatBubble_screen.dart';
+import 'package:home_alone_recipe/widget/chatBubble.dart';
 import 'package:provider/provider.dart';
 
 class MessageListScreen extends StatefulWidget {
   final String chatId;
+  final bool isDeleted;
 
-  const MessageListScreen(this.chatId, {Key? key}) : super(key: key);
+  const MessageListScreen(this.chatId, this.isDeleted, {Key? key}) : super(key: key);
 
   @override
   State<MessageListScreen> createState() => _MessageListScreenState();
@@ -19,12 +20,14 @@ class _MessageListScreenState extends State<MessageListScreen> {
   TextEditingController controller = TextEditingController();
   late UserProvider userProvider;
 
+
+
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '채팅방',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
@@ -59,10 +62,26 @@ class _MessageListScreenState extends State<MessageListScreen> {
                                 messages[index].uid.toString() ==
                                     userProvider.uid,
                                 messages[index].nickName,
-                                messages[index].sendDate),
+                                messages[index].sendDate,
+
+                            ),
                           );
                         })),
-                getInputWidget()
+                widget.isDeleted
+                    ? Container(
+                  padding: EdgeInsets.all(10),
+                  child: const Center(
+                    child: Text(
+                      "채팅이 종료되었습니다.",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                )
+                : SizedBox.shrink(),
+                getInputWidget(),
               ],
             );
           }
@@ -103,30 +122,33 @@ class _MessageListScreenState extends State<MessageListScreen> {
   //전송버튼
   Widget getInputWidget() {
     return Container(
-      height: 60,
+      height: 70,
       width: double.infinity,
       decoration: BoxDecoration(boxShadow: const [
         BoxShadow(color: Colors.black12, offset: Offset(0, -2), blurRadius: 3)
       ], color: Theme.of(context).bottomAppBarColor),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
               child: TextField(
                 controller: controller,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 decoration: InputDecoration(
+                  isDense: true,
                   labelStyle: const TextStyle(fontSize: 15),
                   fillColor: Colors.white,
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                    borderRadius: BorderRadius.circular(30.0),
                     borderSide: const BorderSide(
                       color: Colors.blue,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                    borderRadius: BorderRadius.circular(30.0),
                     borderSide: const BorderSide(
                       color: Colors.black26,
                       width: 1.0,
@@ -139,11 +161,11 @@ class _MessageListScreenState extends State<MessageListScreen> {
               width: 10,
             ),
             RawMaterialButton(
-              onPressed: _onPressedSendButton,
+              onPressed: widget.isDeleted ? null : _onPressedSendButton,
               //전송버튼을 누를때 동작시킬 메소드
               constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
               elevation: 2,
-              fillColor: Theme.of(context).colorScheme.primary,
+              fillColor: widget.isDeleted ? Colors.grey : Theme.of(context).colorScheme.primary,
               shape: const CircleBorder(),
               child: const Padding(
                 padding: EdgeInsets.all(10),
