@@ -76,33 +76,43 @@ class _MyPostBuilder extends State<MyPostBuilder> {
         }
         final postDocs = snapshot.data!.docs;
 
-        return ListView.builder(
-          itemCount: postDocs.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Post post = Post.fromQuerySnapshot(postDocs[index]);
+        return Column(
+          children: [
+            (postDocs.isEmpty) ? Text('작성된 게시글이 없습니다.') : Text(''),
+        Expanded(
+        child:
+            ListView.builder(
+            itemCount: postDocs.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Post post = Post.fromQuerySnapshot(postDocs[index]);
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GroupBuyingDetailPage(post)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => GroupBuyingDetailPage(post)));
+                  },
+                  child: PostList(
+                    postDocs[index]['Content'],
+                    postDocs[index]['Title'],
+                    postDocs[index]['Date'],
+                    postDocs[index]['Time'],
+                    postDocs[index]['WriterName'],
+                    postDocs[index]['UpperCategory'],
+                    postDocs[index]['LowerCategory'],
+                    postDocs[index]['maxParticipants'],
+                    postDocs[index]['curParticipants'],
+                    postDocs[index]['Place'],
+                  ),
+                );
               },
-              child: PostList(
-                postDocs[index]['Content'],
-                postDocs[index]['Title'],
-                postDocs[index]['Date'],
-                postDocs[index]['Time'],
-                postDocs[index]['WriterName'],
-                postDocs[index]['UpperCategory'],
-                postDocs[index]['LowerCategory'],
-                postDocs[index]['maxParticipants'],
-                postDocs[index]['curParticipants'],
-                postDocs[index]['Place'],
-              ),
-            );
-          },
+            ),
+        ),
+          ],
         );
+
+
       },
     );
   }

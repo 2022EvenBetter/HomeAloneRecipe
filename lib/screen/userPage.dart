@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_alone_recipe/config/palette.dart';
 import 'package:home_alone_recipe/provider/userProvider.dart';
+import 'package:home_alone_recipe/screen/login_screen.dart';
 import 'package:home_alone_recipe/screen/myPost_screen.dart';
 import 'package:home_alone_recipe/screen/myScrapRecipe_screen.dart';
 import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:provider/provider.dart';
+import 'home_screen.dart';
 import 'myTown_screen.dart';
 
 class UserPage extends StatefulWidget {
@@ -16,6 +18,8 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPage extends State<UserPage> {
+
+
   final List<Category> catego = [
     Category(
       imagUrl: "lib/assets/icons/가공유제품/계란.png",
@@ -70,18 +74,7 @@ class _UserPage extends State<UserPage> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // Padding(padding: EdgeInsets.only(left: 10,)),
-                        // CircleAvatar(
-                        //   radius: 35,
-                        //   backgroundColor: Colors.white,
-                        //   child: Icon(
-                        //     Icons.person_outline,
-                        //     size: 35,
-                        //     color: Palette.grey,
-                        //   ),
-                        // ),
                         SizedBox(
                           width: 5,
                         ),
@@ -102,10 +95,18 @@ class _UserPage extends State<UserPage> {
                             Text(_userProvider.nickname + ' 님',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20)),
+                            Text(_userProvider.email,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 12)),
                             (str=='') ? Text('위치를 설정해주세요.') : Text(str),
 
                           ],
-                        )
+                        ),
+
+                        IconButton(onPressed: () {
+                          Navigator.pop(context, HomeScreen());
+                        }, icon: Icon(Icons.logout))
+
                       ],
                     ),
                   ),
@@ -324,6 +325,7 @@ class _UserPage extends State<UserPage> {
       ),
     );
   }
+
 }
 
 class Category {

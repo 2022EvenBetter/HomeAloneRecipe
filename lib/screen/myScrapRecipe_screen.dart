@@ -196,6 +196,8 @@ class _ListBuilderState extends State<ListBuilder> {
   @override
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return FutureBuilder(
         future: _getFiteredRecipe(widget.filterIngredient),
         builder: ((BuildContext context, AsyncSnapshot<List<Recipe>> snapshot) {
@@ -213,158 +215,194 @@ class _ListBuilderState extends State<ListBuilder> {
             return Column(
               children: [
                 (snapRecipe.length >= 1)
-                    ? Text('총${snapRecipe.length}개의 스크랩한 레시피입니다!')
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('스크랩한 레시피가 없습니다!',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                    textAlign: TextAlign.center),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    ? Padding(
+                  padding: const EdgeInsets.only(top:10.0,bottom:15),
+                  child: Text('총${snapRecipe.length}개의 레시피가 나왔어요!',
+                    style: TextStyle(
+                      fontSize: 15.0,),),
+                )
+                    : Padding(
+                  padding: const EdgeInsets.only(top:10.0,bottom:15),
+                  child: Text('스크랩한 레시피가 없습니다.',
+                    style: TextStyle(
+                      fontSize: 15.0,),),
+                ),
                 Expanded(
                   child: ListView.builder(
                       itemCount: snapRecipe.length,
                       itemBuilder: (BuildContext context, int idx) {
                         return Container(
-                            margin: EdgeInsets.all(20.0),
                             child: Column(
                               children: [
                                 Row(
                                   children: [
-                                    Container(
-                                      width: 110.0,
-                                      height: 110.0,
-                                      child: Image.network(
-                                        snapRecipe[idx].imageURL,
-                                        fit: BoxFit.cover,
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                    Padding(
+                                      padding: const EdgeInsets.only(left:10.0),
+                                      child: Container(
+                                        width: 110.0,
+                                        height: 110.0,
+                                        child: Image.network(
+                                          snapRecipe[idx].imageURL,
+                                          fit: BoxFit.cover,
+                                          width:
+                                          MediaQuery.of(context).size.width,
+                                        ),
                                       ),
                                     ),
-                                    Container(
-                                      height: 110,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            width: 210,
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  '${snapRecipe[idx].recipeName}',
-                                                  style: TextStyle(
-                                                      fontSize: 18.0,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                Container(
-                                                    width: 180,
-                                                    child: Text(
-                                                      snapRecipe[idx]
-                                                          .description,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, top: 0),
+                                      child: Container(
+                                        height: 110,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.bottomLeft,
+                                              child: Container(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      '${snapRecipe[idx].recipeName}',
                                                       style: TextStyle(
-                                                          fontSize: 13),
-                                                    )),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(10.0),
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    width: 30,
-                                                    child: IconButton(
-                                                      padding: EdgeInsets.zero,
-                                                      constraints:
-                                                          BoxConstraints(),
-                                                      icon: _userProvider
-                                                              .recipes
-                                                              .contains(
-                                                                  snapRecipe[
-                                                                          idx]
-                                                                      .recipeCode)
-                                                          ? Icon(
-                                                              Icons.favorite,
-                                                              color:
-                                                                  Colors.yellow,
-                                                            )
-                                                          : Icon(
-                                                              Icons
-                                                                  .favorite_border,
-                                                              color: Colors
-                                                                  .yellow),
-                                                      focusColor: Colors.amber,
-                                                      isSelected: false,
-                                                      selectedIcon: Icon(Icons
-                                                          .favorite_border),
-                                                      onPressed: () {},
+                                                          fontSize: 18.0,
+                                                          fontWeight:
+                                                          FontWeight.bold),
+                                                      textAlign: TextAlign.left,
                                                     ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(10, 0, 10, 0),
-                                                    child: Text(
-                                                        '${snapRecipe[idx].scrapped}'),
-                                                  ),
-                                                  ConstrainedBox(
-                                                    constraints:
-                                                        BoxConstraints.tightFor(
-                                                            height: 25),
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    RecipeDetailPage(
-                                                                        snapRecipe[
-                                                                            idx])));
-                                                      },
-                                                      child: Text('자세히 보기 >'),
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          3,
-                                                                          3,
-                                                                          3,
-                                                                          3),
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .transparent,
-                                                              shadowColor: Colors
-                                                                  .transparent),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 7, 0, 0),
+                                                      child: Container(
+                                                          width: screenWidth *
+                                                              0.6,
+                                                          child: Text(
+                                                              snapRecipe[idx]
+                                                                  .description,
+                                                              maxLines: 2,
+                                                              overflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  color: Colors
+                                                                      .black54),
+                                                              textAlign:
+                                                              TextAlign
+                                                                  .start)),
                                                     ),
-                                                  )
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                            Container(
+                                              width:screenWidth*0.55,
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.only(top:15.0),
+                                                child: Row(
+
+                                                  children: [
+                                                    Container(
+                                                      width: 30,
+                                                      child: IconButton(
+                                                        padding:
+                                                        EdgeInsets.zero,
+                                                        constraints:
+                                                        BoxConstraints(),
+                                                        icon: _userProvider
+                                                            .recipes
+                                                            .contains(
+                                                            snapRecipe[
+                                                            idx]
+                                                                .recipeCode)
+                                                            ? Icon(
+                                                          Icons.favorite,
+                                                          color: Colors
+                                                              .yellow,
+                                                        )
+                                                            : Icon(
+                                                            Icons
+                                                                .favorite_border,
+                                                            color: Colors
+                                                                .yellow),
+                                                        focusColor:
+                                                        Colors.amber,
+                                                        isSelected: false,
+                                                        selectedIcon: Icon(Icons
+                                                            .favorite_border),
+                                                        onPressed: () {},
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(
+                                                          0, 0, 10, 0),
+                                                      child: Text(
+                                                          '${snapRecipe[idx].scrapped}'),
+                                                    ),
+                                                    ConstrainedBox(
+                                                      constraints:
+                                                      BoxConstraints
+                                                          .tightFor(
+                                                          height: 25),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left:30.0),
+                                                        child: ElevatedButton(
+                                                          onPressed: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        RecipeDetailPage(
+                                                                            snapRecipe[
+                                                                            idx])));
+                                                          },
+                                                          child: Text('자세히 보기 >'),
+                                                          style: ElevatedButton.styleFrom(
+                                                              padding: EdgeInsets
+                                                                  .fromLTRB(
+                                                                  3, 3, 3, 3),
+                                                              backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                              shadowColor: Colors
+                                                                  .transparent),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                Divider(
-                                  color: Colors.grey,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 15, top: 15),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(1),
+                                          spreadRadius: 0,
+                                          blurRadius: 2,
+                                          offset: Offset(0,
+                                              2), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    height: 1.0,
+                                    width: 500.0,
+                                  ),
                                 ),
                               ],
                             ));
