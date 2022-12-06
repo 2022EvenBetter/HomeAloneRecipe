@@ -214,7 +214,25 @@ class _ListBuilderState extends State<ListBuilder> {
               children: [
                 (snapRecipe.length >= 1)
                     ? Text('총${snapRecipe.length}개의 스크랩한 레시피입니다!')
-                    : Text('스크랩한 레시피가 없습니다.'),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.8,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('스크랩한 레시피가 없습니다!',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                    textAlign: TextAlign.center),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                 Expanded(
                   child: ListView.builder(
                       itemCount: snapRecipe.length,
