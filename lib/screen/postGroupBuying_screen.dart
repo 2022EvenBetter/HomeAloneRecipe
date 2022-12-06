@@ -121,7 +121,6 @@ class _GroupBuyingState extends State<GroupBuying> {
                                         .doc(_userProvider.uid)
                                         .set({"Chats": _userProvider.chats},
                                             SetOptions(merge: true));
-
                                     await FirebaseFirestore.instance
                                         .collection(route)
                                         .doc(_userProvider.uid)

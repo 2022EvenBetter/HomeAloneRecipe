@@ -7,6 +7,7 @@ import 'package:home_alone_recipe/screen/myPost_screen.dart';
 import 'package:home_alone_recipe/screen/myScrapRecipe_screen.dart';
 import 'package:home_alone_recipe/screen/postGroupBuying_screen.dart';
 import 'package:provider/provider.dart';
+import 'home_screen.dart';
 import 'myTown_screen.dart';
 
 class UserPage extends StatefulWidget {
@@ -17,6 +18,8 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPage extends State<UserPage> {
+
+
   final List<Category> catego = [
     Category(
       imagUrl: "lib/assets/icons/가공유제품/계란.png",
@@ -101,8 +104,7 @@ class _UserPage extends State<UserPage> {
                         ),
 
                         IconButton(onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.pop(context, LoginScreen());
+                          Navigator.pop(context, HomeScreen());
                         }, icon: Icon(Icons.logout))
 
                       ],
@@ -323,6 +325,7 @@ class _UserPage extends State<UserPage> {
       ),
     );
   }
+
 }
 
 class Category {
