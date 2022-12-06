@@ -108,7 +108,42 @@ class _ocr extends State<ocr> {
             ),
           ]),
 
+      // appBar: AppBar(
+      //   title: Text('마이냉장고',style:TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+      //     backgroundColor: Colors.white,
+      //     centerTitle: true,
+      //     // elevation: 0.0,
+      //     actions: <Widget>[
+      //       IconButton(
+      //         icon: Icon(
+      //           Icons.add,
+      //           color: Colors.black,
+      //         ),
+      //         onPressed: () {
+      //           if (flag == 0) {
+      //             _controller.open();
+      //             flag = 1;
+      //           } else {
+      //             _controller.close();
+      //             flag = 0;
+      //           }
+      //
+      //           setState(() {
+      //             _button = 'Close Drawer';
+      //           });
+      //         },
+      //       ),
+      //     ]),
 
+      // drawer: Drawer(
+      //     child: ListView(
+      //       children: [
+      //         DrawerHeader(
+      //           child: Text('header'),
+      //           decoration: BoxDecoration(color: Colors.green),
+      //         )
+      //       ],
+      //     )),
       body: Stack(
         children: [
           Column(
@@ -405,25 +440,19 @@ class _ocr extends State<ocr> {
         print(tmp[i]);
       }
     }
-    // _userProvider.ingredients.clear();
+    _userProvider.ingredients.clear();
 
     print(tmp.toString());
     showPopup(context,tmp);
     _userProvider.addIngredient(tmp);
+    
     await FirebaseFirestore.instance
         .collection("User")
         .doc(_userProvider.uid)
         .set(
       {
-        "Email": _userProvider.email,
-        "Password": _userProvider.password,
-        "NickName": _userProvider.nickname,
-        "Scope": "",
         "Ingredient": _userProvider.ingredients,
-        "MyRecipes": [],
-        "Location": [],
-        "Post": [],
-      },
+      } , SetOptions(merge: true),
     ).onError((e, _) => print("Error writing document: $e"));
     // print(parsedtext);
     setState(() {
@@ -480,7 +509,7 @@ class _ocr extends State<ocr> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: const Icon(Icons.check),
+                              icon: const Icon(Icons.close),
                               label: const Text('확인'),
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xff686EFF),
