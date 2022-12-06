@@ -81,7 +81,7 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                                   .collection("User")
                                   .doc(_userProvider.uid)
                                   .set({"Chats": _userProvider.chats},
-                                      SetOptions(merge: true));
+                                  SetOptions(merge: true));
 
                               String route = '/chatrooms/' +
                                   widget.post.chatId! +
@@ -95,7 +95,8 @@ class _GroupBuyingDetailPageState extends State<GroupBuyingDetailPage> {
                                 "Position": "guest",
                               });
                             }
-
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
