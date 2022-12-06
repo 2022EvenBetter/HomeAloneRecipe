@@ -355,8 +355,7 @@ class _ListBuilderState extends State<ListBuilder> {
               ],
             );
           }
-          return Align(
-              alignment: Alignment.center, child: const Text('Now Loading...'));
+          return const Center(child: CircularProgressIndicator());
         }));
   }
 }
