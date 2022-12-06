@@ -34,8 +34,10 @@ class _IngredientButtonState extends State<IngredientButton> {
                   _hasBeenPressed = !_hasBeenPressed;
                   if (_hasBeenPressed) {
                     widget.selectedIngedient.add(widget.buttonName);
+                    print(widget.selectedIngedient);
                   } else {
                     widget.selectedIngedient.remove(widget.buttonName);
+                    print(widget.selectedIngedient);
                   }
                 });
               },

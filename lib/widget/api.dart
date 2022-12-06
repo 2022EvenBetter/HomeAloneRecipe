@@ -600,7 +600,7 @@ class _ListBuilderState extends State<ListBuilder> {
               ],
             );
           }
-          return const Text('Now Loading...');
+          return const Center(child: CircularProgressIndicator());
         }));
   }
 }
