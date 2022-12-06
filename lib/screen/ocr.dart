@@ -50,7 +50,7 @@ class _ocr extends State<ocr> {
   Future getImage(ImageSource imageSource) async {
     // final image = await picker.pickImage(source: imageSource);
     final XFile? image =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
     });
@@ -418,7 +418,7 @@ class _ocr extends State<ocr> {
   Future _getFromGallery() async {
     // final pickedFile=_image;
     final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
 
     var bytes = File(pickedFile.path.toString()).readAsBytesSync();
@@ -440,12 +440,12 @@ class _ocr extends State<ocr> {
         print(tmp[i]);
       }
     }
-    _userProvider.ingredients.clear();
 
     print(tmp.toString());
     showPopup(context,tmp);
+
     _userProvider.addIngredient(tmp);
-    
+
     await FirebaseFirestore.instance
         .collection("User")
         .doc(_userProvider.uid)
@@ -489,6 +489,14 @@ class _ocr extends State<ocr> {
                                     color: Colors.black),
                                 textAlign: TextAlign.center),
                           ),
+
+                        (removeIng.isEmpty)? Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Text("검색된 재료가 없습니다.",
+                              style:
+                              TextStyle(fontSize: 15, color: Colors.black),
+                              textAlign: TextAlign.center),
+                        ):
                         Padding(
                           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                           child: Text("이(가) 추가되었습니다.",
@@ -530,4 +538,3 @@ class _ocr extends State<ocr> {
   }
 
 }
-

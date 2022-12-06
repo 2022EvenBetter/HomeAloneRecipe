@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_alone_recipe/config/palette.dart';
+import 'package:home_alone_recipe/models/findIngredientByString.dart';
 import 'package:home_alone_recipe/widget/ingredient_button.dart';
 import 'package:provider/provider.dart';
 import '../provider/userProvider.dart';
@@ -22,11 +23,23 @@ class _userIngredient extends State<userIngredient> {
   late UserProvider _userProvider;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
+
+
+
   @override
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
     var a = widget.selectedIngredient;
     String str = _userProvider.ingredients.toString();
+
+
+
+    distinctIngredient(str);
+
+
+
+
+
     str = str.substring(1, str.length - 1);
     str = str.split(' ').join('');
     List<String> list = str.split(',');
@@ -315,6 +328,39 @@ class _userIngredient extends State<userIngredient> {
       ),
     );
   }
+
+
+
+
+  Future distinctIngredient(String str) async {
+    List<String> tmp = findIngredient(str);
+    tmp.toSet();
+    for (int i = 0; i < tmp.length; i++) {
+      if (kDebugMode) {
+        print(tmp[i]);
+      }
+    }
+
+    print(tmp.toString());
+    _userProvider.ingredients.clear();
+    _userProvider.addIngredient(tmp);
+
+    await FirebaseFirestore.instance
+        .collection("User")
+        .doc(_userProvider.uid)
+        .set(
+      {
+        "Ingredient": _userProvider.ingredients,
+      } , SetOptions(merge: true),
+    );
+  }
+
+
+
+
+
+
+
 }
 
 class homeIngredient extends StatefulWidget {
@@ -382,4 +428,10 @@ class _homeIngredientState extends State<homeIngredient> {
       ),
     );
   }
+
+
+
+
+
+
 }
