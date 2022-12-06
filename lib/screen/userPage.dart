@@ -102,6 +102,9 @@ class _UserPage extends State<UserPage> {
                             Text(_userProvider.nickname + ' 님',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20)),
+                            Text(_userProvider.email,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 12)),
                             (str=='') ? Text('위치를 설정해주세요.') : Text(str),
 
                           ],
