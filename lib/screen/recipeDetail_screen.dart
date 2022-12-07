@@ -44,10 +44,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
       db.collection("recipeScrap").doc().set(
           {"recipeCode": recipeCodeNum, "scrapNum": 0},
           SetOptions(merge: true));
-      print("init data");
-    } else {
-      print("already exist");
-    }
+    } else {}
   }
 
   Future<int> getScrapNum(int recipeCodeNum) async {
@@ -89,19 +86,15 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
 
     for (var i = 0; i < _userProvider.ingredients.length; i++) {
-      print(ingredient[_userProvider.ingredients[i]]);
-
       if (ingredient[_userProvider.ingredients[i]] != null) {
         for (var j = 0;
             j < ingredient[_userProvider.ingredients[i]].length;
             j++) {
-          print(ingredient[_userProvider.ingredients[i]][j]);
           plusAlphaIng.add(ingredient[_userProvider.ingredients[i]][j]);
         }
       }
     }
-    print("plusAlpha");
-    print(plusAlphaIng);
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -163,8 +156,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               onPressed: () {
                                 setState(() {
                                   isClicked2 = !isClicked2;
-                                  print(isClicked2);
-                                  print(changeMode);
                                 });
                                 setState(() async {
                                   isScrap = !isScrap;
@@ -196,10 +187,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       "MyRecipes": _userProvider.recipes
                                     }, SetOptions(merge: true));
                                   }
-                                  print("유저 좋아요 레시피");
-                                  print(_userProvider.recipes);
-                                  print(tmpScrapNum);
-                                  //print(tmpScrapNum);
                                 });
                               },
                             ),
@@ -223,8 +210,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(
-                    bottom: 10, top: 10),
+                padding: const EdgeInsets.only(bottom: 10, top: 10),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.grey,
@@ -233,8 +219,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                         color: Colors.grey.withOpacity(1),
                         spreadRadius: 0,
                         blurRadius: 2,
-                        offset: Offset(0,
-                            2), // changes position of shadow
+                        offset: Offset(0, 2), // changes position of shadow
                       ),
                     ],
                   ),
@@ -259,7 +244,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 0.0, top:3),
+                    padding: EdgeInsets.only(left: 0.0, top: 3),
                     child: Wrap(
                         direction: Axis.horizontal, // 나열 방향
                         alignment: WrapAlignment.start,
@@ -292,8 +277,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(
-                    bottom: 10, top: 10),
+                padding: const EdgeInsets.only(bottom: 10, top: 10),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.grey,
@@ -302,8 +286,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                         color: Colors.grey.withOpacity(1),
                         spreadRadius: 0,
                         blurRadius: 2,
-                        offset: Offset(0,
-                            2), // changes position of shadow
+                        offset: Offset(0, 2), // changes position of shadow
                       ),
                     ],
                   ),
