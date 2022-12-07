@@ -335,13 +335,7 @@ class _userIngredient extends State<userIngredient> {
   Future distinctIngredient(String str) async {
     List<String> tmp = findIngredient(str);
     tmp.toSet();
-    for (int i = 0; i < tmp.length; i++) {
-      if (kDebugMode) {
-        print(tmp[i]);
-      }
-    }
 
-    print(tmp.toString());
     _userProvider.ingredients.clear();
     _userProvider.addIngredient(tmp);
 
@@ -399,7 +393,6 @@ class _homeIngredientState extends State<homeIngredient> {
                   setState(() {
                     _hasPressed = !_hasPressed;
 
-                    print(_hasPressed);
                     if (_hasPressed) {
                       widget.setRemoveIngredient(ingName[0]);
                     } else {
