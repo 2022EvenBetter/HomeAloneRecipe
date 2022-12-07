@@ -50,7 +50,7 @@ class _ocr extends State<ocr> {
   Future getImage(ImageSource imageSource) async {
     // final image = await picker.pickImage(source: imageSource);
     final XFile? image =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
     });
@@ -62,14 +62,12 @@ class _ocr extends State<ocr> {
     setState(() {
       selectedIngredient.add(name);
     });
-    print(selectedIngredient);
   }
 
   void cancelRemoveIngredient(String name) {
     setState(() {
       selectedIngredient.remove(name);
     });
-    print(selectedIngredient);
   }
 
   @override
@@ -166,12 +164,7 @@ class _ocr extends State<ocr> {
                 padding: EdgeInsets.only(top: 30.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // if(parsedtext.length>100)
-                    //   Text(parsedtext.substring(0,100))
-                    // else
-                    //   Text(parsedtext),
-                  ],
+                  children: [],
                 ),
               ),
             ],
@@ -290,8 +283,6 @@ class _ocr extends State<ocr> {
             ),
             onPressed: () {
               _getFromGallery();
-
-
             },
           ),
           Padding(padding: EdgeInsets.fromLTRB(0, 3, 0, 0)),
@@ -414,7 +405,7 @@ class _ocr extends State<ocr> {
   Future _getFromGallery() async {
     // final pickedFile=_image;
     final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
 
     var bytes = File(pickedFile.path.toString()).readAsBytesSync();
@@ -432,7 +423,7 @@ class _ocr extends State<ocr> {
     List<String> tmp = findIngredient(parsedtext);
     tmp.toSet();
 
-    showPopup(context,tmp);
+    showPopup(context, tmp);
 
     _userProvider.addIngredient(tmp);
 
@@ -442,7 +433,8 @@ class _ocr extends State<ocr> {
         .set(
       {
         "Ingredient": _userProvider.ingredients,
-      } , SetOptions(merge: true),
+      },
+      SetOptions(merge: true),
     ).onError((e, _) => print("Error writing document: $e"));
     setState(() {
       parsedtext = result['ParsedResults'][0]['ParsedText'];
@@ -478,21 +470,21 @@ class _ocr extends State<ocr> {
                                     color: Colors.black),
                                 textAlign: TextAlign.center),
                           ),
-
-                        (removeIng.isEmpty)? Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Text("검색된 재료가 없습니다.",
-                              style:
-                              TextStyle(fontSize: 15, color: Colors.black),
-                              textAlign: TextAlign.center),
-                        ):
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Text("이(가) 추가되었습니다.",
-                              style:
-                              TextStyle(fontSize: 15, color: Colors.black),
-                              textAlign: TextAlign.center),
-                        ),
+                        (removeIng.isEmpty)
+                            ? Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                child: Text("검색된 재료가 없습니다.",
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.black),
+                                    textAlign: TextAlign.center),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                child: Text("이(가) 추가되었습니다.",
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.black),
+                                    textAlign: TextAlign.center),
+                              ),
                       ],
                     ),
                     Padding(
@@ -525,5 +517,4 @@ class _ocr extends State<ocr> {
       },
     );
   }
-
 }

@@ -41,18 +41,13 @@ class _IngredientFilterState extends State<IngredientFilter> {
   bool _isVisible1 = false;
   bool _isVisible2 = true;
   void setVisible(int index) {
-    print(111);
-    print(index);
     setState(() {
       for (var i = 0; i < _isV.length; i++) {
-        print('for');
         _isV[i] = false;
       }
       _isV[index] = true;
       _isVisible1 = true;
     });
-
-    print(_isV[index]);
   }
 
   @override

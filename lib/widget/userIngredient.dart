@@ -23,22 +23,13 @@ class _userIngredient extends State<userIngredient> {
   late UserProvider _userProvider;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-
-
-
   @override
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
     var a = widget.selectedIngredient;
     String str = _userProvider.ingredients.toString();
 
-
-
     distinctIngredient(str);
-
-
-
-
 
     str = str.substring(1, str.length - 1);
     str = str.split(' ').join('');
@@ -311,7 +302,7 @@ class _userIngredient extends State<userIngredient> {
     Set<String> tmpIng;
     tmpIng = imageAsset.toSet();
     imageAsset = tmpIng.toList();
-    print('userIngredient');
+
     return Container(
       child: Align(
         alignment: Alignment.center,
@@ -329,9 +320,6 @@ class _userIngredient extends State<userIngredient> {
     );
   }
 
-
-
-
   Future distinctIngredient(String str) async {
     List<String> tmp = findIngredient(str);
     tmp.toSet();
@@ -345,16 +333,10 @@ class _userIngredient extends State<userIngredient> {
         .set(
       {
         "Ingredient": _userProvider.ingredients,
-      } , SetOptions(merge: true),
+      },
+      SetOptions(merge: true),
     );
   }
-
-
-
-
-
-
-
 }
 
 class homeIngredient extends StatefulWidget {
@@ -421,10 +403,4 @@ class _homeIngredientState extends State<homeIngredient> {
       ),
     );
   }
-
-
-
-
-
-
 }

@@ -32,14 +32,12 @@ class _removeIngredientState extends State<removeIngredient> {
     setState(() {
       selectedIngredient.add(name);
     });
-    print(selectedIngredient);
   }
 
   void cancelRemoveIngredient(String name) {
     setState(() {
       selectedIngredient.remove(name);
     });
-    print(selectedIngredient);
   }
 
   void showPopup(context, List<String> removeIng) {
@@ -89,8 +87,6 @@ class _removeIngredientState extends State<removeIngredient> {
                             width: 110,
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                //print(selectedIngredient);
-
                                 Navigator.of(context).pop();
                                 Navigator.pop(context, selectedIngredient);
                               },
@@ -178,7 +174,6 @@ class _removeIngredientState extends State<removeIngredient> {
                       onPressed: () async {
                         if (!selectedIngredient.isEmpty) {
                           showPopup(context, selectedIngredient);
-                          print(selectedIngredient);
                         } else {
                           showDialog(
                               context: context,

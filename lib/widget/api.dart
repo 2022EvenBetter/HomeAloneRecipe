@@ -46,25 +46,13 @@ class _ApiState extends State<Api> {
   void addIng(String ing) {
     setState(() {
       if (!ingredientArr.contains(ing)) ingredientArr.add(ing);
-
-      print(ingredientArr);
     });
   }
 
   void rmvIng(String ing) {
-    print("rmvIng");
-    print(ingMap[ing]);
-    //var length = ingMap[ing].length;
-
     setState(() {
       ingredientArr.remove(ing);
-      print("before for)");
-      for (var i = 0; i < 1; i++) {
-        //ingredientArr.remove(ingMap[ing][i]);
-        //print(ingMap[ing][i]);
-      }
-      //ingredientArr.clear();
-      print(ingredientArr);
+      for (var i = 0; i < 1; i++) {}
     });
   }
 
@@ -144,16 +132,12 @@ class _ListBuilderState extends State<ListBuilder> {
           .collection("recipeScrap")
           .doc(recipeCodeNum.toString())
           .set({"scrapNum": 0}, SetOptions(merge: true));
-      print("init data");
-    } else {
-      print("already exist");
-    }
+    } else {}
   }
 
   Future<int> getScrapNum(int recipeCodeNum) async {
     var data =
         await db.collection("recipeScrap").doc(recipeCodeNum.toString()).get();
-    print("Get Scrap Num in API");
     return data.data()!["scrapNum"];
   }
 
@@ -167,21 +151,13 @@ class _ListBuilderState extends State<ListBuilder> {
 
     int duplicate = 0;
     for (var i = 0; i < recipeName.length; i++) {
-      print(ing);
-      print("recipeName");
-      print(recipeName);
       if (ing[recipeName[i]] != null) {
         for (var j = 0; j < ing[recipeName[i]].length; j++) {
           recipeAllName.add(ing[recipeName[i]][j]);
           duplicate += 1;
-          print("dup recipeName");
-          print(recipeName);
         }
       }
     }
-    print("recipeAllName");
-
-    print(recipeAllName);
     for (var idx = 0; idx < recipeAllName.length; idx++) {
       final response = await http.get(Uri.parse(
           'http://211.237.50.150:7080/openapi/a0e05d197e3886ea191fa4f206b3b99dfc004411423b5e5187361ae7e6e651cd/xml/Grid_20150827000000000227_1/1/100?IRDNT_NM=${recipeAllName[idx]}'));
@@ -205,7 +181,6 @@ class _ListBuilderState extends State<ListBuilder> {
                 .toString()
                 .length >=
             150) {
-          print(1);
           for (var i = 0;
               i < jsonResult['Grid_20150827000000000227_1']['row'].length;
               i++) {
@@ -217,10 +192,9 @@ class _ListBuilderState extends State<ListBuilder> {
         throw Exception('오류');
       }
     }
-    print("추가 되지 않은 배열");
-    print(recipeName);
+
     ingResult.sort();
-    print(ingResult);
+
     if (recipeName.length > 1) {
       int upFlag = 0;
       bool downFlag = false;
@@ -234,12 +208,11 @@ class _ListBuilderState extends State<ListBuilder> {
           upFlag = 0;
         }
       }
-      print(doubleIng);
+
       return doubleIng;
     } else {
       var setResult = ingResult.toSet();
-      print("set");
-      print(setResult);
+
       var toListResult = setResult.toList();
       return toListResult;
     }
@@ -306,7 +279,6 @@ class _ListBuilderState extends State<ListBuilder> {
     final data = await convert.json.decode(response);
 
     _items = await data["recipe"];
-    print("read json");
 
     return _items;
   }
@@ -316,7 +288,6 @@ class _ListBuilderState extends State<ListBuilder> {
     List<Recipe> _recipe = [];
 
     for (var i = 0; i < recipeMake.length; i++) {
-      //print("레시피설명 불러오는중");
       await initRecipeScrap(recipeInfo[i]);
       int scrapNum = await getScrapNum(recipeInfo[i]);
       List<String> _recipeIng = await _getIngAPI(recipeInfo[i].toString());
@@ -336,7 +307,6 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 
   Future<List<Recipe>> _getFiteredRecipe() async {
-    print(widget.filterIngredient);
     if (widget.filterIngredient != "") {
       final List<int> filteredRecipecode =
           await _getIngAPIbyIngName(widget.filterIngredient);
@@ -344,18 +314,15 @@ class _ListBuilderState extends State<ListBuilder> {
       final List<dynamic> filteredRecipeArray = [];
 
       List<dynamic> allRecipes = await readJson();
-      print(allRecipes);
-      print(filteredRecipecode);
+
       for (var i = allRecipes.length - 1; i >= 0; i--) {
         for (var j = filteredRecipecode.length - 1; j >= 0; j--) {
           if (allRecipes[i]["레시피 코드"] == filteredRecipecode[j]) {
             filteredRecipeArray.add(allRecipes[i]);
-            print("filtered");
           }
         }
       }
-      print(filteredRecipeArray);
-      print(filteredRecipecode);
+
       return await _MakeRecipeArray(filteredRecipecode, filteredRecipeArray);
     } else {
       List<Recipe> emptyArr = [];
@@ -374,13 +341,10 @@ class _ListBuilderState extends State<ListBuilder> {
         future: _getFiteredRecipe(),
         builder: ((BuildContext context, AsyncSnapshot<List<Recipe>> snapshot) {
           List<Recipe> snapRecipe = [];
-
-          print(snapshot);
           if (snapshot.hasData) {
             snapshot.data!.forEach((element) {
               Recipe r = element as Recipe;
               snapRecipe.add(r);
-              print("Recipe Snap For");
             });
           }
 
@@ -397,8 +361,7 @@ class _ListBuilderState extends State<ListBuilder> {
                         child: Text('만족하는 레시피가 없습니다.'),
                       ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 15, top: 10),
+                  padding: const EdgeInsets.only(bottom: 15, top: 10),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey,
@@ -407,8 +370,7 @@ class _ListBuilderState extends State<ListBuilder> {
                           color: Colors.grey.withOpacity(1),
                           spreadRadius: 0,
                           blurRadius: 2,
-                          offset: Offset(0,
-                              2), // changes position of shadow
+                          offset: Offset(0, 2), // changes position of shadow
                         ),
                       ],
                     ),
@@ -422,179 +384,177 @@ class _ListBuilderState extends State<ListBuilder> {
                       itemBuilder: (BuildContext context, int idx) {
                         return Container(
                             child: Column(
+                          children: [
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left:10.0),
-                                      child: Container(
-                                        width: 110.0,
-                                        height: 110.0,
-                                        child: Image.network(
-                                          snapRecipe[idx].imageURL,
-                                          fit: BoxFit.cover,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                        ),
-                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Container(
+                                    width: 110.0,
+                                    height: 110.0,
+                                    child: Image.network(
+                                      snapRecipe[idx].imageURL,
+                                      fit: BoxFit.cover,
+                                      width: MediaQuery.of(context).size.width,
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20, top: 0),
-                                      child: Container(
-                                        height: 110,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.bottomLeft,
-                                              child: Container(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      '${snapRecipe[idx].recipeName}',
-                                                      style: TextStyle(
-                                                          fontSize: 18.0,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      textAlign: TextAlign.left,
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(0, 7, 0, 0),
-                                                      child: Container(
-                                                          width: screenWidth *
-                                                              0.6,
-                                                          child: Text(
-                                                              snapRecipe[idx]
-                                                                  .description,
-                                                              maxLines: 2,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  color: Colors
-                                                                      .black54),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start)),
-                                                    ),
-                                                  ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 20, top: 0),
+                                  child: Container(
+                                    height: 110,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: Container(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${snapRecipe[idx].recipeName}',
+                                                  style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  textAlign: TextAlign.left,
                                                 ),
-                                              ),
-                                            ),
-                                            Container(
-                                              width:screenWidth*0.55,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.only(top:15.0),
-                                                child: Row(
-
-                                                  children: [
-                                                    Container(
-                                                      width: 30,
-                                                      child: IconButton(
-                                                        padding:
-                                                            EdgeInsets.zero,
-                                                        constraints:
-                                                            BoxConstraints(),
-                                                        icon: _userProvider
-                                                                .recipes
-                                                                .contains(
-                                                                    snapRecipe[
-                                                                            idx]
-                                                                        .recipeCode)
-                                                            ? Icon(
-                                                                Icons.favorite,
-                                                                color: Colors
-                                                                    .yellow,
-                                                              )
-                                                            : Icon(
-                                                                Icons
-                                                                    .favorite_border,
-                                                                color: Colors
-                                                                    .yellow),
-                                                        focusColor:
-                                                            Colors.amber,
-                                                        isSelected: false,
-                                                        selectedIcon: Icon(Icons
-                                                            .favorite_border),
-                                                        onPressed: () {},
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .fromLTRB(
-                                                          0, 0, 10, 0),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 7, 0, 0),
+                                                  child: Container(
+                                                      width: screenWidth * 0.6,
                                                       child: Text(
-                                                          '${snapRecipe[idx].scrapped}'),
-                                                    ),
-                                                    ConstrainedBox(
-                                                      constraints:
-                                                          BoxConstraints
-                                                              .tightFor(
-                                                                  height: 25),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.only(left:30.0),
-                                                        child: ElevatedButton(
-                                                          onPressed: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        RecipeDetailPage(
-                                                                            snapRecipe[
-                                                                                idx])));
-                                                          },
-                                                          child: Text('자세히 보기 >'),
-                                                          style: ElevatedButton.styleFrom(
-                                                              padding: EdgeInsets
-                                                                  .fromLTRB(
-                                                                      3, 3, 3, 3),
+                                                          snapRecipe[idx]
+                                                              .description,
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: Colors
+                                                                  .black54),
+                                                          textAlign:
+                                                              TextAlign.start)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: screenWidth * 0.55,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 15.0),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 30,
+                                                  child: IconButton(
+                                                    padding: EdgeInsets.zero,
+                                                    constraints:
+                                                        BoxConstraints(),
+                                                    icon: _userProvider.recipes
+                                                            .contains(
+                                                                snapRecipe[idx]
+                                                                    .recipeCode)
+                                                        ? Icon(
+                                                            Icons.favorite,
+                                                            color:
+                                                                Colors.yellow,
+                                                          )
+                                                        : Icon(
+                                                            Icons
+                                                                .favorite_border,
+                                                            color:
+                                                                Colors.yellow),
+                                                    focusColor: Colors.amber,
+                                                    isSelected: false,
+                                                    selectedIcon: Icon(
+                                                        Icons.favorite_border),
+                                                    onPressed: () {},
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 0, 10, 0),
+                                                  child: Text(
+                                                      '${snapRecipe[idx].scrapped}'),
+                                                ),
+                                                ConstrainedBox(
+                                                  constraints:
+                                                      BoxConstraints.tightFor(
+                                                          height: 25),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 30.0),
+                                                    child: ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    RecipeDetailPage(
+                                                                        snapRecipe[
+                                                                            idx])));
+                                                      },
+                                                      child: Text('자세히 보기 >'),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .fromLTRB(
+                                                                          3,
+                                                                          3,
+                                                                          3,
+                                                                          3),
                                                               backgroundColor:
                                                                   Colors
                                                                       .transparent,
                                                               shadowColor: Colors
                                                                   .transparent),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 15, top: 15),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(1),
-                                          spreadRadius: 0,
-                                          blurRadius: 2,
-                                          offset: Offset(0,
-                                              2), // changes position of shadow
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    height: 1.0,
-                                    width: 500.0,
                                   ),
                                 ),
                               ],
-                            ));
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 15, top: 15),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(1),
+                                      spreadRadius: 0,
+                                      blurRadius: 2,
+                                      offset: Offset(
+                                          0, 2), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                height: 1.0,
+                                width: 500.0,
+                              ),
+                            ),
+                          ],
+                        ));
                       }),
                 )
               ],

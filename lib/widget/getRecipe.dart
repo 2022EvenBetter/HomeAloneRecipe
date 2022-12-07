@@ -23,14 +23,12 @@ class GetRecipe extends StatelessWidget {
           onError: (e) => print("error"));
     }
 
-
     return FutureBuilder<QuerySnapshot>(
       future: recipe.where("레시피 코드", isEqualTo: int.parse(ingredient[i])).get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text("Something went wrong");
         }
-        print(i);
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView(
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
