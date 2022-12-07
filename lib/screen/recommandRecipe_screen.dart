@@ -371,6 +371,26 @@ class _ListBuilderState extends State<ListBuilder> {
                         style: TextStyle(
                           fontSize: 15.0,),),
                     ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 15, top: 2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(1),
+                          spreadRadius: 0,
+                          blurRadius: 2,
+                          offset: Offset(0,
+                              2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    height: 1.0,
+                    width: 500.0,
+                  ),
+                ),
                 Expanded(
                   child:  ListView.builder(
                       itemCount: snapRecipe.length,

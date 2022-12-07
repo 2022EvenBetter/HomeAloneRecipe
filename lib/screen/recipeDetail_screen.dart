@@ -222,9 +222,26 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                   ),
                 ],
               ),
-              Container(
-                  width: 500,
-                  child: Divider(color: Colors.grey, thickness: 1.0)),
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 10, top: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(1),
+                        spreadRadius: 0,
+                        blurRadius: 2,
+                        offset: Offset(0,
+                            2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  height: 1.0,
+                  width: 500.0,
+                ),
+              ),
               Column(
                 children: [
                   Row(
@@ -242,7 +259,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 8.0),
+                    padding: EdgeInsets.only(left: 0.0, top:3),
                     child: Wrap(
                         direction: Axis.horizontal, // 나열 방향
                         alignment: WrapAlignment.start,
@@ -252,20 +269,20 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               i++)
                             plusAlphaIng.contains(widget.recipe.ingredients[i])
                                 ? Padding(
-                                    padding: const EdgeInsets.all(2.0),
+                                    padding: const EdgeInsets.all(3.0),
                                     child: Text(
                                       widget.recipe.ingredients[i],
                                       style: TextStyle(
-                                          fontSize: 12.0,
+                                          fontSize: 15.0,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   )
                                 : Padding(
-                                    padding: const EdgeInsets.all(2.0),
+                                    padding: const EdgeInsets.all(3.0),
                                     child: Text(
                                       widget.recipe.ingredients[i],
                                       style: TextStyle(
-                                          fontSize: 12.0,
+                                          fontSize: 15.0,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey),
                                     ),
@@ -274,9 +291,26 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                   )
                 ],
               ),
-              Container(
-                  width: 500,
-                  child: Divider(color: Colors.grey, thickness: 1.0)),
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 10, top: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(1),
+                        spreadRadius: 0,
+                        blurRadius: 2,
+                        offset: Offset(0,
+                            2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  height: 1.0,
+                  width: 500.0,
+                ),
+              ),
               Column(
                 children: [
                   Row(

@@ -158,7 +158,7 @@ class _ocr extends State<ocr> {
                 padding: const EdgeInsets.only(top: 25),
               ),
               if (_userProvider.ingredients.isEmpty)
-                Text('재료가 없습니다.', style: TextStyle(fontSize: 10))
+                Text('재료가 없습니다!', style: TextStyle(fontSize: 17))
               else
                 userIngredient(selectedIngredient, setRemoveIngredient,
                     cancelRemoveIngredient),
@@ -517,7 +517,7 @@ class _ocr extends State<ocr> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: const Icon(Icons.close),
+                              icon: const Icon(Icons.check),
                               label: const Text('확인'),
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xff686EFF),

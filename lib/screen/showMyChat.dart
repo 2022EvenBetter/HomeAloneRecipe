@@ -31,7 +31,12 @@ class _showMyChatState extends State<showMyChat> {
       ),
       body: Container(
         child: Stack(
-          children: const [
+          children:  [
+          _userProvider.chats.isEmpty?
+          Center(
+              child:
+                Text("아직 채팅이 없습니다.", style: TextStyle(fontSize: 18), ),
+            ):
             Padding(
               padding: EdgeInsets.only(top: 20),
               child: Expanded(
