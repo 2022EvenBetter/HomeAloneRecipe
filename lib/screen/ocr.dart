@@ -158,7 +158,7 @@ class _ocr extends State<ocr> {
                 padding: const EdgeInsets.only(top: 25),
               ),
               if (_userProvider.ingredients.isEmpty)
-                Text('재료가 없습니다.', style: TextStyle(fontSize: 10))
+                Text('재료가 없습니다!', style: TextStyle(fontSize: 17))
               else
                 userIngredient(selectedIngredient, setRemoveIngredient,
                     cancelRemoveIngredient),
@@ -310,9 +310,7 @@ class _ocr extends State<ocr> {
                 MaterialPageRoute(builder: (context) => CategoryIngredient()),
               );
               if (addUserIngredient.isEmpty) {
-                print("Data has NULL");
               } else {
-                print("추가할 재료 목록 : $addUserIngredient");
                 _userProvider.addIngredient(addUserIngredient);
                 await FirebaseFirestore.instance
                     .collection("User")
@@ -341,9 +339,7 @@ class _ocr extends State<ocr> {
                   MaterialPageRoute(builder: (context) => removeIngredient()),
                 );
                 if (removeIng.isEmpty) {
-                  print("Data has NULL");
                 } else {
-                  print("제거할 재료 목록 : $removeIng");
                   _userProvider.removeIngredient(removeIng);
                   await FirebaseFirestore.instance
                       .collection("User")
@@ -435,13 +431,7 @@ class _ocr extends State<ocr> {
     var result = jsonDecode(post.body);
     List<String> tmp = findIngredient(parsedtext);
     tmp.toSet();
-    for (int i = 0; i < tmp.length; i++) {
-      if (kDebugMode) {
-        print(tmp[i]);
-      }
-    }
 
-    print(tmp.toString());
     showPopup(context,tmp);
 
     _userProvider.addIngredient(tmp);
@@ -454,7 +444,6 @@ class _ocr extends State<ocr> {
         "Ingredient": _userProvider.ingredients,
       } , SetOptions(merge: true),
     ).onError((e, _) => print("Error writing document: $e"));
-    // print(parsedtext);
     setState(() {
       parsedtext = result['ParsedResults'][0]['ParsedText'];
     });
@@ -517,7 +506,7 @@ class _ocr extends State<ocr> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: const Icon(Icons.close),
+                              icon: const Icon(Icons.check),
                               label: const Text('확인'),
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xff686EFF),

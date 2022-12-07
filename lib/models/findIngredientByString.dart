@@ -394,18 +394,14 @@ List<String> findIngredient(String s){
         result.add(ingredientName['양송이']!);
       }
       if(ingredientName[s.substring(i,i+j)] != null ) {
-        // print(ingredientName[s.substring(i, i + j)]);
         result.add(ingredientName[s.substring(i, i + j)]!);
       }
 
     }
   }
-  print(result);
-  print("casting…");
 
   List<String> resultList= result.toList();
 
-  print("hi");
   return resultList;
 
 
