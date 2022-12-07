@@ -21,7 +21,6 @@ class _MyPostScreen extends State<MyPostScreen> {
   @override
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
-    print(_userProvider.uid);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
